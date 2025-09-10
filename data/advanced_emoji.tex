@@ -1,0 +1,136 @@
+% Advanced emoji configuration for XeLaTeX with color support
+\usepackage{fontspec}
+\usepackage{xcolor}
+
+% Set main fonts with better Unicode support
+\setmainfont{Noto Sans}[
+  BoldFont = Noto Sans Bold,
+  ItalicFont = Noto Sans Italic,
+  BoldItalicFont = Noto Sans Bold Italic,
+  Script = Latin
+]
+
+\setsansfont{Noto Sans}
+\setmonofont{Noto Sans Mono}
+
+% Try multiple emoji fonts in order of preference
+\IfFontExistsTF{Noto Color Emoji}{
+  \newfontfamily\emojifont{Noto Color Emoji}[
+    Renderer=Harfbuzz,
+    RawFeature={+cmap}
+  ]
+}{
+  \IfFontExistsTF{Apple Color Emoji}{
+    \newfontfamily\emojifont{Apple Color Emoji}[
+      Renderer=Harfbuzz
+    ]
+  }{
+    \IfFontExistsTF{Segoe UI Emoji}{
+      \newfontfamily\emojifont{Segoe UI Emoji}[
+        Renderer=Harfbuzz
+      ]
+    }{
+      \IfFontExistsTF{Symbola}{
+        \newfontfamily\emojifont{Symbola}[
+          Renderer=Harfbuzz
+        ]
+      }{
+        % Fallback to DejaVu Sans if no emoji fonts found
+        \newfontfamily\emojifont{DejaVu Sans}
+      }
+    }
+  }
+}
+
+% Define emoji command with better spacing
+\newcommand{\emoji}[1]{%
+  \begingroup%
+  \emojifont%
+  #1%
+  \endgroup%
+}
+
+% Alternative approach: try to use system emoji fonts
+\newfontfamily\twemoji{Twitter Color Emoji}[
+  Renderer=Harfbuzz,
+  Path = /System/Library/Fonts/Supplemental/
+]
+
+% Map Unicode characters to emoji commands
+\usepackage{newunicodechar}
+
+% Core emojis used in the document
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🟢}{\emoji{🟢}}
+\newunicodechar{🟡}{\emoji{🟡}}
+\newunicodechar{🔴}{\emoji{🔴}}
+\newunicodechar{🔵}{\emoji{🔵}}
+\newunicodechar{🟣}{\emoji{🟣}}
+\newunicodechar{🎯}{\emoji{🎯}}
+\newunicodechar{💡}{\emoji{💡}}
+\newunicodechar{🔥}{\emoji{🔥}}
+\newunicodechar{⭐}{\emoji{⭐}}
+\newunicodechar{🌟}{\emoji{🌟}}
+\newunicodechar{💎}{\emoji{💎}}
+\newunicodechar{🛡}{\emoji{🛡}}
+\newunicodechar{🔑}{\emoji{🔑}}
+\newunicodechar{🎨}{\emoji{🎨}}
+\newunicodechar{📈}{\emoji{📈}}
+\newunicodechar{📉}{\emoji{📉}}
+\newunicodechar{🔍}{\emoji{🔍}}
+\newunicodechar{🔎}{\emoji{🔎}}
+\newunicodechar{📝}{\emoji{📝}}
+\newunicodechar{📋}{\emoji{📋}}
+\newunicodechar{📌}{\emoji{📌}}
+\newunicodechar{📍}{\emoji{📍}}
+
+% Handle variation selectors that can cause issues
+\newunicodechar{️}{}  % Variation Selector-16 (invisible)
+
+% Mathematical and arrow symbols
+\newunicodechar{≈}{\emoji{≈}}
+\newunicodechar{→}{\emoji{→}}
+\newunicodechar{←}{\emoji{←}}
+\newunicodechar{↑}{\emoji{↑}}
+\newunicodechar{↓}{\emoji{↓}}
+
+% Additional technical emojis
+\newunicodechar{🔗}{\emoji{🔗}}
+\newunicodechar{⛓}{\emoji{⛓}}
+\newunicodechar{🔐}{\emoji{🔐}}
+\newunicodechar{🗝}{\emoji{🗝}}
+\newunicodechar{🛠}{\emoji{🛠}}
+\newunicodechar{⚒}{\emoji{⚒}}
+\newunicodechar{🔨}{\emoji{🔨}}
+\newunicodechar{⛏}{\emoji{⛏}}
+\newunicodechar{🔩}{\emoji{🔩}}
+\newunicodechar{🧰}{\emoji{🧰}}
+\newunicodechar{🧲}{\emoji{🧲}}
+\newunicodechar{⚗}{\emoji{⚗}}
+\newunicodechar{🧬}{\emoji{🧬}}
+\newunicodechar{🔬}{\emoji{🔬}}
+\newunicodechar{🔭}{\emoji{🔭}}
+\newunicodechar{📡}{\emoji{📡}}
+\newunicodechar{🛰}{\emoji{🛰}}
+
+% Fallback for unknown emojis - show as colored squares
+\DeclareRobustCommand{\unknownemoji}[1]{%
+  \textcolor{orange}{\rule{0.8em}{0.8em}}%
+}

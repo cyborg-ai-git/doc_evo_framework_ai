@@ -1,0 +1,57 @@
+@startuml
+!theme plain
+
+' Global dark theme
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Notes
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+}
+
+' Actors
+skinparam actorStyle awesome
+skinparam actor {
+  StereotypeFontColor #FFFFFF
+  FontColor #FFFFFF
+}
+
+' Sequence styling
+skinparam sequence {
+  LifeLineBorderColor #FFFFFF
+  LifeLineBackgroundColor #000000
+  ParticipantBorderColor #FFFFFF
+  DividerBackgroundColor #000000
+  DividerBorderColor #FFFFFF
+  DividerFontColor #FFFFFF
+}
+
+' Colors
+!$PEER_A_COLOR   = "#87CEEB"
+!$PEER_B_COLOR   = "#FFB6C1"
+!$BRIDGE_COLOR   = "#ff0000"
+!$SYSTEM_COLOR   = "#FFFFFF"
+
+actor "PeerA" as PA $PEER_A_COLOR
+actor "PeerB" as PB $PEER_B_COLOR
+queue "Bridge" as BR $BRIDGE_COLOR
+
+title Diagram 6: Keepalive Heartbeat Protocol
+
+autonumber
+
+PB -[$PEER_B_COLOR]> PA: KEEPALIVE
+activate PA $PEER_A_COLOR
+note right PA: Check connection\nReset timeout
+
+PA -[$PEER_A_COLOR]> BR: HEARTBEAT
+note right BR: Forward to all peers
+
+BR -[$BRIDGE_COLOR]> PB: HEARTBEAT_ACK
+deactivate PA
+
+footer ""
+@enduml

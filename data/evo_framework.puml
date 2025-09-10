@@ -1,0 +1,114 @@
+@startuml
+
+' Set background color
+skinparam BackgroundColor transparent
+
+' Define colors for each interface
+!define IEvoColor #FFFFFF
+!define IDColor #FFFFFF
+!define ITimeColor #FFFFFF
+!define IBridgeColor #ff0000
+!define IControlColor #2735f3
+!define IEntityColor #09b620
+!define IMemoryColor #fbff00
+!define IFoundationColor #ffa600
+!define IGuiColor #b700ff
+!define IApiColor #00eeff
+ 
+
+' Define the interfaces with their respective colors
+interface IEvo <<(I, IEvoColor)>> {
+    +{static} evo_version() : TypeEvoVersion
+    +get_evo_version() : TypeEvoVersion
+}
+
+interface ID<TypeID> <<(I, IDColor)>> {
+    +get_id() : TypeID
+    +set_id(id: TypeID)
+}
+
+interface ITime <<(I, ITimeColor)>> {
+    +get_time() : TypeTime
+    +set_time(time: TypeTime)
+}
+interface IEntity<TypeID> <<(I, IEntityColor)>> IEntityColor{
+    +to_bytes() : BYTES
+    +from_bytes(data: BYTES) : IEntity
+    +to_string() : STRING
+}
+
+
+interface IControl <<(I, IControlColor)>> IControlColor{
+    +on_start()
+    +on_stop()
+}
+
+interface IApi <<(I, IApiColor)>> IApiColor{
+    +on_start()
+    +on_stop()
+}
+
+
+interface IBridge<K> <<(I, IBridgeColor)>> IBridgeColor{
+    +set_on_connected(callback: OnConnected<K>)
+    +set_on_disconnected(callback: OnDisconnected<K>)
+    +set_on_error(callback: OnError<K>)
+    +set_on_message(callback: OnMessage<K>)
+    +do_connect()
+    +do_disconnect()
+}
+
+interface IMemory<TypeID, IEntity> <<(I, IMemoryColor)>> IMemoryColor {
+    + do_set(entity: IEntity)
+    + do_set_with_id(id: TypeID, entity: IEntity)
+    + do_get(id: TypeID) : IEntity?
+    + do_query<TypeID, IEntity, Q>(query: IQuery) : [IEntity]
+    + do_del(id: TypeID)
+} 
+
+
+
+interface IGui<K> <<(I, IGuiColor)>> IGuiColor {
+    + on_start()
+    + on_stop()
+    + do_view(obj: Any?)
+    + do_hide(obj: Any?)
+    + do_update(obj: Any?)
+}
+
+
+
+' Define the relationships between interfaces
+IEvo <|-- IControl IControlColor
+
+IEvo <|-- IEntity IEntityColor
+ID <|-- IEntity IEntityColor
+ITime <|-- IEntity IEntityColor
+
+IEvo <|-- IBridge IBridgeColor
+ID <|-- IBridge IBridgeColor
+
+IEvo <|-- IMemory IMemoryColor
+
+IEvo <|-- IGui IGuiColor
+ID <|-- IGui IGuiColor
+
+IEvo <|-- IApi IApiColor
+ID <|-- IApi IApiColor
+IControl <|-- IApi IApiColor
+
+IEvo -down-> ID #transparent
+'ID -left-> ITime #transparent
+'ID -down-> IControl #transparent
+IMemory -left-> IBridge #transparent
+
+IControl -down-> IGui #transparent
+IControl -right-> IApi #transparent
+IEntity -down-> IGui #transparent
+IEntity -down-> IBridge #transparent
+IEntity -up-> IControl #transparent
+IMemory -down-> IGui #transparent
+IBridge -down-> IGui #transparent
+
+
+@enduml

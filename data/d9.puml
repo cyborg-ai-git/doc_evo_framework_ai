@@ -1,0 +1,68 @@
+@startuml
+!theme plain
+
+' Colour constants
+!define PEER_A_COLOR      #87CEEB
+!define PEER_B_COLOR      #FFB6C1
+!define BRIDGE_COLOR      #ff0000
+!define SYSTEM_COLOR      #FFFFFF
+
+' Global styling
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+skinparam actorStyle awesome
+skinparam queue {
+  BackgroundColor #FFFFFF
+  BorderColor #FFFFFF
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+  LifeLineBorderColor #FFFFFF
+  LifeLineBackgroundColor #000000
+  ParticipantBorderColor #FFFFFF
+  DividerBackgroundColor #000000
+  DividerBorderColor #FFFFFF
+  DividerFontColor #FFFFFF
+}
+
+' Participants
+actor "PeerB"           as PB PEER_B_COLOR
+queue "Bridge Channel"  as SC BRIDGE_COLOR
+actor "PeerA"           as PA PEER_A_COLOR
+
+title Diagram 6: Full Secure Messaging Flow
+autonumber
+
+== Session Establishment ==
+PB -[PEER_B_COLOR]> SC: AKE Request (Kyber)
+SC -[BRIDGE_COLOR]> PA: AKE Request
+activate PA
+PA -[PEER_A_COLOR]> PB: Session Confirm
+
+== Data Exchange ==
+PB -[PEER_B_COLOR]> PA: AUTH_DATA[0]
+note right PB: ChaCha20-Poly1305\nNonce per packet
+
+PA -[PEER_A_COLOR]> PB: ENC_RESPONSE[0]
+note left PA: Anti-replay checks
+
+== Rekey Loop ==
+loop Every 1 MB or 24 h
+  PA -> PB: Rekey Request
+  PB -> PA: Rekey Confirm
+end
+
+== Channel Maintenance ==
+PB -[PEER_B_COLOR]> SC: Keepalive
+SC -[BRIDGE_COLOR]> PA: Heartbeat
+deactivate PA
+
+footer "Secure Messaging Protocol v1.4 | IETF-Compliant"
+@enduml

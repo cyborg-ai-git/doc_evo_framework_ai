@@ -1,0 +1,94 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings - using monochrome style
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Control specific settings
+skinparam control {
+    FontColor #FFFFFF
+    FontSize 17
+    BackgroundColor $MASTER_PEER_COLOR
+    BorderColor $MASTER_PEER_COLOR
+    ScaleX 1.5
+    ScaleY 1.5
+}
+
+' Queue specific settings
+skinparam queue {
+    BackgroundColor #FFFFFF
+    BorderColor #FFFFFF
+    FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+}
+
+' Colors
+!$PEER_A_COLOR = "#87CEEB"
+!$MASTER_PEER_COLOR = "#90EE90"
+!$PEER_B_COLOR = "#FFB6C1"
+!$SYSTEM_COLOR = "#FFFFFF"
+!$MEMORY_COLOR = "#FFFFFF"
+!$BRIDGE_COLOR = "#ff0000"
+
+' Participants
+actor "PeerA" as PA $PEER_A_COLOR
+actor "PeerB" as PB $PEER_B_COLOR
+queue "Bridge channel" as SC $BRIDGE_COLOR
+
+title Case 1: Peer-to-Peer Communication Flow
+
+autonumber
+== Session Establishment ==
+
+PB -[$PEER_B_COLOR]> PA: Kyber Ciphertext
+activate PA $PEER_A_COLOR
+note right PA: 1. Decapsulate Kyber\n2. HKDF-SHA384
+
+PA -[$PEER_A_COLOR]> PB: Session Confirm
+note left PB: Verify MAC\nInit AEAD
+
+== Data Exchange ==
+
+PB -[$PEER_B_COLOR]> PA: AUTH_DATA[0]
+note right PB: ChaCha20-Poly1305\nSeq: 001
+
+PA -[$PEER_A_COLOR]> PB: ENC_RESPONSE[0]
+note left PA: Rate Limited\nAnti-Replay
+
+== Channel Maintenance ==
+
+PB -[$PEER_B_COLOR]> SC: Keepalive
+SC -[$BRIDGE_COLOR]> PA: Heartbeat
+
+deactivate PA
+
+footer "Secure Messaging Protocol v1.4 | IETF-Compliant"
+@enduml

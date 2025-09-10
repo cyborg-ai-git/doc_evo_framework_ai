@@ -1,0 +1,50 @@
+% Working emoji configuration using Symbola font
+\usepackage{fontspec}
+
+% Set main fonts
+\setmainfont{Noto Sans}
+
+% Use Symbola font for emojis (works reliably with XeLaTeX)
+\newfontfamily\emojifont{Symbola}
+
+% Simple emoji command
+\newcommand{\emoji}[1]{{\emojifont #1}}
+
+% Map Unicode characters to emoji command
+\usepackage{newunicodechar}
+
+% Essential emojis from the document
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🎯}{\emoji{🎯}}
+\newunicodechar{💡}{\emoji{💡}}
+\newunicodechar{🔥}{\emoji{🔥}}
+\newunicodechar{⭐}{\emoji{⭐}}
+\newunicodechar{🌟}{\emoji{🌟}}
+\newunicodechar{💎}{\emoji{💎}}
+\newunicodechar{🛡}{\emoji{🛡}}
+\newunicodechar{🔑}{\emoji{🔑}}
+\newunicodechar{🎨}{\emoji{🎨}}
+
+% Mathematical symbols
+\newunicodechar{≈}{\emoji{≈}}
+\newunicodechar{→}{\emoji{→}}
+
+% Handle variation selectors (invisible characters)
+\newunicodechar{️}{}  % Variation Selector-16

@@ -1,0 +1,65 @@
+@startuml
+!theme plain
+
+' Global dark theme
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Notes
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+}
+
+' Actors
+skinparam actorStyle awesome
+skinparam actor {
+  StereotypeFontColor #FFFFFF
+  FontColor #FFFFFF
+}
+
+' Sequence styling
+skinparam sequence {
+  LifeLineBorderColor #FFFFFF
+  LifeLineBackgroundColor #000000
+  ParticipantBorderColor #FFFFFF
+  DividerBackgroundColor #000000
+  DividerBorderColor #FFFFFF
+  DividerFontColor #FFFFFF
+}
+
+' Colors
+!$PEER_COLOR        = "#87CEEB"
+!$MASTER_PEER_COLOR = "#90EE90"
+!$MEMORY_COLOR      = "#fbff00"
+!$SYSTEM_COLOR      = "#FFFFFF"
+
+actor "Peer" as P $PEER_COLOR
+actor "MasterPeer" as MP $MASTER_PEER_COLOR
+database "CertDB" as DB $MEMORY_COLOR
+queue "IPFS" as IPFS $SYSTEM_COLOR
+queue "GitHub" as GH $SYSTEM_COLOR
+
+title Diagram 3: Certificate Revocation Protocol
+
+autonumber
+
+P -[$PEER_COLOR]> MP: REVOKE_REQ(Cert_ID)
+activate MP $MASTER_PEER_COLOR
+note right MP: Authenticate request\nCheck authorization
+
+MP -[$MASTER_PEER_COLOR]> DB: MARK_REVOKED(Cert_ID)
+activate DB $MEMORY_COLOR
+DB --[$MEMORY_COLOR]> MP: REVOKE_ACK
+deactivate DB
+
+== Revocation Publication ==
+MP -[$MASTER_PEER_COLOR]> IPFS: PUBLISH_REVOKE(Cert_ID)
+MP -[$MASTER_PEER_COLOR]> GH: PUBLISH_REVOKE(Cert_ID)
+
+MP --> P: REVOKE_CONFIRM
+deactivate MP
+
+footer ""
+@enduml

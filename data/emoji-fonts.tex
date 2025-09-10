@@ -1,0 +1,52 @@
+% Emoji font configuration for XeLaTeX
+\usepackage{fontspec}
+
+% Set main fonts
+\setmainfont{Noto Sans}[
+  BoldFont = Noto Sans Bold,
+  ItalicFont = Noto Sans Italic,
+  BoldItalicFont = Noto Sans Bold Italic
+]
+\setsansfont{Noto Sans}
+\setmonofont{Noto Sans Mono}
+
+% Define emoji font family using Symbola (more reliable than color emoji)
+\newfontfamily\emojifont{Symbola}
+
+% Create a command to use emoji font
+\newcommand{\emoji}[1]{{\emojifont #1}}
+
+% Alternative: Use font fallback for better emoji support
+\usepackage{newunicodechar}
+
+% Map common emojis to use Symbola font
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🟢}{\emoji{🟢}}
+\newunicodechar{🟡}{\emoji{🟡}}
+\newunicodechar{🔴}{\emoji{🔴}}
+\newunicodechar{🔵}{\emoji{🔵}}
+\newunicodechar{🟣}{\emoji{🟣}}
+
+% Handle variation selectors (U+FE0F) that cause issues
+\newunicodechar{️}{}  % Variation Selector-16 - just ignore it
+
+% Mathematical symbols
+\newunicodechar{≈}{\emoji{≈}}  % Approximately equal
+\newunicodechar{→}{\emoji{→}}  % Right arrow

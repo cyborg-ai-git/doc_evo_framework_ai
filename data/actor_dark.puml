@@ -1,0 +1,261 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+'Colors definition
+!$PEER_A_COLOR = "#87CEEB"
+!$MASTER_PEER_COLOR = "#90EE90"
+!$REPOSITORY_COLOR = "#00FFFF"
+!$PEER_B_COLOR = "#FFB6C1"
+!$PEER_N_COLOR = "#DDA0DD"
+!$SYSTEM_COLOR = "#FFFFFF"
+
+'Styling for dark theme
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam card {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Actor specific settings - using monochrome style
+
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+skinparam actorStyle awesome
+skinparam control {
+    BackgroundColor $MASTER_PEER_COLOR
+    BorderColor $MASTER_PEER_COLOR
+    FontColor #FFFFFF
+}
+
+skinparam database {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #FFFFFF
+}
+
+title Cyborg AI - System Actors Overview
+
+' MasterPeer
+actor "MasterPeer" as MP $MASTER_PEER_COLOR
+card "MasterPeer Specifications" as MP_CARD
+note right of MP_CARD
+  - Signaling server
+  - Has PK_MP (Public Key)
+  - Has SK_MP (Secret Key)
+  - Manages MAP_REGISTER and MAP_OFFER
+  - Handles connection signaling
+  - Verifies HMAC signatures
+  - Routes SDP messages
+  - Manages peer connections
+  - Handles disconnection events
+end note
+
+' System Components
+database "Foundation" as DB $MASTER_PEER_COLOR
+card "Foundation" as SYS_CARD
+note right of SYS_CARD
+  MAP_REGISTER:
+  - Stores peer registrations
+  - Key: hash
+  - Value: EWebrtc struct
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+'Colors definition
+!$PEER_A_COLOR = "#87CEEB"
+!$MASTER_PEER_COLOR = "#90EE90"
+!$PEER_B_COLOR = "#FFB6C1"
+!$PEER_N_COLOR = "#DDA0DD"
+!$SYSTEM_COLOR = "#FFFFFF"
+
+'Styling for dark theme
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam card {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Actor specific settings - using monochrome style
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+skinparam actorStyle awesome
+skinparam control {
+    BackgroundColor $MASTER_PEER_COLOR
+    BorderColor $MASTER_PEER_COLOR
+    FontColor #FFFFFF
+}
+skinparam database {
+    BackgroundColor #000000
+    BorderColor #000000
+    FontColor #000000
+}
+
+title PQCES Actors Overview
+
+' Master Peer (Trust Anchor / CA)
+actor "EMasterPeer" as MP $MASTER_PEER_COLOR
+card "EMasterPeer Specifications" as MP_CARD
+note right of MP_CARD
+  **Cryptographic Capabilities:**
+  - Kyber-1024 (NIST Level 5) KEM
+  - Dilithium-5 (NIST Level 5) digital signatures
+
+  **Maintains:**
+  - Peer certificate registry (public GitHub, Smart Contract & IPFS)
+  - Public key directory & trust anchors
+  - Certificate issuance & revocation data
+  - Cryptographic material storage
+end note
+
+' Certificate Repository
+database "Certificate Repository" as DB #fbff00
+card "Certificate Repository" as SYS_CARD
+note right of SYS_CARD
+  **Repository:**
+  - certificates with Dilithium signatures MasterPeer
+  - Peer IDs (32-byte SHA3 hashes)
+  - Public key chains & revocation lists
+  - Metadata: issuance, expiration, status
+  - GitHub, Smart Contract, IPFS
+end note
+
+' PeerA (Single-Peer Client)
+actor "EPeerA" as PA $PEER_A_COLOR
+card "EPeerA Specifications" as PA_CARD
+note right of PA_CARD
+  - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
+  - Kyber-1024 keypair for key exchange
+  - ChaCha20-Poly1305 for symmetric encryption
+  - Certificate chain issued by EMasterPeer
+  - Embedded EMasterPeer public keys (Kyber & Dilithium)
+  - Supports multiple simultaneous connections
+end note
+
+' PeerB (Multi-Peer Client)
+actor "EPeerB" as PB $PEER_B_COLOR
+card "EPeerB Specifications" as PB_CARD
+note right of PB_CARD
+  - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
+  - Kyber-1024 keypair for key exchange
+  - ChaCha20-Poly1305 for symmetric encryption
+  - Certificate chain issued by EMasterPeer
+  - Embedded EMasterPeer public keys (Kyber & Dilithium)
+  - Supports multiple simultaneous connections
+end note
+
+' PeerN (Generic Peer)
+actor "EPeerN" as PN $PEER_N_COLOR
+card "EPeerN Specifications" as PN_CARD
+note right of PN_CARD
+  - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
+  - Kyber-1024 keypair for key exchange
+  - ChaCha20-Poly1305 for symmetric encryption
+  - Certificate chain issued by EMasterPeer
+  - Embedded EMasterPeer public keys (Kyber & Dilithium)
+  - Supports multiple simultaneous connections
+end note
+
+' Layout adjustments
+MP -[hidden]-> PA
+PA -[hidden]-> PB
+PB -[hidden]-> PN
+PN -[hidden]-> DB
+
+MP_CARD -[hidden]-> PA_CARD
+PA_CARD -[hidden]-> PB_CARD
+PB_CARD -[hidden]-> PN_CARD
+PN_CARD -[hidden]-> SYS_CARD
+
+footer ""
+@enduml
+  MAP_OFFER:
+  - Stores pending offers
+  - Key: hash
+  - Value: EWebrtc struct
+
+  EWebrtc Structure:
+  - id: Unique identifier
+  - time: Timestamp
+  - version: Entity version
+  - peer_from: Sender ID
+  - peer_to: Recipient ID
+  - sdp_type: OFFER/ANSWER/REGISTER
+  - sdp: Encrypted connection info
+end note
+
+' PeerA
+actor "PeerA" as PA $PEER_A_COLOR
+card "PeerA Specifications" as PA_CARD
+note right of PA_CARD
+  - Client with single peer connection
+  - Has unique ID_A
+  - Contains PK_A (Public Key)
+  - Contains SK_A (Secret Key)
+  - Has MasterPeer's PK_MP embedded
+  - Supports WebRTC connections
+  - Handles SDP_OFFER and SDP_ANSWER
+  - Can connect to multiple peers
+end note
+
+' PeerB
+actor "PeerB" as PB $PEER_B_COLOR
+card "PeerB Specifications" as PB_CARD
+note right of PB_CARD
+  - Client with multi-peer capabilities
+  - Has unique ID_B
+  - Contains PK_B (Public Key)
+  - Contains SK_B (Secret Key)
+  - Has MasterPeer's PK_MP embedded
+  - Supports WebRTC connections
+  - Handles SDP registration
+  - Can connect to multiple peers
+end note
+
+' PeerN
+actor "PeerN" as PN $PEER_N_COLOR
+card "PeerN Specifications" as PN_CARD
+note right of PN_CARD
+  - Generic client with single peer connection
+  - Has unique ID
+  - Contains own Public/Secret keys
+  - Has MasterPeer's PK_MP embedded
+  - Supports WebRTC connections
+  - Can connect to multiple peers
+end note
+
+' Layout adjustments
+MP -[hidden]-> PA
+PA -[hidden]-> PB
+PB -[hidden]-> PN
+PN -[hidden]-> DB
+
+MP_CARD -[hidden]-> PA_CARD
+PA_CARD -[hidden]-> PB_CARD
+PB_CARD -[hidden]-> PN_CARD
+PN_CARD -[hidden]-> SYS_CARD
+
+@enduml

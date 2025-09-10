@@ -1,0 +1,66 @@
+name: Attach Latest PDF to Release
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release Tag'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  attach-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Find latest PDF
+        id: find_pdf
+        run: |
+          if [ -d "output" ] && [ "$(ls -A output/*.pdf 2>/dev/null)" ]; then
+            LATEST_PDF=$(ls -t output/*.pdf | head -n1)
+            echo "✅ Found PDF: $LATEST_PDF"
+            echo "📄 PDF details:"
+            ls -la "$LATEST_PDF"
+            du -h "$LATEST_PDF"
+            echo "pdf_path=$LATEST_PDF" >> $GITHUB_OUTPUT
+            echo "pdf_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ No PDF files found in output directory"
+            echo "pdf_found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and upload to release
+        if: steps.find_pdf.outputs.pdf_found == 'true'
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: ${{ steps.find_pdf.outputs.pdf_path }}
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Evo Framework Documentation ${{ steps.tag.outputs.tag }}"
+          body: "Evo Framework documentation release ${{ steps.tag.outputs.tag }}"
+          draft: false
+          prerelease: ${{ contains(steps.tag.outputs.tag, '-') }}
+
+      - name: No PDF found
+        if: steps.find_pdf.outputs.pdf_found != 'true'
+        run: |
+          echo "⚠️ No PDF found to attach to release"
+          echo "💡 Generate a PDF locally and commit it to the output/ directory first"
+          exit 1
+

@@ -1,0 +1,36 @@
+@startuml
+!theme plain
+
+' Global dark theme
+skinparam backgroundColor #000000
+skinparam defaultFontColor #000000
+
+' Class styling
+skinparam class {
+  BackgroundColor #90EE90
+  BorderColor #FFFFFF
+  FontColor #000000
+}
+
+title Embedded Master Peer Certificate Model
+
+class MasterPeer {
+  + peerId: String
+  + kyberPublicKey: byte[]
+  + dilithiumPublicKey: byte[]
+  + certificate: EmbeddedCertificate
+}
+
+class EmbeddedCertificate {
+  + certificateVersion: String
+  + issuerId: String
+  + subjectId: String
+  + subjectPublicKey: byte[]
+  + signature: byte[]
+  + validFrom: DateTime
+  + validTo: DateTime
+  + metadata: Map<String, String>
+}
+
+MasterPeer *-- EmbeddedCertificate : embeds
+@enduml

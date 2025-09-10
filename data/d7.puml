@@ -1,0 +1,59 @@
+@startuml
+!theme plain
+
+' Colour constants
+!define PEER_A_COLOR      #87CEEB
+!define MASTER_PEER_COLOR #90EE90
+!define MEMORY_COLOR      #fbff00
+!define SYSTEM_COLOR      #FFFFFF
+
+' Global styling
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+skinparam actorStyle awesome
+skinparam database {
+  BackgroundColor #000000
+  BorderColor #000000
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+  LifeLineBorderColor #FFFFFF
+  LifeLineBackgroundColor #000000
+  ParticipantBorderColor #FFFFFF
+  DividerBackgroundColor #000000
+  DividerBorderColor #FFFFFF
+  DividerFontColor #FFFFFF
+}
+
+' Participants
+actor      "MasterPeer" as MP MASTER_PEER_COLOR
+database   "CertDB"     as DB MEMORY_COLOR
+actor      "PeerA"      as PA PEER_A_COLOR
+
+title Diagram 4: Certificate Issuance Flow
+autonumber
+
+== Claim Processing ==
+MP -> MP: Decapsulate Kyber\nDecrypt identity claim
+note left MP: Validate format\nCheck self-signature
+
+MP -> MP: Generate Dilithium-5 Signature
+note left MP: Cert contains:\nPeer ID, PubKey, Expiry
+
+== Storage & Delivery ==
+MP -[MASTER_PEER_COLOR]> DB: Store(ID_A, Certificate)
+activate DB
+DB --[SYSTEM_COLOR]> MP: Storage ACK
+deactivate DB
+
+MP -[MASTER_PEER_COLOR]> PA: ENC_CERT_PACKAGE
+note right PA: ChaCha20-Poly1305\nSession key from KEM
+
+@enduml

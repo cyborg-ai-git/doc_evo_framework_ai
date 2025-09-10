@@ -1,0 +1,57 @@
+% Noto-based emoji configuration (more reliable in CI environments)
+\usepackage{fontspec}
+
+% Set main fonts to Noto family for consistency
+\setmainfont{Noto Sans}
+
+% Use Noto Color Emoji for emojis (widely available)
+\newfontfamily\emojifont{Noto Color Emoji}
+
+% Fallback command that handles missing glyphs gracefully
+\newcommand{\emoji}[1]{%
+    \begingroup%
+    \emojifont%
+    #1%
+    \endgroup%
+}
+
+% Map Unicode characters to emoji command
+\usepackage{newunicodechar}
+
+% Essential emojis from the document
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🎯}{\emoji{🎯}}
+\newunicodechar{💡}{\emoji{💡}}
+\newunicodechar{🔥}{\emoji{🔥}}
+\newunicodechar{⭐}{\emoji{⭐}}
+\newunicodechar{🌟}{\emoji{🌟}}
+\newunicodechar{💎}{\emoji{💎}}
+\newunicodechar{🛡}{\emoji{🛡}}
+\newunicodechar{🔑}{\emoji{🔑}}
+\newunicodechar{🎨}{\emoji{🎨}}
+
+% Mathematical symbols (use regular font for these)
+\newunicodechar{≈}{≈}
+\newunicodechar{→}{→}
+
+% Handle variation selectors (invisible characters)
+\newunicodechar{️}{}  % Variation Selector-16
+</text>
+</invoke>

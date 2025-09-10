@@ -1,0 +1,46 @@
+% Direct emoji font loading for XeLaTeX
+\usepackage{fontspec}
+
+% Set main fonts
+\setmainfont{Noto Sans}
+
+% Load emoji font directly by file path
+\newfontfamily\emojifont[Path=/usr/share/fonts/truetype/noto/]{NotoColorEmoji.ttf}
+
+% Simple emoji command
+\newcommand{\emoji}[1]{{\emojifont #1}}
+
+% Map Unicode characters
+\usepackage{newunicodechar}
+
+% Core emojis
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🎯}{\emoji{🎯}}
+\newunicodechar{💡}{\emoji{💡}}
+\newunicodechar{🔥}{\emoji{🔥}}
+\newunicodechar{⭐}{\emoji{⭐}}
+\newunicodechar{🌟}{\emoji{🌟}}
+\newunicodechar{💎}{\emoji{💎}}
+\newunicodechar{🛡}{\emoji{🛡}}
+\newunicodechar{🔑}{\emoji{🔑}}
+\newunicodechar{🎨}{\emoji{🎨}}
+
+% Handle variation selectors
+\newunicodechar{️}{}  % Variation Selector-16

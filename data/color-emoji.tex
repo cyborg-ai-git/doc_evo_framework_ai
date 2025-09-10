@@ -1,0 +1,123 @@
+% Color emoji configuration for XeLaTeX
+\usepackage{fontspec}
+\usepackage{xcolor}
+
+% Set main fonts
+\setmainfont{Noto Sans}[
+  BoldFont = Noto Sans Bold,
+  ItalicFont = Noto Sans Italic,
+  BoldItalicFont = Noto Sans Bold Italic
+]
+\setsansfont{Noto Sans}
+\setmonofont{Noto Sans Mono}
+
+% Try to use color emoji font with simpler approach
+\newfontfamily\emojifont{Symbola}
+\newcommand{\emoji}[1]{{\emojifont #1}}
+
+% Try to load color emoji font if available
+\@ifpackageloaded{fontspec}{
+  \IfFontExistsTF{NotoColorEmoji.ttf}{
+    \newfontfamily\coloremojifont{NotoColorEmoji.ttf}[Renderer=Harfbuzz]
+    \renewcommand{\emoji}[1]{{\coloremojifont #1}}
+  }{}
+}{}
+
+\usepackage{newunicodechar}
+
+% Map common emojis to use emoji font
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🟢}{\emoji{🟢}}
+\newunicodechar{🟡}{\emoji{🟡}}
+\newunicodechar{🔴}{\emoji{🔴}}
+\newunicodechar{🔵}{\emoji{🔵}}
+\newunicodechar{🟣}{\emoji{🟣}}
+
+% Handle variation selectors
+\newunicodechar{️}{}  % Variation Selector-16
+
+% Mathematical symbols
+\newunicodechar{≈}{\emoji{≈}}
+\newunicodechar{→}{\emoji{→}}
+
+% Status and technical emojis
+\newunicodechar{🎯}{\emoji{🎯}}
+\newunicodechar{💡}{\emoji{💡}}
+\newunicodechar{🔥}{\emoji{🔥}}
+\newunicodechar{⭐}{\emoji{⭐}}
+\newunicodechar{🌟}{\emoji{🌟}}
+\newunicodechar{💎}{\emoji{💎}}
+\newunicodechar{🛡}{\emoji{🛡}}
+\newunicodechar{🔑}{\emoji{🔑}}
+\newunicodechar{🎨}{\emoji{🎨}}
+\newunicodechar{📈}{\emoji{📈}}
+\newunicodechar{📉}{\emoji{📉}}
+\newunicodechar{🔍}{\emoji{🔍}}
+\newunicodechar{🔎}{\emoji{🔎}}
+\newunicodechar{📝}{\emoji{📝}}
+\newunicodechar{📋}{\emoji{📋}}
+\newunicodechar{📌}{\emoji{📌}}
+\newunicodechar{📍}{\emoji{📍}}
+\newunicodechar{🎪}{\emoji{🎪}}
+\newunicodechar{🎭}{\emoji{🎭}}
+\newunicodechar{🎬}{\emoji{🎬}}
+\newunicodechar{🎮}{\emoji{🎮}}
+\newunicodechar{🕹}{\emoji{🕹}}
+\newunicodechar{🎲}{\emoji{🎲}}
+\newunicodechar{🧩}{\emoji{🧩}}
+\newunicodechar{🔗}{\emoji{🔗}}
+\newunicodechar{⛓}{\emoji{⛓}}
+\newunicodechar{🔐}{\emoji{🔐}}
+\newunicodechar{🗝}{\emoji{🗝}}
+\newunicodechar{🛠}{\emoji{🛠}}
+\newunicodechar{⚒}{\emoji{⚒}}
+\newunicodechar{🔨}{\emoji{🔨}}
+\newunicodechar{⛏}{\emoji{⛏}}
+\newunicodechar{🔩}{\emoji{🔩}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🧰}{\emoji{🧰}}
+\newunicodechar{🧲}{\emoji{🧲}}
+\newunicodechar{⚗}{\emoji{⚗}}
+\newunicodechar{🧬}{\emoji{🧬}}
+\newunicodechar{🔬}{\emoji{🔬}}
+\newunicodechar{🔭}{\emoji{🔭}}
+\newunicodechar{📡}{\emoji{📡}}
+\newunicodechar{🛰}{\emoji{🛰}}
+\newunicodechar{🚁}{\emoji{🚁}}
+\newunicodechar{✈}{\emoji{✈}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🛸}{\emoji{🛸}}
+\newunicodechar{🌌}{\emoji{🌌}}
+\newunicodechar{🌠}{\emoji{🌠}}
+\newunicodechar{🌈}{\emoji{🌈}}
+\newunicodechar{☀}{\emoji{☀}}
+\newunicodechar{🌞}{\emoji{🌞}}
+\newunicodechar{🌝}{\emoji{🌝}}
+\newunicodechar{🌛}{\emoji{🌛}}
+\newunicodechar{🌜}{\emoji{🌜}}
+\newunicodechar{🌚}{\emoji{🌚}}
+\newunicodechar{🌕}{\emoji{🌕}}
+\newunicodechar{🌖}{\emoji{🌖}}
+\newunicodechar{🌗}{\emoji{🌗}}
+\newunicodechar{🌘}{\emoji{🌘}}
+\newunicodechar{🌑}{\emoji{🌑}}
+\newunicodechar{🌒}{\emoji{🌒}}
+\newunicodechar{🌓}{\emoji{🌓}}
+\newunicodechar{🌔}{\emoji{🌔}}

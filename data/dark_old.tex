@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{xcolor}
+\pagecolor{black}
+\color{white}
+\usepackage{hyperref}
+\usepackage{tocloft} % Add this for TOC control
+\hypersetup{colorlinks=true, linkcolor=orange, urlcolor=orange}
+\usepackage{fancyvrb}
+\usepackage{framed}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\setkeys{Gin}{width=\textwidth,height=\textheight,keepaspectratio}
+\setmainfont{Arial}
+% Define code block environments
+\newenvironment{Shaded}{%
+  \def\FrameCommand##1{\fboxsep=\FrameSep\colorbox{shadecolor}{##1}}%
+  \MakeFramed{\advance\hsize-\width \FrameRestore}}%
+{\endMakeFramed}
+
+\newenvironment{Highlighting}{\begin{Shaded}}{\end{Shaded}}
+
+% Define tight list spacing
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Set code block background
+\definecolor{shadecolor}{gray}{0.1}
+
+% TOC styling
+\renewcommand{\contentsname}{\large\textbf{Contents}}
+\setlength{\cftbeforesecskip}{4pt} % Now works with tocloft
+
+\begin{document}
+
+% Title page with logo and title
+\begin{titlepage}
+ \begin{center}
+
+    \includegraphics[width=0.9\textwidth]{./data/logo_evo.png}
+
+    % Add title section
+    \title{$title$}
+    \author{$author$}
+    \date{$date$}
+
+      \end{center}
+      \vspace*{\fill}
+\end{titlepage}
+ \maketitle
+% Abstract on a new page
+\newpage
+\begin{abstract}
+    This is the abstract of your document. It now appears on a separate page.
+\end{abstract}
+
+\newpage
+{
+\hypersetup{linkcolor=white}
+\tableofcontents
+}
+
+\newpage
+$body$
+\end{document}
+

@@ -1,0 +1,70 @@
+% Robust emoji configuration with fallbacks
+\usepackage{fontspec}
+\usepackage{ifthen}
+
+% Set main fonts
+\setmainfont{Noto Sans}
+
+% Try to use Symbola font for emojis, with fallbacks
+\IfFontExistsTF{Symbola}{
+    \newfontfamily\emojifont{Symbola}
+    \typeout{Using Symbola font for emojis}
+}{
+    \IfFontExistsTF{Noto Color Emoji}{
+        \newfontfamily\emojifont{Noto Color Emoji}
+        \typeout{Using Noto Color Emoji font for emojis}
+    }{
+        \IfFontExistsTF{Apple Color Emoji}{
+            \newfontfamily\emojifont{Apple Color Emoji}
+            \typeout{Using Apple Color Emoji font for emojis}
+        }{
+            % Final fallback to Noto Sans
+            \newfontfamily\emojifont{Noto Sans}
+            \typeout{Warning: No emoji font found, using Noto Sans as fallback}
+        }
+    }
+}
+
+% Simple emoji command
+\newcommand{\emoji}[1]{{\emojifont #1}}
+
+% Map Unicode characters to emoji command
+\usepackage{newunicodechar}
+
+% Essential emojis from the document
+\newunicodechar{📚}{\emoji{📚}}
+\newunicodechar{🧠}{\emoji{🧠}}
+\newunicodechar{🏗}{\emoji{🏗}}
+\newunicodechar{⚙}{\emoji{⚙}}
+\newunicodechar{🦀}{\emoji{🦀}}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{✅}{\emoji{✅}}
+\newunicodechar{❌}{\emoji{❌}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{🔧}{\emoji{🔧}}
+\newunicodechar{💻}{\emoji{💻}}
+\newunicodechar{🔒}{\emoji{🔒}}
+\newunicodechar{⚡}{\emoji{⚡}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{📊}{\emoji{📊}}
+\newunicodechar{🚀}{\emoji{🚀}}
+\newunicodechar{🎉}{\emoji{🎉}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🎯}{\emoji{🎯}}
+\newunicodechar{💡}{\emoji{💡}}
+\newunicodechar{🔥}{\emoji{🔥}}
+\newunicodechar{⭐}{\emoji{⭐}}
+\newunicodechar{🌟}{\emoji{🌟}}
+\newunicodechar{💎}{\emoji{💎}}
+\newunicodechar{🛡}{\emoji{🛡}}
+\newunicodechar{🔑}{\emoji{🔑}}
+\newunicodechar{🎨}{\emoji{🎨}}
+
+% Mathematical symbols
+\newunicodechar{≈}{\emoji{≈}}
+\newunicodechar{→}{\emoji{→}}
+
+% Handle variation selectors (invisible characters)
+\newunicodechar{️}{}  % Variation Selector-16
+</text>
+</invoke>

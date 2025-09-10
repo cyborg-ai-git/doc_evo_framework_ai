@@ -1,0 +1,8 @@
+scripts_release
+*.assets*
+*.so
+*.onnx
+*.ort
+*.idea
+*.kiro
+*.vscode

@@ -1,0 +1,274 @@
+% Emoji support configuration for XeLaTeX
+\usepackage{fontspec}
+\usepackage{newunicodechar}
+
+% Set main fonts with better Unicode support
+\setmainfont{DejaVu Sans}
+\setsansfont{DejaVu Sans}  
+\setmonofont{DejaVu Sans Mono}
+
+% Try different font names for emoji support
+\IfFontExistsTF{NotoColorEmoji.ttf}{
+  \newfontfamily\emojifont{NotoColorEmoji.ttf}
+}{
+  \IfFontExistsTF{Noto Color Emoji}{
+    \newfontfamily\emojifont{Noto Color Emoji}
+  }{
+    \IfFontExistsTF{Apple Color Emoji}{
+      \newfontfamily\emojifont{Apple Color Emoji}
+    }{
+      \newfontfamily\emojifont{DejaVu Sans}
+    }
+  }
+}
+
+% Map common emoji characters
+\newunicodechar{😀}{\emojifont 😀}
+\newunicodechar{😃}{\emojifont 😃}
+\newunicodechar{😄}{\emojifont 😄}
+\newunicodechar{😁}{\emojifont 😁}
+\newunicodechar{😆}{\emojifont 😆}
+\newunicodechar{😅}{\emojifont 😅}
+\newunicodechar{🤣}{\emojifont 🤣}
+\newunicodechar{😂}{\emojifont 😂}
+\newunicodechar{🙂}{\emojifont 🙂}
+\newunicodechar{🙃}{\emojifont 🙃}
+\newunicodechar{😉}{\emojifont 😉}
+\newunicodechar{😊}{\emojifont 😊}
+\newunicodechar{😇}{\emojifont 😇}
+\newunicodechar{🥰}{\emojifont 🥰}
+\newunicodechar{😍}{\emojifont 😍}
+\newunicodechar{🤩}{\emojifont 🤩}
+\newunicodechar{😘}{\emojifont 😘}
+\newunicodechar{😗}{\emojifont 😗}
+\newunicodechar{☺}{\emojifont ☺}
+\newunicodechar{😚}{\emojifont 😚}
+\newunicodechar{😙}{\emojifont 😙}
+\newunicodechar{🥲}{\emojifont 🥲}
+\newunicodechar{😋}{\emojifont 😋}
+\newunicodechar{😛}{\emojifont 😛}
+\newunicodechar{😜}{\emojifont 😜}
+\newunicodechar{🤪}{\emojifont 🤪}
+\newunicodechar{😝}{\emojifont 😝}
+\newunicodechar{🤑}{\emojifont 🤑}
+\newunicodechar{🤗}{\emojifont 🤗}
+\newunicodechar{🤭}{\emojifont 🤭}
+\newunicodechar{🤫}{\emojifont 🤫}
+\newunicodechar{🤔}{\emojifont 🤔}
+\newunicodechar{🤐}{\emojifont 🤐}
+\newunicodechar{🤨}{\emojifont 🤨}
+\newunicodechar{😐}{\emojifont 😐}
+\newunicodechar{😑}{\emojifont 😑}
+\newunicodechar{😶}{\emojifont 😶}
+\newunicodechar{😏}{\emojifont 😏}
+\newunicodechar{😒}{\emojifont 😒}
+\newunicodechar{🙄}{\emojifont 🙄}
+\newunicodechar{😬}{\emojifont 😬}
+\newunicodechar{🤥}{\emojifont 🤥}
+\newunicodechar{😔}{\emojifont 😔}
+\newunicodechar{😪}{\emojifont 😪}
+\newunicodechar{🤤}{\emojifont 🤤}
+\newunicodechar{😴}{\emojifont 😴}
+\newunicodechar{😷}{\emojifont 😷}
+\newunicodechar{🤒}{\emojifont 🤒}
+\newunicodechar{🤕}{\emojifont 🤕}
+\newunicodechar{🤢}{\emojifont 🤢}
+\newunicodechar{🤮}{\emojifont 🤮}
+\newunicodechar{🤧}{\emojifont 🤧}
+\newunicodechar{🥵}{\emojifont 🥵}
+\newunicodechar{🥶}{\emojifont 🥶}
+\newunicodechar{🥴}{\emojifont 🥴}
+\newunicodechar{😵}{\emojifont 😵}
+\newunicodechar{🤯}{\emojifont 🤯}
+\newunicodechar{🤠}{\emojifont 🤠}
+\newunicodechar{🥳}{\emojifont 🥳}
+\newunicodechar{😎}{\emojifont 😎}
+\newunicodechar{🤓}{\emojifont 🤓}
+\newunicodechar{🧐}{\emojifont 🧐}
+\newunicodechar{😕}{\emojifont 😕}
+\newunicodechar{😟}{\emojifont 😟}
+\newunicodechar{🙁}{\emojifont 🙁}
+\newunicodechar{☹}{\emojifont ☹}
+\newunicodechar{😮}{\emojifont 😮}
+\newunicodechar{😯}{\emojifont 😯}
+\newunicodechar{😲}{\emojifont 😲}
+\newunicodechar{😳}{\emojifont 😳}
+\newunicodechar{🥺}{\emojifont 🥺}
+\newunicodechar{😦}{\emojifont 😦}
+\newunicodechar{😧}{\emojifont 😧}
+\newunicodechar{😨}{\emojifont 😨}
+\newunicodechar{😰}{\emojifont 😰}
+\newunicodechar{😥}{\emojifont 😥}
+\newunicodechar{😢}{\emojifont 😢}
+\newunicodechar{😭}{\emojifont 😭}
+\newunicodechar{😱}{\emojifont 😱}
+\newunicodechar{😖}{\emojifont 😖}
+\newunicodechar{😣}{\emojifont 😣}
+\newunicodechar{😞}{\emojifont 😞}
+\newunicodechar{😓}{\emojifont 😓}
+\newunicodechar{😩}{\emojifont 😩}
+\newunicodechar{😫}{\emojifont 😫}
+\newunicodechar{🥱}{\emojifont 🥱}
+\newunicodechar{😤}{\emojifont 😤}
+\newunicodechar{😡}{\emojifont 😡}
+\newunicodechar{😠}{\emojifont 😠}
+\newunicodechar{🤬}{\emojifont 🤬}
+\newunicodechar{😈}{\emojifont 😈}
+\newunicodechar{👿}{\emojifont 👿}
+\newunicodechar{💀}{\emojifont 💀}
+\newunicodechar{☠}{\emojifont ☠}
+\newunicodechar{💩}{\emojifont 💩}
+\newunicodechar{🤡}{\emojifont 🤡}
+\newunicodechar{👹}{\emojifont 👹}
+\newunicodechar{👺}{\emojifont 👺}
+\newunicodechar{👻}{\emojifont 👻}
+\newunicodechar{👽}{\emojifont 👽}
+\newunicodechar{👾}{\emojifont 👾}
+\newunicodechar{🤖}{\emojifont 🤖}
+\newunicodechar{🎃}{\emojifont 🎃}
+\newunicodechar{😺}{\emojifont 😺}
+\newunicodechar{😸}{\emojifont 😸}
+\newunicodechar{😹}{\emojifont 😹}
+\newunicodechar{😻}{\emojifont 😻}
+\newunicodechar{😼}{\emojifont 😼}
+\newunicodechar{😽}{\emojifont 😽}
+\newunicodechar{🙀}{\emojifont 🙀}
+\newunicodechar{😿}{\emojifont 😿}
+\newunicodechar{😾}{\emojifont 😾}
+
+% Technical and framework related emojis
+\newunicodechar{⚡}{\emojifont ⚡}
+\newunicodechar{🔥}{\emojifont 🔥}
+\newunicodechar{💡}{\emojifont 💡}
+\newunicodechar{🔧}{\emojifont 🔧}
+\newunicodechar{⚙}{\emojifont ⚙}
+\newunicodechar{🛠}{\emojifont 🛠}
+\newunicodechar{🔩}{\emojifont 🔩}
+\newunicodechar{⚒}{\emojifont ⚒}
+\newunicodechar{🔨}{\emojifont 🔨}
+\newunicodechar{🪓}{\emojifont 🪓}
+\newunicodechar{🔪}{\emojifont 🔪}
+\newunicodechar{⚔}{\emojifont ⚔}
+\newunicodechar{🛡}{\emojifont 🛡}
+\newunicodechar{🔒}{\emojifont 🔒}
+\newunicodechar{🔓}{\emojifont 🔓}
+\newunicodechar{🔐}{\emojifont 🔐}
+\newunicodechar{🔑}{\emojifont 🔑}
+\newunicodechar{🗝}{\emojifont 🗝}
+\newunicodechar{💻}{\emojifont 💻}
+\newunicodechar{🖥}{\emojifont 🖥}
+\newunicodechar{🖨}{\emojifont 🖨}
+\newunicodechar{⌨}{\emojifont ⌨}
+\newunicodechar{🖱}{\emojifont 🖱}
+\newunicodechar{🖲}{\emojifont 🖲}
+\newunicodechar{💽}{\emojifont 💽}
+\newunicodechar{💾}{\emojifont 💾}
+\newunicodechar{💿}{\emojifont 💿}
+\newunicodechar{📀}{\emojifont 📀}
+\newunicodechar{🧮}{\emojifont 🧮}
+\newunicodechar{🎛}{\emojifont 🎛}
+\newunicodechar{🎚}{\emojifont 🎚}
+\newunicodechar{🎙}{\emojifont 🎙}
+\newunicodechar{📱}{\emojifont 📱}
+\newunicodechar{📲}{\emojifont 📲}
+\newunicodechar{☎}{\emojifont ☎}
+\newunicodechar{📞}{\emojifont 📞}
+\newunicodechar{📟}{\emojifont 📟}
+\newunicodechar{📠}{\emojifont 📠}
+\newunicodechar{🔋}{\emojifont 🔋}
+\newunicodechar{🔌}{\emojifont 🔌}
+\newunicodechar{💡}{\emojifont 💡}
+\newunicodechar{🔦}{\emojifont 🔦}
+\newunicodechar{🕯}{\emojifont 🕯}
+\newunicodechar{🪔}{\emojifont 🪔}
+\newunicodechar{🧯}{\emojifont 🧯}
+\newunicodechar{🛢}{\emojifont 🛢}
+\newunicodechar{💸}{\emojifont 💸}
+\newunicodechar{💰}{\emojifont 💰}
+\newunicodechar{💴}{\emojifont 💴}
+\newunicodechar{💵}{\emojifont 💵}
+\newunicodechar{💶}{\emojifont 💶}
+\newunicodechar{💷}{\emojifont 💷}
+\newunicodechar{💎}{\emojifont 💎}
+\newunicodechar{⚖}{\emojifont ⚖}
+\newunicodechar{🧰}{\emojifont 🧰}
+\newunicodechar{🔧}{\emojifont 🔧}
+\newunicodechar{🔨}{\emojifont 🔨}
+\newunicodechar{⛏}{\emojifont ⛏}
+\newunicodechar{🛠}{\emojifont 🛠}
+\newunicodechar{⚙}{\emojifont ⚙}
+\newunicodechar{🔩}{\emojifont 🔩}
+\newunicodechar{⚒}{\emojifont ⚒}
+\newunicodechar{🛡}{\emojifont 🛡}
+\newunicodechar{⚔}{\emojifont ⚔}
+\newunicodechar{🔫}{\emojifont 🔫}
+\newunicodechar{🏹}{\emojifont 🏹}
+\newunicodechar{🛠}{\emojifont 🛠}
+\newunicodechar{🔧}{\emojifont 🔧}
+\newunicodechar{🔨}{\emojifont 🔨}
+\newunicodechar{⚒}{\emojifont ⚒}
+\newunicodechar{🛠}{\emojifont 🛠}
+\newunicodechar{⛏}{\emojifont ⛏}
+\newunicodechar{🔩}{\emojifont 🔩}
+\newunicodechar{⚙}{\emojifont ⚙}
+\newunicodechar{🧰}{\emojifont 🧰}
+\newunicodechar{🧲}{\emojifont 🧲}
+\newunicodechar{⚗}{\emojifont ⚗}
+\newunicodechar{🧪}{\emojifont 🧪}
+\newunicodechar{🧫}{\emojifont 🧫}
+\newunicodechar{🧬}{\emojifont 🧬}
+\newunicodechar{🔬}{\emojifont 🔬}
+\newunicodechar{🔭}{\emojifont 🔭}
+\newunicodechar{📡}{\emojifont 📡}
+\newunicodechar{💉}{\emojifont 💉}
+\newunicodechar{🩸}{\emojifont 🩸}
+\newunicodechar{💊}{\emojifont 💊}
+\newunicodechar{🩹}{\emojifont 🩹}
+\newunicodechar{🩺}{\emojifont 🩺}
+\newunicodechar{🚪}{\emojifont 🚪}
+\newunicodechar{🛗}{\emojifont 🛗}
+\newunicodechar{🪜}{\emojifont 🪜}
+\newunicodechar{🪟}{\emojifont 🪟}
+\newunicodechar{🪑}{\emojifont 🪑}
+\newunicodechar{🛏}{\emojifont 🛏}
+\newunicodechar{🛋}{\emojifont 🛋}
+\newunicodechar{🪑}{\emojifont 🪑}
+\newunicodechar{🚽}{\emojifont 🚽}
+\newunicodechar{🪠}{\emojifont 🪠}
+\newunicodechar{🚿}{\emojifont 🚿}
+\newunicodechar{🛁}{\emojifont 🛁}
+\newunicodechar{🪒}{\emojifont 🪒}
+\newunicodechar{🧴}{\emojifont 🧴}
+\newunicodechar{🧷}{\emojifont 🧷}
+\newunicodechar{🧹}{\emojifont 🧹}
+\newunicodechar{🧺}{\emojifont 🧺}
+\newunicodechar{🧻}{\emojifont 🧻}
+\newunicodechar{🪣}{\emojifont 🪣}
+\newunicodechar{🧼}{\emojifont 🧼}
+\newunicodechar{🪥}{\emojifont 🪥}
+\newunicodechar{🧽}{\emojifont 🧽}
+\newunicodechar{🧯}{\emojifont 🧯}
+\newunicodechar{🛒}{\emojifont 🛒}
+\newunicodechar{🚬}{\emojifont 🚬}
+\newunicodechar{⚰}{\emojifont ⚰}
+\newunicodechar{⚱}{\emojifont ⚱}
+\newunicodechar{🗿}{\emojifont 🗿}
+\newunicodechar{🪧}{\emojifont 🪧}
+
+% Status and indicator emojis
+\newunicodechar{✅}{\emojifont ✅}
+\newunicodechar{❌}{\emojifont ❌}
+\newunicodechar{⚠}{\emojifont ⚠}
+\newunicodechar{🚫}{\emojifont 🚫}
+\newunicodechar{🔴}{\emojifont 🔴}
+\newunicodechar{🟠}{\emojifont 🟠}
+\newunicodechar{🟡}{\emojifont 🟡}
+\newunicodechar{🟢}{\emojifont 🟢}
+\newunicodechar{🔵}{\emojifont 🔵}
+\newunicodechar{🟣}{\emojifont 🟣}
+\newunicodechar{🟤}{\emojifont 🟤}
+\newunicodechar{⚫}{\emojifont ⚫}
+\newunicodechar{⚪}{\emojifont ⚪}
+\newunicodechar{🔘}{\emojifont 🔘}
+\newunicodechar{🔲}{\emojifont 🔲}
+\newunicodechar{🔳}{\emojifont 🔳}
