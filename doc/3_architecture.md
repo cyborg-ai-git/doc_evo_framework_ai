@@ -1,4 +1,4 @@
-# Architecture 🏗️
+# Architecture
 
 ![evo_framework_text.svg](data/evo_framework_text.svg)
 
