@@ -1,4 +1,4 @@
-# Software Architecture ⚙️
+# Software Architecture
 The Evo Framework is meticulously designed around the most advanced software engineering methodologies, incorporating:
 
 #### SOLID Principles
