@@ -94,10 +94,11 @@ Data Reduction: 91% smaller
 ###  Memory Efficiency
 
 **Memory Footprint Comparison:**
-| Protocol | Memory Usage | Garbage Collection |
-|----------|-------------|-------------------|
-| JSON | 150-300% overhead | Frequent object cleanup |
-| Cyborg AI | 5-10% overhead | Minimal string operations |
+
+| Protocol  | Memory Usage      | Garbage Collection        |
+|-----------|-------------------|---------------------------|
+| JSON      | 150-300% overhead | Frequent object cleanup   |
+| Cyborg AI | 5-10% overhead    | Minimal string operations |
 
 ### Parsing Efficiency
 
@@ -170,7 +171,8 @@ where
 - API_DESCRIPTION: the description of what api do
 
 API Registry:
-|0|Documentation query|
+|0|Documentation api query|
+|1|Error not found a valid api |
 |1001|File operations|
 |1002|Network requests|
 ```
