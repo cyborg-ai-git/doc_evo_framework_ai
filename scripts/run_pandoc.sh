@@ -87,7 +87,8 @@ pandoc \
   "$PATH_INPUT/6_evo_framework_next_generation_software_architecture.md" \
   "$PATH_INPUT/7_architectural_layers.md" \
   "$PATH_INPUT/8_control_layer_icontrol.md" \
-  "$PATH_INPUT/9_evo_api_layer_iapi.md" \
+  "$PATH_INPUT/9_0_evo_api_layer_iapi.md" \
+  "$PATH_INPUT/9_1_ai_tokenization.md" \
   "$PATH_INPUT/10_evo_ai_module_iai.md" \
   "$PATH_INPUT/11_evo_api_module_iapi.md" \
   "$PATH_INPUT/12_memory_layer_imemory.md" \
