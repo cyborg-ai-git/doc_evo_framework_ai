@@ -2,11 +2,16 @@
 
 ![evo bridge](data/evo_layer_bridge.svg)
 
-The **Post Quantum Cryptographic Entity System (PQCES)** is a bridge layer of **Evo Framework AI**  designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. Built from the ground up with quantum-resistance in mind, this system leverages NIST-standardized post-quantum cryptographic algorithms to establish a future-proof security architecture. **PQCES** implements a hierarchical trust model with specialized cryptographic roles, robust certificate management, and defense-in-depth security measures to protect against both classical and quantum threats. This system is particularly suitable for applications requiring long-term security assurances, distributed trust, and resilient communication channels in potentially hostile network environments.
-**PQCES**.
+The **Post Quantum Cryptographic Entity System (PQCES)** is a bridge layer of **Evo Framework AI** designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. 
+
+Built from the ground up with quantum-resistance in mind, this system leverages NIST-standardized post-quantum cryptographic algorithms to establish a future-proof security architecture. 
+
+**PQCES** implements a hierarchical trust model with specialized cryptographic roles, robust certificate management, and defense-in-depth security measures to protect against both classical and quantum threats. This system is particularly suitable for applications requiring long-term security assurances, distributed trust, and resilient communication channels in potentially hostile network environments.
+
 This cryptographic architecture provides a quantum-resistant foundation for distributed systems communication, combining NIST-standardized post-quantum algorithms with robust protocol design. The system enables secure peer authentication, confidential data exchange, and scalable trust management through three core mechanisms:
+
 - **Hierarchical Trust** via certificate-chained identities
-- **Layered Cryptography** combining PQ KEM and symmetric encryption
+- **Layered Cryptography** combining PQ KEM and symmetric encryption  
 - **Defense-in-Depth** through multiple verification stages
 
 The design emphasizes maintainability through modular cryptographic primitives and provides comprehensive protection against both classical and quantum computing threats. Future enhancements would focus on automated key rotation and distributed trust mechanisms.
@@ -128,8 +133,9 @@ The identity system leverages blockchain technology to achieve true decentraliza
 - **Migration Flexibility**: Seamless movement between hosting providers including local development environments, cloud platforms (AWS, Google Cloud, Azure), edge computing providers (Fly.io, Cloudflare Workers), AI/ML platforms (HuggingFace, Google Colab), and decentralized hosting (IPFS, Arweave)
 
 **Identity Resolution Process:**
+
 1. **Peer Discovery**: Query Master Peer or distributed registry with target peer ID
-2. **Certificate Retrieval**: Obtain authenticated EPeerCertificate for the target peer
+2. **Certificate Retrieval**: Obtain authenticated EPeerCertificate for the target peer  
 3. **Capability Negotiation**: Determine optimal transport protocol and connection parameters
 4. **Secure Connection**: Establish quantum-resistant encrypted channel using retrieved public keys
 
