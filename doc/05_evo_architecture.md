@@ -1,6 +1,6 @@
 # Architecture
 
-![evo_framework_text.svg](data/evo_framework_text.svg)
+![evo framework ai](data/evo_framework_text.svg)
 
 The Evo Framework is based on different programming paradigms:
 - modular programming,
@@ -34,3 +34,5 @@ The Evo Framework is structured so as to be able to use different types of netwo
 - The task is divided into parts that are processed individually by each and then sent back together to form the final result.
 - Peer-to-peer networks – architecture where there are special machines that provide a service or manage the network resources. Instead all responsibilities are uniformly divided among all machines known as peers. The peer can act both as a client and a server.
 - Space-based – Refers to a structure that creates the illusion (virtualization) of a single address space. The data is replicated according to application requirements.
+
+\pagebreak

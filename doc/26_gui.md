@@ -164,4 +164,3 @@ The GUI Layer represents a revolutionary approach to user interface development,
 - Comprehensive logging
 
 \pagebreak
-

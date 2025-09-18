@@ -68,3 +68,5 @@
 - **Primary Signature**: ML-DSA (FIPS 204) for most digital signature applications
 - **Backup Signature**: SLH-DSA (FIPS 205) for cases requiring hash-based security
 - **Backup KEM**: HQC will serve as alternative to ML-KEM with different mathematical foundation
+
+\pagebreak

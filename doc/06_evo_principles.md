@@ -28,8 +28,6 @@ The Evo Framework is meticulously designed around the most advanced software eng
 - Low-level modules implement specific interfaces
 - Facilitates loose coupling and improved system flexibility
 
-\pagebreak
-
 ## Design Patterns Integration
 
 ### Creational Patterns
@@ -61,8 +59,6 @@ The Evo Framework is meticulously designed around the most advanced software eng
 - Template Method
 - Visitor
 
-\pagebreak
-
 ## KISS principle 💋
 The KISS principle, standing for "Keep It Simple, Stupid," is a design guideline in coding that advocates for making systems, strategies, and decisions as simple as possible to avoid unnecessary complexity. This approach makes code easier to understand, debug, and maintain, ultimately leading to more robust and user-friendly software. 
 
@@ -78,4 +74,5 @@ Clarity and Readability: The principle encourages clear, concise, and easy-to-un
 - Use Clear and Descriptive Names: Choose variable and method names that accurately reflect their purpose. 
 - Eliminate Redundancy: Remove any unnecessary or unused code, processes, or features. 
 - Consider User Experience: Design interfaces and interactions that are simple and intuitive for the user. 
+
 \pagebreak

@@ -125,3 +125,5 @@
 | **LSM Tree** | O(n) | 1.5-3.0× | Write-heavy workloads |
 | **Bloom Filter** | O(n) | 0.1-0.2× | Negative lookup optimization |
 | **Vector Index** | O(n×d) | 2.0-10.0× | Similarity search acceleration |
+
+\pagebreak

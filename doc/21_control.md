@@ -47,5 +47,3 @@ Serialization methods enable:
 - Network transmission
 
 \pagebreak
-
----

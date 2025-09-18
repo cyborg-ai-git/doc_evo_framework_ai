@@ -175,5 +175,3 @@ The Entity Layer represents a revolutionary approach to data representation:
 - Error detection
 
 \pagebreak
-
----
