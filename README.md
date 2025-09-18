@@ -176,11 +176,11 @@ This repository uses **Git Flow** branching strategy for organized development:
 ### 🚀 Quick Start for Contributors
 
 1. **Fork the Repository**: Create your own fork of the project
-2. **Create an Issue**: Use our automated script to create issues and Git Flow feature branches:
-3. **Start Feature Branch**: Use Git Flow to start working on the issue:
-4. **Follow EVO Framework**: Adhere to naming conventions and architecture patterns
-5. **Write Tests**: Include appropriate test coverage
-6. **Submit Pull Request**: Use Git Flow to finish and target the `develop` branch:
+2. **Git Flow Init**: run $git flow init and use default branches name
+3. **Create an Issue**: Use our automated script to create issues [0_issue_create.sh](./scripts/0_issue_create.sh)
+4. **Start Feature Branch**: Use [1_issue_start.sh](./scripts/1_issue_start.sh) start working on the issue:
+5. **Commit Feature Branch**: Use [2_issue_commit.sh](./scripts/2_issue_commit.sh)
+6. **Finish Feature Branch**: Use [3_issue_finish.sh](./scripts/3_issue_finish.sh)
 7. **Code Review**: Participate in the review process
 
 
