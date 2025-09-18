@@ -28,25 +28,7 @@ else
     sh ./run_create_github_repository.sh
 fi
 
-# Check if git flow is initialized
-if ! git config --get gitflow.branch.master >/dev/null 2>&1; then
-    echo "❌ Git flow not initialized. Initializing now..."
-
-    # Check if develop branch exists
-    if git show-ref --verify --quiet refs/heads/develop; then
-        echo "🔵 Develop branch found"
-    else
-        echo "🔵 Creating develop branch..."
-        git checkout -b develop 2>/dev/null || git checkout develop
-        git push -u origin develop 2>/dev/null || true
-    fi
-
-    # Initialize git flow with defaults (no hotfix branch)
-    echo -e "master\ndevelop\nfeature/\nrelease/\n\nsupport/\nv" | git flow init
-
-    echo "🟢 Git flow initialized successfully!"
-fi
-
+#---------------------------------------------------------------------------------------------------
 # Set commit message
 if [ -z "$1" ]; then
     comment="commit $CURRENT_TIME"
@@ -59,7 +41,8 @@ echo "💬 Commit message: $comment"
 # Configure git and fetch updates
 git config http.postBuffer 524288000
 git fetch --all
-
+git pull origin develop
+git rebase develop
 # Add and commit changes
 git add .
 git commit -am "$comment"
