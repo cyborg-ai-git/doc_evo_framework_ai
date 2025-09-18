@@ -44,7 +44,7 @@ The framework includes an advanced documentation generation system:
 - Deployment diagrams
 
 **Documentation Features**
-- Markdown and HTML output
+- Markdown, pdf, HTML ... output
 - Interactive documentation
 - Code usage examples
 - API reference
@@ -150,23 +150,6 @@ The framework includes an advanced documentation generation system:
 - Adaptive optimization
 - Hardware-specific instruction selection
 - Profile-guided optimization
-
-## Language and Platform Interoperability
-
-**Cross-Language FFI**
-- Native binary compatibility
-- Minimal runtime overhead
-- Type-safe bindings
-- Automatic binding generation
-
-**Supported Target Platforms**
-- WebAssembly
-- Linux
-- macOS
-- Windows
-- iOS
-- Android
-- Embedded systems
 
 ## Continuous Integration and Deployment
 

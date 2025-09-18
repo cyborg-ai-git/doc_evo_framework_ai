@@ -2,21 +2,21 @@
 
 ![evo framework ai](data/evo_framework_text.svg)
 
-The Evo Framework is based on different programming paradigms:
+The **Evo Framework AI** is based on different programming paradigms:
 - modular programming,
 - object-oriented programming,
-- planning events,
+- events driven,
 - aspect-oriented programming.
 
-The Evo Framework is divided into individual modules each of which performs specific functions in an autonomous way and that can cooperate with each other.
+The **Evo Framework AI** is divided into individual modules each of which performs specific functions in an autonomous way and that can cooperate with each other.
 
 The goal is to simplify development, testing and maintenance of large programs that involve one or more developers.
 
 ### Multi language
-The Evo Framework can be implemented in any language that supports object-oriented programming.
+The **Evo Framework AI** can be implemented in any language that supports object-oriented programming.
 
 ### Multi platform
-The Evo Framework is portable and platform can be used:
+The **Evo Framework AI** is portable and platform can be used:
 - desktop environment
 - server environment
 - on mobile devices
@@ -24,7 +24,7 @@ The Evo Framework is portable and platform can be used:
 - for web platforms
 
 ### Network architecture
-The Evo Framework is structured so as to be able to use different types of network architecture.
+The **Evo Framework AI** is structured so as to be able to use different types of network architecture.
 
 - Stand-alone is capable of functioning alone or independently from other objects or software, which might otherwise interact with.
 - Client-server client code contacts the server for data, which formats and displays to the user. The input data to the client are sent to the server when they are given a permanent basis.

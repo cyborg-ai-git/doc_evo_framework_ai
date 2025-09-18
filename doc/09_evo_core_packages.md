@@ -1,4 +1,4 @@
-## Evo Framework Modules Structure
+## Evo Framework AI Modules Structure
 
 ![evo_package](data/evo_package.svg)
 

@@ -1,7 +1,7 @@
 ## Cross-Language Compatibility
 ![languages](data/evo_languages.svg)
 
-The **Evo Framework** is designed for seamless integration across multiple platforms and languages through:
+The **Evo Framework AI** is designed for seamless integration across multiple platforms and languages through:
 - Foreign Function Interface (FFI) support
 - Native compilation targets
 - Direct exportability to:

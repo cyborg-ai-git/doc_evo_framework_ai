@@ -1,11 +1,6 @@
-# Architectural Layers
+# Evo Entity Layer: Advanced Data Representation and Serialization (IEntity)
 
-![architectural layers](data/evo_framework.svg)
-
-\pagebreak
-## Entity Layer: Advanced Data Representation and Serialization (IEntity)
-
-![evo_entity.svg](data/evo_entity.svg)
+![evo entity](data/evo_layer_entity.svg)
 
 The Entity Layer represents the fundamental data abstraction mechanism of the Evo Framework, designed to provide an ultra-efficient, flexible, and performant approach to data representation and transmission.
 

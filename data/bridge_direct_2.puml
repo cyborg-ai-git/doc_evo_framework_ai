@@ -59,29 +59,24 @@ skinparam sequence {
 !$BRIDGE_COLOR = "#ff0000"
 
 ' Participants
-actor "PeerA" as PA $PEER_A_COLOR
 actor "PeerB" as PB $PEER_B_COLOR
+actor "PeerA" as PA $PEER_A_COLOR
 queue "Bridge channel" as SC $BRIDGE_COLOR
 
-title Case 1: Peer-to-Peer Communication Flow
+title PeerB get_peer PeerA certificate from Local Cache or other secure channel 
 
 autonumber
 == Session Establishment ==
 
-PB -[$PEER_B_COLOR]> PA: Kyber Ciphertext
+PB -[$PEER_B_COLOR]> PA: EApiEvent(Kyber Ciphertext,Api request,id_peer_b)
 activate PA $PEER_A_COLOR
-note right PA: 1. Decapsulate Kyber\n2. HKDF-SHA384
+note right PA: 1. Decapsulate Kyber\n2.Verify sign\n3. get_peer PeerB (cache, Master Peer)
 
-PA -[$PEER_A_COLOR]> PB: Session Confirm
-note left PB: Verify MAC\nInit AEAD
+PA -[$PEER_A_COLOR]> PB: Recive EApiEvent response
+note left PB: 1. Decrypt EApiEvent\n2. Store new Secret Key
 
-== Data Exchange ==
+== Other EApiEvent Request/Response ... ==
 
-PB -[$PEER_B_COLOR]> PA: AUTH_DATA[0]
-note right PB: ChaCha20-Poly1305\nSeq: 001
-
-PA -[$PEER_A_COLOR]> PB: ENC_RESPONSE[0]
-note left PA: Rate Limited\nAnti-Replay
 
 == Channel Maintenance ==
 
@@ -89,6 +84,4 @@ PB -[$PEER_B_COLOR]> SC: Keepalive
 SC -[$BRIDGE_COLOR]> PA: Heartbeat
 
 deactivate PA
-
-footer "Secure Messaging Protocol v1.4 | IETF-Compliant"
 @enduml

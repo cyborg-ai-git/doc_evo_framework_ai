@@ -62,12 +62,12 @@ actor "PeerB" as PB $PEER_B_COLOR
 actor "MasterPeer" as MP $MASTER_PEER_COLOR
 database "CertDB" as DB $MEMORY_COLOR
 
-title Case 1: Certificate Request Flow
+title PeerB get_peer PeerA certificate from Master Peer
 
 autonumber
 == Request Initiation ==
 
-PB -[$PEER_B_COLOR]> MP: ENC_QUERY(ID_A)
+PB -[$PEER_B_COLOR]> MP: EApiEvent(ID_PEER_A)
 activate MP $MASTER_PEER_COLOR
 note right MP: 1. Decapsulate Kyber\n2. Derive Session Key
 
@@ -80,12 +80,11 @@ deactivate DB
 == Secure Delivery ==
 
 MP -[$MASTER_PEER_COLOR]> MP: Package Response
-note left MP: ChaCha20-Poly1305\nAES-GCM-SIV
+note left MP: ChaCha20-Poly1305
 
 MP -[$MASTER_PEER_COLOR]> PB: ENC_CERT
-note left PB: 1. Decrypt Response\n2. Verify Chain
+note left PB: 1. Decrypt Response\n2. Verify Master Peer Certificate sign
 
 deactivate MP
 
-footer "Cert Retrieval Protocol | PQ-Secure"
 @enduml

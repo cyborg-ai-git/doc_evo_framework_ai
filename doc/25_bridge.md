@@ -1,9 +1,9 @@
-# Bridge Layer (IBridge)
+# Evo Bridge Layer (IBridge)
 
-![i_bridge](data/evo_bridge.svg)
+![evo bridge](data/evo_layer_bridge.svg)
 
-The Post Quantum Cryptographic Entity System (PQCES) is a comprehensive framework designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. Built from the ground up with quantum-resistance in mind, this system leverages NIST-standardized post-quantum cryptographic algorithms to establish a future-proof security architecture. PQCE implements a hierarchical trust model with specialized cryptographic roles, robust certificate management, and defense-in-depth security measures to protect against both classical and quantum threats. This system is particularly suitable for applications requiring long-term security assurances, distributed trust, and resilient communication channels in potentially hostile network environments.
-PQCES.
+The **Post Quantum Cryptographic Entity System (PQCES)** is a bridge layer of **Evo Framework AI**  designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. Built from the ground up with quantum-resistance in mind, this system leverages NIST-standardized post-quantum cryptographic algorithms to establish a future-proof security architecture. **PQCES** implements a hierarchical trust model with specialized cryptographic roles, robust certificate management, and defense-in-depth security measures to protect against both classical and quantum threats. This system is particularly suitable for applications requiring long-term security assurances, distributed trust, and resilient communication channels in potentially hostile network environments.
+**PQCES**.
 This cryptographic architecture provides a quantum-resistant foundation for distributed systems communication, combining NIST-standardized post-quantum algorithms with robust protocol design. The system enables secure peer authentication, confidential data exchange, and scalable trust management through three core mechanisms:
 - **Hierarchical Trust** via certificate-chained identities
 - **Layered Cryptography** combining PQ KEM and symmetric encryption
@@ -16,7 +16,8 @@ By implementing this system in accordance with NIST guidelines and recommendatio
 
 
 ## Technical Overview
-This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.\pagebreak
+This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.
+
 ## CIA Triad Implementation
 
 The Cryptographic Entity Management System is designed with the foundational principles of information security - Confidentiality, Integrity, and Availability (CIA) - as core architectural considerations. Each element of the CIA triad is addressed through specific cryptographic mechanisms and protocol designs.
@@ -56,7 +57,7 @@ Integrity ensures that information is accurate, complete, and has not been modif
 
 - **Hash Algorithm Options:** Multiple hash algorithm options (BLAKE3) for identity derivation and integrity validation.
 
-- **Integrity Proofs:** SHA-512/256 integrity proofs included in certificate packages and critical communications.
+- **Integrity Proofs:** SHA-256/512 integrity proofs included in certificate packages and critical communications.
 
 - **Monotonic Counters:** EAction headers include monotonic counters to prevent message replay or reordering attacks.
 
@@ -73,13 +74,13 @@ Availability ensures that authorized users have reliable and timely access to in
 
 **Implementation Mechanisms:**
 
-- **Distributed Certificate Registry:** Certificate information distributed across GitHub repositories and IPFS ensures high availability even if individual nodes fail.
+- **Distributed Certificate Registry:** Certificate information are now distributed across GitHub repositories and IPFS (soon will migrate to EvoDPQ) ensures high availability even if individual nodes fail.
 
 - **Decentralized Trust Model:** Master Peer architecture can be extended to multiple Master Peers for redundancy.
 
 - **Robust Protocol Design:** Communication protocols designed to handle network interruptions and reconnections gracefully.
 
-- **Certificate Caching:** Peers can cache validated certificates to continue operations during temporary Master Peer unavailability.
+- **Certificate Caching:** Peers can cache validated certificates to continue operations during temporary Master Peer unavailability or direct coneection Peer to Peer.
 
 - **Protocol Resilience:** Automatic session rekeying and reconnection capabilities maintain availability during network disruptions.
 
@@ -101,15 +102,15 @@ The system maintains a careful balance between the three elements of the CIA tri
 
 - **Integrity vs Performance Balance:** Comprehensive integrity verification is optimized for minimal latency impact.
 
-- **Security Level Customization:** The system allows selection of cryptographic parameters based on specific confidentiality, integrity, and availability requirements.\pagebreak
-  \pagebreak
-## System Architecture
+- **Security Level Customization:** The system allows selection of cryptographic parameters based on specific confidentiality, integrity, and availability requirements.
+
+## Bridge System Architecture
 
 ### Core Components
 
 ![](data/actor_dark.svg)
 
-#### Master Peer (EMasterPeer)
+#### Master Peer (EPeerMasterPeer)
 
 The Master Peer serves as the trust anchor and certificate authority within the system.
 
@@ -119,7 +120,7 @@ The Master Peer serves as the trust anchor and certificate authority within the 
 
 **Maintains:**
 - Peer certificate registry
-- Fully distributed in public GitHub repository and IPFS (InterPlanetary File System)
+- Fully distributed IPFS (InterPlanetary File System)
 - Public key directory
 - Cryptographic material storage
 
@@ -179,7 +180,7 @@ Network Actions represent standardized communication protocol units.
 #### Direct Communication Flow
 
 **Certificate Verification**
-- Validate Dilithium signature using Master Peer's public key
+- Validate Dilithium signature using Master Peer's public key (embedded in each peer for pinning)
 - Verify certificate chain integrity
 - Check revocation status (implied via registry)
 - Implementation follows NIST SP 800-57 Part 1 Rev. 5 guidelines for key management
@@ -187,7 +188,7 @@ Network Actions represent standardized communication protocol units.
 **Session Establishment**
 - Initiator performs Kyber KEM with recipient's certified public key
 - Generate 256-bit shared secret
-- Derive session keys using SHA-3-512 according to NIST FIPS 202
+- Derive session keys using SHA-512 according to NIST FIPS 202
 - Session key derivation follows NIST SP 800-108 Rev. 1 recommendations
 
 **Secure Messaging**
@@ -203,7 +204,7 @@ Network Actions represent standardized communication protocol units.
 ### Certificate Retrieval Protocol
 
 #### Request Phase
-- Requester initiates KEM with Master Peer
+- Requester initiates KEM with Master Peer 
 - Encrypts certificate query using established secret
 
 #### Validation Phase
@@ -229,63 +230,72 @@ Network Actions represent standardized communication protocol units.
 - **Cryptographic Agility:** Modular design supports algorithm updates
   - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
 
-## Protocol Flow Diagrams
+## **PQCES** Protocol Flow Diagrams
 
-### Certificate Issuance Sequence
+### Certificate Issuance Sequence (api: set_peer)
 
 ```
-[PeerA]                    [Master Peer]
-|--- AKE Request ----------->|
-|<-- Session Confirm --------|
-|--- Api request  ---------->| <- Each packet with unique ChaCha20 nonce
-|<-- PeerA Certificate ------| <- Each packet with unique ChaCha20 nonce
+[PeerA]                                     [Master Peer]
+|--------- AKE Request + EPeerPublic + sign ----------->| 
+|<-------- PeerA Certificate (Master Peer signed) ------|
 ```
-![sequence_diagram_0.svg](data/sequence_diagram_0.svg)
-\pagebreak
 
-### Secure Messaging Sequence
+![bridge set_peer](data/bridge_set_peer_mp.svg)
+
+---
+
+### Secure Messaging Sequence (api:get peer)
 
 #### Case 1: Certificate Retrieval and Direct Communication
-First, PeerB requests PeerA's certificate from the Master Peer:
+First, PeerB requests PeerA's certificate from the Master Peer because don't have PeerA in cache:
 
 ```
-[PeerB]                    [Master Peer]
-|--- AKE Request ----------->|
-|<-- Session Confirm --------|
-|--- Api request  ---------->| <- Each packet with unique ChaCha20 nonce
-|<-- PeerA Certificate ------| <- Each packet with unique ChaCha20 nonce
+[PeerB]                                     [Master Peer]
+|--------- AKE Request + PeerA ID --------------------->|
+|<-------- PeerA Certificate (Master Peer signed) ------|
+
 ```
-![sequence_diagram_1.svg](data/sequence_diagram_1.svg)
-\pagebreak
+![bridge get_peer](data/bridge_get_peer_mp.svg)
+
+---
+
 Then, direct communication between PeerB and PeerA occurs:
+```
+[PeerB]                                           [PeerA]
+|--------- AKE Request + PeerB ID + Api Request ------->| (PeerA get certificate of PeerB (case 1/2) )
+|<-- Encrypted Response with new Secret Key ------------|
+```
+![bridge direct case 1](data/bridge_direct_1.svg)
 
-```
-[PeerB]                    [PeerA]
-|--- AKE Request ----------->|
-|<-- Session Confirm --------|
-|--- Api request  ---------->| <- Each packet with unique ChaCha20 nonce
-|<-- Encrypted Response -----|  <- Each packet with unique ChaCha20 nonce
-```
-![sequence_diagram_1_1.svg](data/sequence_diagram_1_1.svg)
 \pagebreak
+
 #### Case 2: Direct Communication
-Direct communication between PeerB and PeerA when certificate is already available:
+Direct communication between PeerB and PeerA when certificate is already available (from cache or other secure channel):
 
 ```
-[PeerB]                     [PeerA]
-|--- AKE Request ----------->|
-|<-- Session Confirm --------|
-|--- Api request  ---------->| <- Each packet with unique ChaCha20 nonce
-|<-- Encrypted Response -----|  <- Each packet with unique ChaCha20 nonce
+[PeerB]                                           [PeerA]
+|--------- AKE Request + PeerB ID + Api Request ------->|
+|<-- Encrypted Response with new Secret Key ------------|
 ```
-![sequence_diagram_2.svg](data/sequence_diagram_2.svg)
-\pagebreak
+![bridge direct case 2](data/bridge_direct_2.svg)
+
+---
+
+#### Case Revoke: Revoke Certificate (api: del_peer)
+If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the peer is no longer safe and must revoke the peer certificate so other peers know not to use the certificate, and PeerA becomes untrusted:
+
+```
+[PeerA]                                                      [Master Peer]
+|--------- AKE Request + PeerA ID + Sign with compromized secret ------->|
+|<-- Encrypted EApiResult Response --------------------------------------|
+```
+![bridge revoke](data/bridge_del_peer_mp.svg)
+
+---
 
 ## Testing and Validation
 
 ### Verification Scenarios
-
-![d0.svg](data/d0.svg)
 
 **Direct Certificate Validation**
 - Signature verification success/failure cases
@@ -293,7 +303,6 @@ Direct communication between PeerB and PeerA when certificate is already availab
 - Revocation list checks
 - Testing methodology aligned with NIST SP 800-56A Rev. 3 recommendations
 
-![d1.svg](data/d1.svg)
 
 **KEM Session Establishment**
 - Successful key exchange
@@ -301,21 +310,17 @@ Direct communication between PeerB and PeerA when certificate is already availab
 - Forward secrecy validation
 - Testing follows NIST SP 800-161 Rev. 1 supply chain risk management practices
 
-
-
 **Full Protocol Integration**
 - Multi-hop certificate chains
 - Mass certificate issuance
 - Long-duration session stress tests
 - Performance testing under NIST SP 800-115 guidelines
 
-![d3.svg](data/d3.svg)
-
 **Nonce Generation Testing**
 - Statistical distribution of generated nonces
 - Verification of nonce uniqueness across large message samples
 - Performance testing of secure random number generation
-  \pagebreak
+
 ## Certificate Pinning and Trust Anchors
 
 ### Master Peer Certificate Pinning
@@ -324,17 +329,14 @@ The system implements robust certificate pinning to establish an immutable trust
 
 #### Embedded Certificates
 
-![d4.svg](data/d4.svg)
 
 All peers in the network have the Master Peer's cryptographic certificates embedded directly within their software or firmware:
 
 - **Kyber-1024 Public Certificate:** Embedded as a hardcoded constant, providing the quantum-resistant encryption trust anchor
 - **Dilithium-5 Public Certificate:** Embedded to verify all Master Peer signatures, establishing signature validation trust
-- **Certificate Fingerprints:** SHA3-256 fingerprints of both certificates stored for integrity verification
+- **Certificate Fingerprints:** SHA-256 fingerprints of both certificates stored for integrity verification
 
 #### Security Benefits
-
-![d6.svg](data/d6.svg)
 
 This certificate pinning approach provides several critical security advantages:
 
@@ -356,7 +358,6 @@ The embedded certificates are protected with the following measures:
 
 #### Emergency Certificate Rotation
 
-![d5.svg](data/d5.svg)
 
 In the rare case of Master Peer key compromise, the system supports secure certificate rotation:
 
@@ -364,13 +365,13 @@ In the rare case of Master Peer key compromise, the system supports secure certi
 - Out-of-band verification channels established for certificate rotation
 - Tiered approach to certificate acceptance based on threshold signatures
 - Follows NIST SP 800-57 guidelines for cryptographic key transition
+
 ## Memory Management and Session Security
 
 ### Connection State Management
 
 #### Master Peer Memory Optimization
 
-![d7.svg](data/d7.svg)
 
 The Master Peer implements efficient memory management by maintaining only essential connection information in active memory:
 
@@ -383,7 +384,6 @@ This approach significantly reduces the memory footprint, particularly in high-c
 
 #### Peer Connection Caching
 
-![d9.svg](data/d9.svg)
 
 Regular Peers implement similar memory optimization strategies:
 
@@ -396,16 +396,14 @@ Regular Peers implement similar memory optimization strategies:
 
 #### Secret Renegotiation Protocol
 
-![d8.svg](data/d8.svg)
-
 To enhance forward secrecy and mitigate passive monitoring, the system implements dynamic session renegotiation:
 
 - **Random Renegotiation Triggers:**
-  - Time-based: Session keys renegotiated after configurable intervals (default: 1 hour)
+  - Time-based: Secret session keys renegotiated after configurable intervals (default: 1 hour)
   - Random-based: Spontaneous renegotiation initiated with 0.1% probability per message exchange
 
 - **Renegotiation Process:**
-  - Initiated via special EAction type
+  - Initiated via special EApiEvent type
   - New Kyber KEM exchange performed within existing encrypted channel
   - Seamless key transition without communication interruption
   - Previous session keys securely erased from memory

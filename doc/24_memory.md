@@ -1,6 +1,6 @@
-# Memory Layer (IMemory)
+# Evo Memory Layer (IMemory)
 
-![i_memory.svg](data/evo_memory.svg)
+![evo memory](data/evo_layer_memory.svg)
 
 A sophisticated memory management system supporting:
 

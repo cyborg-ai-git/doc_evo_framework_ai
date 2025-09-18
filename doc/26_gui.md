@@ -1,6 +1,6 @@
-# IGui module: Unified Cross-Platform Interface Generation
+# Evo Gui module: Unified Cross-Platform Interface Generation
 
-![evo_gui.svg](data/evo_gui.svg)
+![evo gui](data/evo_layer_gui.svg)
 
 ## Design Philosophy
 

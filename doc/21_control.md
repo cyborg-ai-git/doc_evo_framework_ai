@@ -1,6 +1,6 @@
-# Control Layer (IControl)
+# Evo Control Layer (IControl)
 
-![evo_control](data/evo_control.svg)
+![evo control](data/evo_layer_control.svg)
 
 The Control layer manages the application's core logic, handling message flow and inter-component communication. It supports multiple communication paradigms:
 

@@ -1,6 +1,6 @@
-# Evo Utility Modules 
+# Evo Utility Layer 
 
-![evo_utility](data/evo_utility.svg)
+![evo utility](data/evo_layer_utility.svg)
 
 ## Overview
 
