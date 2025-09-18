@@ -78,7 +78,7 @@ PATH_OUTPUT="$OUTPUT_DIR/evo_framework_doc_$VERSION.pdf"
 # Build PDF from modular markdown sections
 # Each .md file is on a separate line for easy addition/removal
 pandoc \
-  "$PATH_INPUT/*.md" \
+  $PATH_INPUT/*.md \
   -o "$PATH_OUTPUT" \
   --pdf-engine="$PDF_ENGINE" \
   --template="$TEMPLATE" \
@@ -87,7 +87,7 @@ pandoc \
   --metadata subtitle="$SUBTITLE" \
   --metadata author="$AUTHOR" \
   --metadata version="$VERSION" \
-  --no-highlight \
+  --syntax-highlighting=none \
   --number-sections \
   --toc \
   --include-in-header="$EMOJI_CONFIG" \

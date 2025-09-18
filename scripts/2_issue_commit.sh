@@ -70,7 +70,7 @@ echo "🔵 Working on branch: $CURRENT_BRANCH"
 
 # Pull and push current branch
 git pull --rebase origin "$CURRENT_BRANCH"
-git push --force-with-lease origin "$CURRENT_BRANCH"
+git push #--force-with-lease origin "$CURRENT_BRANCH"
 
 echo "🟢 Changes pushed to $CURRENT_BRANCH"
 #---------------------------------------------------------------------------------------------------
