@@ -5,7 +5,7 @@
 # github: https://github.com/cyborg-ai-git
 #===================================================================================================
 # Document Configuration
-version = "v2025.9.131612"
+version = "v2025.9.180807"
 title = "Evo Framework AI"
 subtitle = "The fastest and secure framework for AI"
 author = "Massimiliano Pizzola"

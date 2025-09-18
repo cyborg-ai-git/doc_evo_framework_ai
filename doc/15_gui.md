@@ -1,4 +1,6 @@
-# GUI Layer: Unified Cross-Platform Interface Generation
+# IGui module: Unified Cross-Platform Interface Generation
+
+![evo_gui.svg](data/evo_gui.svg)
 
 ## Design Philosophy
 
