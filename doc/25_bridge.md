@@ -18,6 +18,123 @@ By implementing this system in accordance with NIST guidelines and recommendatio
 ## Technical Overview
 This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.
 
+## Bridge Entities
+
+The **Evo Bridge PQCES** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
+
+> TODO: add UML figure
+
+### Core Entity Types
+
+#### EPeerSecret - Private Cryptographic Identity
+
+The foundational private entity containing all secret cryptographic material for a peer.
+
+**Cryptographic Components:**
+
+- **Kyber Secret Key (sk)**: NIST-standardized post-quantum key encapsulation mechanism private key (Kyber-1024)
+- **Dilithium Secret Key (sk_sign)**: NIST-standardized post-quantum digital signature private key (Dilithium-5)
+- **Private Bridge Configuration**: Local network settings, security policies, and operational parameters
+- **Unique Identifier (id)**: Cryptographically derived from hash_256(pk + pk_sign) ensuring tamper-proof identity binding
+
+**Security Properties:**
+
+- Never transmitted across the network
+- Stored in secure memory regions with automatic cleanup
+- Protected by hardware security modules (HSMs) when available
+- Enables quantum-resistant authentication and key exchange
+
+#### EPeerPublic - Public Cryptographic Identity
+
+The public counterpart containing verifiable cryptographic material and network configuration.
+
+**Cryptographic Components:**
+
+- **Kyber Public Key (pk)**: Derived from the corresponding secret key sk, enables secure key encapsulation
+- **Dilithium Public Key (pk_sign)**: Derived from sk_sign, enables signature verification
+- **Public Bridge Configuration**: Network endpoints, supported protocols, and capability advertisements
+- **Derived Identifier**: Matches EPeerSecret.id through hash_256(pk + pk_sign) for identity verification
+
+**Network Capabilities:**
+
+- Distributed through certificate infrastructure
+- Enables peer discovery and capability negotiation
+- Supports multiple transport protocols simultaneously
+- Provides cryptographic binding between identity and capabilities
+
+#### EPeerCertificate - Authenticated Identity Credential
+
+A digitally signed certificate that establishes trust and authenticity for peer identities.
+
+**Certificate Structure:**
+
+- **EPeerPublic Data**: Complete public identity information
+- **Master Peer Signature**: Dilithium-5 signature providing authenticity guarantee
+- **Certificate Metadata**: Contains issuance and expiration timestamps, certificate serial number and version, alternative distribution channels (IPFS hashes, backup repositories), revocation check endpoints, and certificate chain information
+
+**Trust Model:**
+
+- Hierarchical trust anchored by Master Peer
+- Supports certificate chaining for scalable trust delegation
+- Includes revocation mechanisms for compromised identities
+- Compatible with X.509v3 extensions for interoperability
+
+#### EApiEvent - Secure Communication Container
+
+The standardized message format for all peer-to-peer communications.
+
+**Message Structure:**
+
+- **Event Type**: Categorizes the communication (request, response, notification)
+- **Source/Destination IDs**: 32-byte peer identifiers for routing
+- **Cryptographic Payload**: Encrypted data using ChaCha20-Poly1305
+- **Authentication Data**: Poly1305 MAC for message integrity
+- **Protocol Metadata**: Version, flags, and extension headers
+
+**Security Features:**
+
+- End-to-end encryption with forward secrecy
+- Message authentication and integrity protection
+- Replay attack prevention through nonce management
+- Support for both synchronous and asynchronous communication patterns
+
+### Virtual IPv6 Architecture (VIP6)
+
+#### Decentralized Identity System
+
+The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
+
+**Key Characteristics:**
+- **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
+- **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
+- **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
+- **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
+
+**Supported Transport Protocols:**
+- **WebSocket**: Real-time bidirectional communication for web applications
+- **WebRTC**: Direct peer-to-peer communication with NAT traversal
+- **Raw TCP/UDP**: Low-level protocols for maximum performance
+- **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities
+- **EvoQuic** *(Coming Soon)*: Custom quantum-resistant protocol optimized for PQCES
+
+#### Blockchain-Based Decentralization
+
+The identity system leverages blockchain technology to achieve true decentralization.
+
+**Decentralization Benefits:**
+- **Infrastructure Independence**: No reliance on centralized DNS or certificate authorities
+- **Global Accessibility**: Peer identities remain valid across different network infrastructures
+- **Censorship Resistance**: Distributed identity resolution prevents single points of control
+- **Migration Flexibility**: Seamless movement between hosting providers including local development environments, cloud platforms (AWS, Google Cloud, Azure), edge computing providers (Fly.io, Cloudflare Workers), AI/ML platforms (HuggingFace, Google Colab), and decentralized hosting (IPFS, Arweave)
+
+**Identity Resolution Process:**
+1. **Peer Discovery**: Query Master Peer or distributed registry with target peer ID
+2. **Certificate Retrieval**: Obtain authenticated EPeerCertificate for the target peer
+3. **Capability Negotiation**: Determine optimal transport protocol and connection parameters
+4. **Secure Connection**: Establish quantum-resistant encrypted channel using retrieved public keys
+
+This architecture enables a truly decentralized, secure, and flexible communication system where peers can maintain persistent identities while adapting to changing network conditions and infrastructure requirements.
+
 ## CIA Triad Implementation
 
 The Cryptographic Entity Management System is designed with the foundational principles of information security - Confidentiality, Integrity, and Availability (CIA) - as core architectural considerations. Each element of the CIA triad is addressed through specific cryptographic mechanisms and protocol designs.
@@ -108,7 +225,7 @@ The system maintains a careful balance between the three elements of the CIA tri
 
 ### Core Components
 
-![](data/actor_dark.svg)
+![Bridge Actors](data/bridge_actors.svg)
 
 #### Master Peer (EPeerMasterPeer)
 
@@ -221,7 +338,7 @@ Network Actions represent standardized communication protocol units.
 
 ### Cryptographic Foundations
 
-- **Post-Quantum Security:** All primitives resist quantum computing attacks
+* **Post-Quantum Security:** All primitives resist quantum computing attacks
   - Implements NIST-selected post-quantum cryptographic algorithms
   - Kyber: [NIST FIPS 203](https://csrc.nist.gov/pubs/fips/203/ipd)
   - Dilithium: [NIST FIPS 204](https://csrc.nist.gov/pubs/fips/204/ipd)
@@ -311,12 +428,14 @@ If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the 
 - Testing follows NIST SP 800-161 Rev. 1 supply chain risk management practices
 
 **Full Protocol Integration**
+
 - Multi-hop certificate chains
 - Mass certificate issuance
 - Long-duration session stress tests
 - Performance testing under NIST SP 800-115 guidelines
 
 **Nonce Generation Testing**
+
 - Statistical distribution of generated nonces
 - Verification of nonce uniqueness across large message samples
 - Performance testing of secure random number generation
