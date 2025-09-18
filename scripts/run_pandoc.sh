@@ -49,7 +49,17 @@ SUBTITLE=${SUBTITLE:-"Documentation"}
 LOGO=${LOGO:-"./data/logo.png"}
 OUTPUT_DIR=${OUTPUT_DIR:-"./output"}
 TEMPLATE=${TEMPLATE:-"data/dark.tex"}
-EMOJI_CONFIG=${EMOJI_CONFIG:-"data/working_emoji.tex"}
+# Platform-specific emoji configuration (override config file setting)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    EMOJI_CONFIG="data/emoji_macos.tex"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux
+    EMOJI_CONFIG="data/emoji_linux.tex"
+else
+    # Fallback - use config file setting or default
+    EMOJI_CONFIG=${EMOJI_CONFIG:-"data/working_emoji.tex"}
+fi
 PDF_ENGINE=${PDF_ENGINE:-"xelatex"}
 
 # Display loaded configuration
@@ -58,6 +68,7 @@ echo "   Version: $VERSION"
 echo "   Title: $TITLE"
 echo "   Subtitle: $SUBTITLE"
 echo "   Author: $AUTHOR"
+echo "   Emoji Config: $EMOJI_CONFIG"
 echo "   Logo: $LOGO"
 echo "   Output Dir: $OUTPUT_DIR"
 echo "   Template: $TEMPLATE"

@@ -1,6 +1,6 @@
 
 
-> ⚠️ **BETA DISCLAIMER**: The EVO framework AI is currently in beta version. The documentation may change.
+> **BETA DISCLAIMER**: The EVO framework AI is currently in beta version. The documentation may change.
 
 > **CC BY-NC-ND 4.0 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International**      
 

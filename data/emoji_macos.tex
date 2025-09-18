@@ -1,0 +1,52 @@
+% macOS emoji configuration
+\usepackage{fontspec}
+\usepackage{adjustbox}
+
+% Define pandocbounded command if not available
+\providecommand{\pandocbounded}[1]{#1}
+
+% Set main fonts
+\setmainfont{Noto Sans}
+
+% Use text replacements for emojis to eliminate warnings
+% This keeps emojis in source but renders them as text symbols in PDF
+
+% Map Unicode characters to text equivalents
+\usepackage{newunicodechar}
+
+% Essential emojis from the document - replace with text symbols
+\newunicodechar{📚}{[BOOKS]}
+\newunicodechar{🧠}{[BRAIN]}
+\newunicodechar{🏗}{[CONSTRUCTION]}
+\newunicodechar{⚙}{[GEAR]}
+\newunicodechar{🦀}{[CRAB]}
+\newunicodechar{🤖}{[ROBOT]}
+\newunicodechar{✅}{[CHECK]}
+\newunicodechar{❌}{[X]}
+\newunicodechar{⚠}{[WARNING]}
+\newunicodechar{🔧}{[WRENCH]}
+\newunicodechar{💻}{[COMPUTER]}
+\newunicodechar{🔒}{[LOCK]}
+\newunicodechar{⚡}{[LIGHTNING]}
+\newunicodechar{🧪}{[TEST]}
+\newunicodechar{📊}{[CHART]}
+\newunicodechar{🚀}{[ROCKET]}
+\newunicodechar{🎉}{[PARTY]}
+\newunicodechar{🔄}{[REFRESH]}
+\newunicodechar{🎯}{[TARGET]}
+\newunicodechar{💡}{[BULB]}
+\newunicodechar{🔥}{[FIRE]}
+\newunicodechar{⭐}{[STAR]}
+\newunicodechar{🌟}{[SPARKLE]}
+\newunicodechar{💎}{[DIAMOND]}
+\newunicodechar{🛡}{[SHIELD]}
+\newunicodechar{🔑}{[KEY]}
+\newunicodechar{🎨}{[ART]}
+\newunicodechar{💋}{[KISS]}
+
+% Mathematical symbols - use ASCII equivalents
+\newunicodechar{≈}{~}
+\newunicodechar{→}{->}
+
+% Handle variation selectors (invisible characters)
+\newunicodechar{️}{}  % Variation Selector-16
