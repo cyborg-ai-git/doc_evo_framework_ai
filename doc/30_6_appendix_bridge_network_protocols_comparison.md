@@ -162,8 +162,6 @@
 
 *Note: Performance metrics can vary significantly based on implementation, network conditions, and specific use cases. Always benchmark for your specific requirements.*
 \pagebreak
-### Evo GUI module
 
-![evo_gui.svg](data/evo_gui.svg)
 
 

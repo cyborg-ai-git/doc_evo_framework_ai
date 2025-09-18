@@ -78,33 +78,7 @@ PATH_OUTPUT="$OUTPUT_DIR/evo_framework_doc_$VERSION.pdf"
 # Build PDF from modular markdown sections
 # Each .md file is on a separate line for easy addition/removal
 pandoc \
-  "$PATH_INPUT/0_abstract.md" \
-  "$PATH_INPUT/1_introduction.md" \
-  "$PATH_INPUT/2_evo_framework.md" \
-  "$PATH_INPUT/3_architecture.md" \
-  "$PATH_INPUT/4_software_architecture.md" \
-  "$PATH_INPUT/5_evo_principles_adda.md" \
-  "$PATH_INPUT/6_evo_framework_next_generation_software_architecture.md" \
-  "$PATH_INPUT/7_architectural_layers.md" \
-  "$PATH_INPUT/8_control_layer_icontrol.md" \
-  "$PATH_INPUT/9_0_evo_api_layer_iapi.md" \
-  "$PATH_INPUT/9_1_ai_tokenization.md" \
-  "$PATH_INPUT/10_evo_ai_module_iai.md" \
-  "$PATH_INPUT/11_evo_api_module_iapi.md" \
-  "$PATH_INPUT/12_memory_layer_imemory.md" \
-  "$PATH_INPUT/13_memory_management_system_big_o_complexity_analysis.md" \
-  "$PATH_INPUT/14_evo_framework_file_storage_strategy.md" \
-  "$PATH_INPUT/15_bridge_layer_ibridge.md" \
-  "$PATH_INPUT/16_nist_post_quantum_cryptography_standards.md" \
-  "$PATH_INPUT/17_cryptographic_signatures_comparison.md" \
-  "$PATH_INPUT/18_network_protocols_technologies_comparison.md" \
-  "$PATH_INPUT/19_gui_layer_unified_cross_platform_interface_generation.md" \
-  "$PATH_INPUT/20_utility_modules.md" \
-  "$PATH_INPUT/21_evo_framework_utility_module_documentation.md" \
-  "$PATH_INPUT/22_why_rust.md" \
-  "$PATH_INPUT/23_conclusion.md" \
-  "$PATH_INPUT/24_references.md" \
-  "$PATH_INPUT/25_additional_resources.md" \
+  $PATH_INPUT/*.md \
   -o "$PATH_OUTPUT" \
   --pdf-engine="$PDF_ENGINE" \
   --template="$TEMPLATE" \
@@ -113,14 +87,14 @@ pandoc \
   --metadata subtitle="$SUBTITLE" \
   --metadata author="$AUTHOR" \
   --metadata version="$VERSION" \
-  --no-highlight \
+  --syntax-highlighting=none \
   --number-sections \
   --toc \
   --include-in-header="$EMOJI_CONFIG" \
   --pdf-engine-opt=-shell-escape
 
 echo "✅ PDF generated successfully: $PATH_OUTPUT"
-#open "$PATH_OUTPUT"
+open "$PATH_OUTPUT"
 #---------------------------------------------------------------------------------------------------
 cd "$CURRENT_DIRECTORY" || exit
 #===================================================================================================

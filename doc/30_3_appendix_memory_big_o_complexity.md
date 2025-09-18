@@ -87,12 +87,12 @@
 
 ### NoSQL Database Backends
 
-| Database Type | SET | GET | DELETE | GET_ALL | DELETE_ALL |
-|---------------|-----|-----|--------|---------|------------|
-| **MongoDB** | O(log n) | O(log n) | O(log n) | O(n) | O(n) |
-| **Redis** | O(1) | O(1) | O(1) | O(n) | O(1) |
-| **Cassandra** | O(1) | O(log n) | O(1) | O(n) | O(n) |
-| **CouchDB** | O(log n) | O(log n) | O(log n) | O(n) | O(n) |
+| Database Type | SET      | GET      | DELETE   | GET_ALL | DELETE_ALL |
+|---------------|----------|----------|----------|---------|------------|
+| **MongoDB**   | O(log n) | O(log n) | O(log n) | O(n)    | O(n)       |
+| **Redis**     | O(1)     | O(1)     | O(1)     | O(n)    | O(1)       |
+| **Cassandra** | O(1)     | O(log n) | O(1)     | O(n)    | O(n)       |
+| **CouchDB**   | O(log n) | O(log n) | O(log n) | O(n)    | O(n)       |
 
 ### Vector Database Operations
 

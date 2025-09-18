@@ -1,14 +1,18 @@
 % Working emoji configuration using Symbola font
 \usepackage{fontspec}
+\usepackage{adjustbox}
+
+% Define pandocbounded command if not available
+\providecommand{\pandocbounded}[1]{#1}
 
 % Set main fonts
 \setmainfont{Noto Sans}
 
-% Use Symbola font for emojis (works reliably with XeLaTeX)
-\newfontfamily\emojifont{Symbola}
+% Disable emoji font for now - just use regular text
+% \newfontfamily\emojifont{Apple Color Emoji}
 
-% Simple emoji command
-\newcommand{\emoji}[1]{{\emojifont #1}}
+% Simple emoji command - just pass through the text
+\newcommand{\emoji}[1]{#1}
 
 % Map Unicode characters to emoji command
 \usepackage{newunicodechar}

@@ -2,18 +2,20 @@
 
 ![evo_i_api](data/evo_c_api.svg)
 
-The **Evo API** is a comprehensive framework module designed to create secure, extensible application programming interfaces within the Evo ecosystem. This framework serves as the foundational layer for building both standalone and distributed API services that can operate seamlessly in offline and online environments.
+The **Evo IApi module** is a comprehensive framework module designed to create secure, extensible application programming interfaces within the Evo ecosystem. This framework serves as the foundational layer for building both standalone and distributed API services that can operate seamlessly in offline and online environments.
 
-The API framework is specifically engineered to enhance AI agent capabilities by providing a standardized interface for API integration, ensuring security through cryptographic verification, and maintaining data integrity across all operations.
+The **Evo IApi module** is specifically engineered to enhance AI agent capabilities by providing a standardized interface for API integration, ensuring security through cryptographic verification, and maintaining data integrity across all operations.
 
-The Evo API represents a comprehensive solution for secure, scalable API development and management. By combining robust security measures, flexible deployment options, and extensive AI agent integration capabilities, it provides a solid foundation for building next-generation distributed applications.
+The **Evo IApi module** framework represents a comprehensive solution for secure, scalable API development and management. By combining robust security measures, flexible deployment options, and extensive AI agent integration capabilities, it provides a solid foundation for building next-generation distributed applications.
 
 The framework's emphasis on security through certification, encryption, and isolation ensures that applications built on this platform can operate safely in both trusted and untrusted environments while maintaining the flexibility required for modern AI-driven workflows.
+
+
 ## Core Architecture
 
 ### Framework Module Structure
 
-The Evo API operates as a modular component within the broader Evo framework, providing essential traits and implementations for API management:
+The **Evo IApi module** operates as a modular component within the broader Evo framework, providing essential traits and implementations for API management:
 
 | Component | Type | Description |
 |-----------|------|-------------|
@@ -28,15 +30,15 @@ The framework implements an asynchronous event-driven model with specialized cal
 
 | Event Type | Callback Signature | Purpose |
 |------------|-------------------|---------|
-| `EventApiDone` | `(TypeID, TypeAction, Arc<dyn IEntity>, Option<TypeID>) -> BoxFuture<'static, ()>` | Triggered on successful action completion |
-| `EventApiError` | `(TypeID, TypeAction, Box<dyn IError>, Option<TypeID>) -> BoxFuture<'static, ()>` | Handles action failures and error reporting |
-| `EventApiProgress` | `(TypeID, TypeAction, Arc<dyn IEntity>, u8, Option<TypeID>) -> BoxFuture<'static, ()>` | Provides real-time progress updates |
+| `EventApiDone` | `(id_e_api_event, action, i_entity, id_bridge?)` | Triggered on successful action completion |
+| `EventApiError` | `(id_e_api_event, action, i_error, id_bridge?)` | Handles action failures and error reporting |
+| `EventApiProgress` | `(id_e_api_event, action, i_entity, progress, id_bridge?)` | Provides real-time progress updates |
 
 ## Standalone and Online Capabilities
 
 ### Dual-Mode Operation
 
-The C API framework is architected to support both standalone offline operations and distributed online services:
+The **IApi** framework is architected to support both standalone offline operations and distributed online services:
 
 **Offline Mode:**
 - Complete functionality without network dependencies
@@ -76,7 +78,7 @@ All APIs within the **Evo Api module** framework undergo rigorous certification 
 |----------------|--------------------------------|-------------------|
 | **Digital Signatures** | Dilitium cryptographic signing | Public key infrastructure validation |
 | **Code Integrity** | SHA-256 hash verification      | Tamper detection through checksum validation |
-| **Certificate Chain** | X.509 certificate hierarchy    | Root CA validation and certificate revocation checks |
+| **Certificate Chain** | certificate hierarchy    | Master Peer CA validation and certificate revocation checks |
 | **Runtime Verification** | Dynamic signature validation   | Real-time verification during API loading |
 
 ### Anti-Tampering Measures
@@ -88,6 +90,7 @@ The framework implements comprehensive protection against code manipulation and 
 - Automated vulnerability detection
 - Dependency security auditing
 - Binary analysis for embedded threats
+- Bynary hash and sign balidation
 
 **Runtime Protection:**
 - Memory integrity monitoring
@@ -154,7 +157,8 @@ The framework provides comprehensive lifecycle management through the `IApi` tra
 | **Instantiation** | `instance_api()` | Singleton pattern implementation for unique API instances |
 | **Initialization** | `do_init_api()` | Asynchronous initialization with error handling |
 | **Configuration** | `get_map_e_api()` | Retrieval of available API mappings and configurations |
-| **Termination** | `do_stop_all()` | Graceful shutdown of all active operations |
+| **Termination** | `do_stop(id)` | Graceful shutdown of id api  operation |
+| **Termination All** | `do_stop_all()` | Graceful shutdown of all active operations |
 
 ### Action Execution Framework
 
@@ -168,7 +172,7 @@ The core action execution system provides robust, event-driven API operations:
 5. **Cleanup:** Resource deallocation and state cleanup
 
 **Concurrent Operation Support:**
-- Thread-safe execution using Arc<RwLock> patterns
+- Thread-safe execution using Task patterns
 - Async/await integration for non-blocking operations
 - Configurable concurrency limits and throttling
 - Dead-lock prevention through ordered resource acquisition
@@ -177,7 +181,7 @@ The core action execution system provides robust, event-driven API operations:
 
 ### Framework Integration
 
-The **Evo Api module** seamlessly integrates with other Evo framework components:
+The **Evo IApi module** seamlessly integrates with other Evo framework components:
 
 | Integration Point | Framework Component | Integration Method |
 |------------------|-------------------|------------------|
@@ -245,6 +249,5 @@ The framework provides extensive logging and monitoring capabilities:
 - Anomaly detection using machine learning
 - Escalation procedures for critical events
 - Integration with incident management systems
-
 
 \pagebreak
