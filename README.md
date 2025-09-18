@@ -59,8 +59,23 @@ The licensing strategy serves multiple purposes:
 
 | Tool | Description | Documentation |
 |------|-------------|---------------|
-| **PlantUML** | Required for diagram generation in `run_documentation.sh` | 📖 **[Install PlantUML Guide](install/install_plantuml.md)** |
+| **Git Flow** | Required for branching workflow and issue management | 📖 **[Install Git Flow Guide](install/install_gitflow.md)** |
+| **PlantUML** | Required for diagram generation | 📖 **[Install PlantUML Guide](install/install_plantuml.md)** |
 | **Pandoc** | Required for document export to PDF, DOC, ODT formats | 📖 **[Install Pandoc Guide](install/install_pandoc.md)** |
+
+### 🚀 Quick Installation
+
+Install all required tools automatically:
+
+```bash
+# Make the script executable
+chmod +x scripts/run_install.sh
+
+# Run the installation script (supports macOS and Ubuntu Linux)
+./scripts/run_install.sh
+```
+
+This script will automatically install Git Flow, Pandoc, PlantUML, and all their dependencies on your system.
 
 **Note**: We are actively working on eliminating these external dependencies in the upcoming **CyborgAI Dev** application.
 
@@ -79,11 +94,14 @@ app_EVO framework DOC/
 │   │   └── test_app_EVO framework DOC.rs
 │   └── Cargo.toml               # Package configuration
 ├── scripts/                     # Development and automation scripts
-│   ├── run_issue_create.sh      # Create GitHub issues with branches
-│   ├── run_issue_commit.sh      # Commit all files changed
-│   ├── run_issue_finish.sh      # Finish issues with PRs
+│   ├── 0_issue_create.sh        # Create GitHub issues with branches
+│   ├── 1_issue_start.sh         # Start working on issues
+│   ├── 2_issue_commit.sh        # Commit all files changed
+│   ├── 3_issue_finish.sh        # Finish issues with PRs
+│   ├── run_install.sh           # Install Git Flow, Pandoc, PlantUML
 │   ├── run_issue_list.sh        # List GitHub issues
-│   ├── run_issue_start.sh       # Start working on issues
+│   ├── run_pandoc.sh            # Run Pandoc document conversion
+│   └── run_plantuml.sh          # Generate PlantUML diagrams
 ├──  data/                   # Documentation assets
 ├──  doc/                   # Documentation markup
 ├── Cargo.toml                  # Workspace configuration
@@ -98,32 +116,44 @@ app_EVO framework DOC/
 
 The `scripts/` folder contains automation scripts for development workflow:
 
+### Installation & Setup
+- **`run_install.sh`**: 
+  - Automatically installs Git Flow, Pandoc, PlantUML and all dependencies
+  - Supports macOS (Homebrew) and Ubuntu Linux (APT)
+  - Includes verification tests and setup guidance
+  - Usage: `./scripts/run_install.sh`
 
 ### Issue Management (GitHub Integration)
-- **`run_issue_create.sh`**: 
+- **`0_issue_create.sh`**: 
   - Creates GitHub issues and corresponding Git Flow feature branches
-  - Usage: `./run_issue_create.sh "issue title" "description"`
+  - Usage: `./0_issue_create.sh "issue title" "description"`
   - Automatically generates sanitized branch names like `feature/issue_123_fix_bug`
 
-- **`run_issue_start.sh`**: 
+- **`1_issue_start.sh`**: 
   - Starts work on existing GitHub issues by creating feature branches
-  - Usage: `./run_issue_start.sh issue_number`
+  - Usage: `./1_issue_start.sh issue_number`
   - Checks out existing remote branches if they exist
 
-- **`run_issue_finish.sh`**: 
+- **`2_issue_commit.sh`**: 
+  - Commits all changed files with proper Git Flow workflow
+  - Usage: `./2_issue_commit.sh "commit message"`
+  - Handles rebasing and pushing to current branch
+
+- **`3_issue_finish.sh`**: 
   - Completes issue workflow by creating pull requests and closing issues
   - Merges feature branches back to develop using Git Flow
   - Automatically closes GitHub issues when PRs are created
 
 - **`run_issue_list.sh`**: Lists all GitHub issues using `gh issue list`
 
-### Documentation & Publishing
-- **`run_documentation.sh`**: 
-  - Generates PlantUML diagrams from `.puml` files in `documentation/data/`
-  - Creates Rust documentation using `cargo doc --no-deps --open`
-  - Copies generated docs to `documentation/doc/` for version control
+### Documentation & Tools
+- **`run_pandoc.sh`**: 
+  - Converts documentation between formats (Markdown, PDF, DOC, ODT)
+  - Handles batch processing of documentation files
 
-- **`run_publish.sh`**: Publishes the crate to crates.io using `cargo publish`
+- **`run_plantuml.sh`**: 
+  - Generates diagrams from PlantUML files
+  - Processes `.puml` files and outputs various formats (PNG, SVG, PDF)
 
 ---
 
@@ -146,11 +176,11 @@ This repository uses **Git Flow** branching strategy for organized development:
 ### 🚀 Quick Start for Contributors
 
 1. **Fork the Repository**: Create your own fork of the project
-2. **Create an Issue**: Use our automated script to create issues and Git Flow feature branches:
-3. **Start Feature Branch**: Use Git Flow to start working on the issue:
-4. **Follow EVO Framework**: Adhere to naming conventions and architecture patterns
-5. **Write Tests**: Include appropriate test coverage
-6. **Submit Pull Request**: Use Git Flow to finish and target the `develop` branch:
+2. **Git Flow Init**: run $git flow init and use default branches name
+3. **Create an Issue**: Use our automated script to create issues [0_issue_create.sh](./scripts/0_issue_create.sh)
+4. **Start Feature Branch**: Use [1_issue_start.sh](./scripts/1_issue_start.sh) start working on the issue:
+5. **Commit Feature Branch**: Use [2_issue_commit.sh](./scripts/2_issue_commit.sh)
+6. **Finish Feature Branch**: Use [3_issue_finish.sh](./scripts/3_issue_finish.sh)
 7. **Code Review**: Participate in the review process
 
 
@@ -160,23 +190,29 @@ Use our automated scripts for streamlined contributions:
 
 ```bash
 
+# Install all required tools first
+./scripts/run_install.sh
+
 # Create a new issue and feature branch
 # type: [doc|feature]
-./scripts/run_issue_create.sh type "Title" "Detailed description"
+./scripts/0_issue_create.sh type "Title" "Detailed description"
 
 #examples:
 
 # Create a documentation issue
-#./scripts/run_issue_create.sh doc "Update API docs" "The agent tab section needs doc ..."
+#./scripts/0_issue_create.sh doc "Update API docs" "The agent tab section needs doc ..."
 
 # Create a feature request  
-#./scripts/run_issue_create.sh feature "Add dark mode" "Implement dark theme support for better user experience ..."
+#./scripts/0_issue_create.sh feature "Add dark mode" "Implement dark theme support for better user experience ..."
 
 # Start working on an existing issue
-./scripts/run_issue_start.sh 123
+./scripts/1_issue_start.sh 123
+
+# Commit your changes
+./scripts/2_issue_commit.sh "Add new feature implementation"
 
 # Finish your work and create a pull request
-./scripts/run_issue_finish.sh 123
+./scripts/3_issue_finish.sh 123
 ```
 ---
 
