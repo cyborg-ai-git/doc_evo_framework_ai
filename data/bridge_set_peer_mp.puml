@@ -1,0 +1,66 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+}
+
+' Colors definition
+!$PEER_A_COLOR = "#87CEEB"
+!$MASTER_PEER_COLOR = "#90EE90"
+!$MEMORY_COLOR = "#fbff00"
+!$SYSTEM_COLOR = "#FFFFFF"
+
+' Participants
+actor "PeerA" as PA $PEER_A_COLOR
+actor "MasterPeer" as MP $MASTER_PEER_COLOR
+database "CertDB" as DB $MEMORY_COLOR
+
+title PeerA set_peer to MasterPeer
+
+autonumber
+
+== PK Registration ==
+PA -[$PEER_A_COLOR]> MP: EApiEvent(EPeerPublic,Dilitium Sign)\n\nAke Kyber\nDilithium sign\nChaCha20-Poly1305 crypt
+activate MP $MASTER_PEER_COLOR
+note right MP: 1. Use Kyber\n2. Verify sign Dilithium\n3.Verify EPeerPublic
+
+MP -[$MASTER_PEER_COLOR]> MP: Generate Certificate
+note left MP: Master Dilithium Signature of ECertificate
+
+MP -[$MASTER_PEER_COLOR]> DB: Store(ID_A, Cert)
+activate DB $SYSTEM_COLOR
+note right DB: Structure:\n- Public Key\n- Metadata\n- Signatures
+DB --[$SYSTEM_COLOR]> MP: Storage ACK
+deactivate DB
+
+== Certificate Delivery ==
+MP -[$MASTER_PEER_COLOR]> PA: Cert Package
+note left PA: 1. Verify Master Signature\n2. Store Securely
+deactivate MP
+
+@enduml

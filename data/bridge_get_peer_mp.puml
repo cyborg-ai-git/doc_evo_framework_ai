@@ -1,0 +1,90 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings - using monochrome style
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Control specific settings
+skinparam control {
+    FontColor #FFFFFF
+    FontSize 17
+    BackgroundColor $MASTER_PEER_COLOR
+    BorderColor $MASTER_PEER_COLOR
+    ScaleX 1.5
+    ScaleY 1.5
+}
+
+' Queue specific settings
+skinparam queue {
+    BackgroundColor #FFFFFF
+    BorderColor #FFFFFF
+    FontColor #000000
+}
+
+' Styling for sequences
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+}
+
+' Colors definition (aligned with sequence_diagram_0.puml + PeerB color)
+!$PEER_A_COLOR = "#87CEEB"
+!$MASTER_PEER_COLOR = "#90EE90"
+!$PEER_B_COLOR = "#FFB6C1"
+!$MEMORY_COLOR = "#fbff00"
+!$SYSTEM_COLOR = "#FFFFFF"
+
+' Participants
+actor "PeerB" as PB $PEER_B_COLOR
+actor "MasterPeer" as MP $MASTER_PEER_COLOR
+database "CertDB" as DB $MEMORY_COLOR
+
+title PeerB get_peer PeerA certificate from Master Peer
+
+autonumber
+== Request Initiation ==
+
+PB -[$PEER_B_COLOR]> MP: EApiEvent(ID_PEER_A)
+activate MP $MASTER_PEER_COLOR
+note right MP: 1. Decapsulate Kyber\n2. Derive Session Key
+
+MP -[$MASTER_PEER_COLOR]> DB: GET_CERT(ID_A)
+activate DB $SYSTEM_COLOR
+DB --[$SYSTEM_COLOR]> MP: Cert Data
+note right DB: Verify:\n- Validity\n- Revocation
+deactivate DB
+
+== Secure Delivery ==
+
+MP -[$MASTER_PEER_COLOR]> MP: Package Response
+note left MP: ChaCha20-Poly1305
+
+MP -[$MASTER_PEER_COLOR]> PB: ENC_CERT
+note left PB: 1. Decrypt Response\n2. Verify Master Peer Certificate sign
+
+deactivate MP
+
+@enduml
