@@ -8,6 +8,8 @@ The GUI Layer represents a revolutionary approach to user interface development,
 
 ## Automated GUI Prototype Generation
 
+> TODO:add uml diagrams...
+
 ### Core Design Principles
 - Single source of truth
 - Platform-agnostic design

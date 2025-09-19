@@ -9,6 +9,8 @@ Supported Communication Modes:
 - Synchronous request-response
 - Remote invocation with precise synchronization
 
+> TODO:add uml diagrams...
+
 #### Extended Control Components
 
 Two critical extensions enhance the base Control layer:
@@ -29,21 +31,5 @@ Two critical extensions enhance the base Control layer:
     - Generic file processing
 - Optimized model loading and inference
 - Hardware acceleration support
-
-## Entity Layer
-
-The Entity represents a comprehensive information container with:
-- Unique identifier (ID)
-- Timestamp tracking
-- Complex relationship support
-    - Association
-    - Aggregation
-    - Composition
-    - Inheritance
-
-Serialization methods enable:
-- In-memory representation
-- Persistent storage conversion
-- Network transmission
 
 \pagebreak

@@ -1,14 +1,14 @@
-# Memory Management System - Big O Complexity Analysis
+# Appendix: Memory Management System - Big O Complexity Analysis
 
 ## Operation Complexity Table
 
-| Operation   | Volatile Memory | Persistent Memory | Hybrid Memory   | Notes |
-|-------------|----------------|-------------------|-----------------|-------|
-| **SET**     | O(1) | O(log n)          | O(log n)        | Volatile: Hash table insertion<br>Persistent: B-tree/LSM insertion<br>Hybrid: Volatile write + async persist |
-| **GET**     | O(1) | O(log n)          | O(1) / O(log n) | Volatile: Hash table lookup<br>Persistent: B-tree/index lookup<br>Hybrid: Cache hit O(1), miss O(log n) |
-| **DEL**     | O(1) | O(log n)          | O(log n)        | Volatile: Hash table removal<br>Persistent: B-tree deletion + compaction<br>Hybrid: Immediate cache removal + async persist |
-| **GET_ALL** | O(n) | O(n + log n)      | O(n + log n)    | Volatile: Linear scan of hash buckets<br>Persistent: Index scan + disk I/O<br>Hybrid: Cache scan + disk fetch for misses |
-| **DEL_ALL** | O(n) | O(n log n)        | O(n log n)      | Volatile: Clear hash table<br>Persistent: Individual deletions or bulk truncate<br>Hybrid: Cache clear + persistent cleanup |
+| Operation   | Volatile Memory | Persistent Memory | Hybrid Memory |
+|-------------|-----------------|-------------------|---------------|
+| **SET**     | O(1)            | O(1)              | O(1)          |
+| **GET**     | O(1)            | O(1)              | O(1)          |
+| **DEL**     | O(1)            | O(1)              | O(1)          |
+| **GET_ALL** | O(n)            | O(n)              | O(n)          |
+| **DEL_ALL** | O(n)            | O(n )             | O(n)          |
 
 ## Detailed Complexity Analysis by Memory Type
 
