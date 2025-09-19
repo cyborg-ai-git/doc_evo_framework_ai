@@ -96,6 +96,8 @@ The Utility Module ensures that operations are atomic by:
 
 ## Implementation Strategies
 
+> TODO:add uml diagrams...
+
 ### Hybrid Approach
 
 The Evo Framework utility module supports a hybrid approach where:
