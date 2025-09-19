@@ -98,7 +98,7 @@ pandoc \
   --metadata subtitle="$SUBTITLE" \
   --metadata author="$AUTHOR" \
   --metadata version="$VERSION" \
-  --syntax-highlighting=none \
+  --no-highlight \
   --number-sections \
   --toc \
   --include-in-header="$EMOJI_CONFIG" \

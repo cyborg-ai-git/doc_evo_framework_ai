@@ -1,5 +1,4 @@
-# EVO Framework File Storage Strategy
-## Binary Entity Serialization with SHA256 Organization
+## Appendix: **EVO Framework AI** Persistent FileSystem Storage Strategy
 
 ### EVO Framework File Structure
 

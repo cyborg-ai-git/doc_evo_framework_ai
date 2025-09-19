@@ -27,7 +27,7 @@ This document describes a post-quantum cryptographic system designed for secure 
 
 The **Evo Bridge PQCES** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
 
-> TODO: add UML figure
+> TODO:add uml diagrams...
 
 ### Core Entity Types
 

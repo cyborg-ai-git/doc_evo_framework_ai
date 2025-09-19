@@ -1,4 +1,4 @@
-# Cryptographic Signatures Comparison
+# # Appendix: Cryptographic Signatures Comparison
 
 | Method | Security Level | Public Key (bytes) | Private Key (bytes) | Signature (bytes) |
 |--------|:--------------:|:------------------:|:-------------------:|:-----------------:|

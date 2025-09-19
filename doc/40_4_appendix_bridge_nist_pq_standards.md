@@ -1,6 +1,6 @@
 > TODO: to move in dedicated section
 
-# NIST Post-Quantum Cryptography Standards
+# Appendix: NIST Post-Quantum Cryptography Standards
 
 ## Key Encapsulation Mechanisms (KEM)
 

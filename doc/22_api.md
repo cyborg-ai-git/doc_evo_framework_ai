@@ -13,6 +13,8 @@ The framework's emphasis on security through certification, encryption, and isol
 
 ## Core Architecture
 
+> TODO:add uml diagrams...
+
 ### Framework Module Structure
 
 The **Evo IApi module** operates as a modular component within the broader Evo framework, providing essential traits and implementations for API management:

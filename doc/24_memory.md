@@ -22,6 +22,8 @@ Hybrid Memory Model:
 - Intelligent caching strategies
 - Automatic memory optimization
 
+> TODO:add uml diagrams...
+
 ## Memory Layer: Comprehensive Data Storage and Management
 
 ## Memory Paradigm Overview
