@@ -1,4 +1,4 @@
-% Working emoji configuration using Symbola font
+% Cross-platform emoji configuration for macOS and Linux
 \usepackage{fontspec}
 \usepackage{adjustbox}
 
@@ -8,11 +8,15 @@
 % Set main fonts
 \setmainfont{Noto Sans}
 
-% Disable emoji font for now - just use regular text
-% \newfontfamily\emojifont{Apple Color Emoji}
+% Fallback emoji font configuration
+% Use Noto Sans as fallback to prevent crashes
+\newfontfamily\emojifont{Noto Sans}
 
-% Simple emoji command - just pass through the text
-\newcommand{\emoji}[1]{#1}
+% If Apple Color Emoji fails, the document will still compile but emojis won't render
+% For Linux systems, create a separate config file that uses Noto Color Emoji
+
+% Simple emoji command
+\newcommand{\emoji}[1]{{\emojifont #1}}
 
 % Map Unicode characters to emoji command
 \usepackage{newunicodechar}

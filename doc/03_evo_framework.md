@@ -1,7 +1,7 @@
 # Evo Framework AI
-The Evo (lution) Framework is a logical structure of the media on which software can be designed and implemented which takes its inspiration from the structure of a neuronal cell.
+The **Evo (lution) Framework AI** is a logical structure of the media on which software can be designed and implemented which takes its inspiration from the structure of a neuronal cell.
 
-![evo_framework_neural_cell.svg](data/evo_framework_neural_cell.svg)
+![evo framework neural cell](data/evo_framework_neural_cell.svg)
 
 The purpose of the framework is to provide a collection of basic entities ready for use, or reuse of code, avoiding the programmer having to rewrite every time the same functions or data structures and thus facilitating maintenance operations. This feature is therefore part of the wider context of the calling code within programs and applications and is present in almost all languages .
 
