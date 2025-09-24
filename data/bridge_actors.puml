@@ -125,7 +125,7 @@ note right of MP_CARD
   - Dilithium-5 (NIST Level 5) digital signatures
 
   **Maintains:**
-  - Peer certificate registry (public GitHub, Smart Contract & IPFS)
+  - Peer certificate registry
   - Public key directory & trust anchors
   - Certificate issuance & revocation data
   - Cryptographic material storage
@@ -140,7 +140,7 @@ note right of SYS_CARD
   - Peer IDs (32-byte SHA3 hashes)
   - Public key chains & revocation lists
   - Metadata: issuance, expiration, status
-  - GitHub, Smart Contract, IPFS
+  - Secure storage (Evo Memento, Other decentralized channels )
 end note
 
 ' PeerA (Single-Peer Client)
