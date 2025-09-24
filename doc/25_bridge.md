@@ -109,6 +109,9 @@ The standardized message format for all peer-to-peer communications.
 
 The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
 
+
+> No more login username or weak password, your password is your secret certificate, so is important to not share or expose the EPeerSecret
+
 **Key Characteristics:**
 - **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
 - **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
@@ -121,6 +124,17 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 - **Raw TCP/UDP**: Low-level protocols for maximum performance
 - **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities
 - **EvoQuic** *(Coming Soon)*: Custom quantum-resistant protocol optimized for PQCES
+
+
+> TODO: to insert diagrams
+### Virtual PQVpn
+
+#### Decentralized PQVpn
+The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security
+
+### Relay Peer
+Relay peer is important to Nat peer that can not tunnelling connection, the relay peer , check if peer is an enemy banned so block the connection otherwise, send the EApiEvent to the correct peer, only the destination peer can decrypt correctly the data 
+
 
 #### Blockchain-Based Decentralization
 
@@ -151,7 +165,7 @@ Confidentiality ensures that information is accessible only to authorized entiti
 
 **Implementation Mechanisms:**
 
-- **Quantum-Resistant Encryption:** Kyber-1024 key encapsulation mechanism provides post-quantum protection for key exchange, ensuring confidentiality even against quantum computing attacks.
+- **Quantum-Resistant Encryption:** Kyber-1024 (Kyber-768 ) key encapsulation mechanism provides post-quantum protection for key exchange, ensuring confidentiality even against quantum computing attacks.
 
 - **Strong Symmetric Encryption:** ChaCha20-Poly1305 authenticated encryption with unique per-packet nonces secures all data in transit.
 
