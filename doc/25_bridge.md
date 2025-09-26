@@ -162,7 +162,7 @@ Confidentiality ensures that information is accessible only to authorized entiti
 
 **Implementation Mechanisms:**
 
-- **Quantum-Resistant Encryption:** Kyber-1024 (Kyber-768 ) key encapsulation mechanism provides post-quantum protection for key exchange, ensuring confidentiality even against quantum computing attacks.
+- **Quantum-Resistant Encryption:** Kyber-1024 key encapsulation mechanism provides post-quantum protection for key exchange, ensuring confidentiality even against quantum computing attacks.
 
 - **Strong Symmetric Encryption:** ChaCha20-Poly1305 authenticated encryption with unique per-packet nonces secures all data in transit.
 
