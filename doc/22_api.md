@@ -114,9 +114,9 @@ The API environment employs advanced encryption techniques to secure all stored 
 
 | Encryption Layer | Algorithm | Key Management |
 |------------------|-----------|----------------|
-| **Data at Rest** | ChaCha20-Poly1305 | Hardware Security Module (HSM) integration |
-| **Configuration Files** | ChaCha20-Poly1305 | Key derivation from master secrets |
-| **Runtime State** | XChaCha20-Poly1305 | Ephemeral key generation |
+| **Data at Rest** | Aes256_Gcm | Hardware Security Module (HSM) integration |
+| **Configuration Files** | Aes256_Gcm | Key derivation from master secrets |
+| **Runtime State** | XAes256_Gcm | Ephemeral key generation |
 
 ### Secure Storage Implementation
 

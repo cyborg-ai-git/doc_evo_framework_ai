@@ -45,7 +45,7 @@ title PeerA del_peer to MasterPeer
 autonumber
 
 == PK Registration ==
-PA -[$PEER_A_COLOR]> MP: EApiEvent(id_peer_a, sign_peer_a)\n\nAke Kyber\nDilithium sign\nChaCha20-Poly1305 crypt
+PA -[$PEER_A_COLOR]> MP: EApiEvent(id_peer_a, sign_peer_a)\n\nAke Kyber\nDilithium sign\nAes256_Gcm crypt
 activate MP $MASTER_PEER_COLOR
 note right MP: 1. Use Kyber\n2. Verify sign Dilithium\n3.Verify if exist EPeerPublic
 

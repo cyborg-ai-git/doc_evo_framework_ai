@@ -80,7 +80,7 @@ deactivate DB
 == Secure Delivery ==
 
 MP -[$MASTER_PEER_COLOR]> MP: Package Response
-note left MP: ChaCha20-Poly1305
+note left MP: Aes256_Gcm
 
 MP -[$MASTER_PEER_COLOR]> PB: ENC_CERT
 note left PB: 1. Decrypt Response\n2. Verify Master Peer Certificate sign

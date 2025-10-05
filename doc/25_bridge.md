@@ -92,7 +92,7 @@ The standardized message format for all peer-to-peer communications.
 
 - **Event Type**: Categorizes the communication (request, response, notification)
 - **Source/Destination IDs**: 32-byte peer identifiers for routing
-- **Cryptographic Payload**: Encrypted data using ChaCha20-Poly1305
+- **Cryptographic Payload**: Encrypted data using Aes256_Gcm
 - **Authentication Data**: Poly1305 MAC for message integrity
 - **Protocol Metadata**: Version, flags, and extension headers
 
@@ -109,8 +109,7 @@ The standardized message format for all peer-to-peer communications.
 
 The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
 
-
-> No more login username or weak password, your password is your secret certificate, so is important to not share or expose the EPeerSecret
+> No more login username or weak password, your password is your e_peer_secret , so is important to not share or expose the EPeerSecret
 
 **Key Characteristics:**
 - **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
@@ -128,10 +127,12 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 
 > TODO: to insert diagrams
 ### Virtual PQVpn
+VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
+**PQCES** automatically finds compatible servers and encrypts connections to them
+PQVpn protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
 
 #### Decentralized PQVpn
 The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security
-
 
 #### Blockchain-Based Decentralization
 
@@ -164,7 +165,7 @@ Confidentiality ensures that information is accessible only to authorized entiti
 
 - **Quantum-Resistant Encryption:** Kyber-1024 key encapsulation mechanism provides post-quantum protection for key exchange, ensuring confidentiality even against quantum computing attacks.
 
-- **Strong Symmetric Encryption:** ChaCha20-Poly1305 authenticated encryption with unique per-packet nonces secures all data in transit.
+- **Strong Symmetric Encryption:** Aes256_Gcm authenticated encryption with unique per-packet nonces secures all data in transit.
 
 - **Layered Encryption Model:** Session keys derived from KEM exchanges provide an additional layer of confidentiality protection.
 
@@ -264,7 +265,7 @@ Regular Peers are standard network participants with established identities.
 
 **Cryptographic Capabilities:**
 - Kyber-1024 for key exchange
-- ChaCha20-Poly1305 for symmetric encryption
+- Aes256_Gcm for symmetric encryption
 
 **Contains:**
 - Unique cryptographic identity (32-byte hash using BLAKE3)
@@ -304,7 +305,7 @@ Network Actions represent standardized communication protocol units.
 #### Phase 2: Certificate Issuance
 - Peer initiates Key Encapsulation Mechanism (KEM) with Master Peer:
   - Generates Kyber ciphertext + shared secret
-  - Encrypts identity package using ChaCha20-Poly1305 with implementation following RFC 8439
+  - Encrypts identity package using Aes256_Gcm with implementation following RFC 8439
 - Master Peer:
   - Decapsulates shared secret
   - Decrypts and validates identity claim
@@ -332,7 +333,7 @@ Network Actions represent standardized communication protocol units.
 - Session key derivation follows NIST SP 800-108 Rev. 1 recommendations
 
 **Secure Messaging**
-- Encrypt payloads with ChaCha20-Poly1305
+- Encrypt payloads with Aes256_Gcm
 - A unique, random 96-bit (12-byte) nonce is generated for every packet sent
   - Nonces are never reused within the same session
   - Generated using a cryptographically secure random number generator

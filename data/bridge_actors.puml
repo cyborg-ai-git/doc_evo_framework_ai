@@ -149,7 +149,7 @@ card "EPeerA Specifications" as PA_CARD
 note right of PA_CARD
   - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
   - Kyber-1024 keypair for key exchange
-  - ChaCha20-Poly1305 for symmetric encryption
+  - Aes256_Gcm for symmetric encryption
   - Certificate chain issued by EMasterPeer
   - Embedded EMasterPeer public keys (Kyber & Dilithium)
   - Supports multiple simultaneous connections
@@ -161,7 +161,7 @@ card "EPeerB Specifications" as PB_CARD
 note right of PB_CARD
   - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
   - Kyber-1024 keypair for key exchange
-  - ChaCha20-Poly1305 for symmetric encryption
+  - Aes256_Gcm for symmetric encryption
   - Certificate chain issued by EMasterPeer
   - Embedded EMasterPeer public keys (Kyber & Dilithium)
   - Supports multiple simultaneous connections
@@ -173,7 +173,7 @@ card "EPeerN Specifications" as PN_CARD
 note right of PN_CARD
   - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
   - Kyber-1024 keypair for key exchange
-  - ChaCha20-Poly1305 for symmetric encryption
+  - Aes256_Gcm for symmetric encryption
   - Certificate chain issued by EMasterPeer
   - Embedded EMasterPeer public keys (Kyber & Dilithium)
   - Supports multiple simultaneous connections
