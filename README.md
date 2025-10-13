@@ -85,45 +85,40 @@ This script will automatically install Git Flow, Pandoc, PlantUML, and all their
 
 ```
 app_EVO framework DOC/
-├── app_EVO framework DOC/              # Main CLI application
+├── app_EVO framework DOC/        # Main CLI application
 │   ├── src/
 │   │   └── main.rs               # Application entry point
 │   ├── benches/                  # Performance benchmarks
 │   │   └── bench_app_EVO framework DOC.rs
 │   ├── tests/                    # Integration tests
 │   │   └── test_app_EVO framework DOC.rs
-│   └── Cargo.toml               # Package configuration
-├── scripts/                     # Development and automation scripts
-│   ├── 0_issue_create.sh        # Create GitHub issues with branches
-│   ├── 1_issue_start.sh         # Start working on issues
-│   ├── 2_issue_commit.sh        # Commit all files changed
-│   ├── 3_issue_finish.sh        # Finish issues with PRs
-│   ├── run_install.sh           # Install Git Flow, Pandoc, PlantUML
-│   ├── run_issue_list.sh        # List GitHub issues
-│   ├── run_pandoc.sh            # Run Pandoc document conversion
-│   └── run_plantuml.sh          # Generate PlantUML diagrams
-├──  data/                   # Documentation assets
-├──  doc/                   # Documentation markup
-├── Cargo.toml                  # Workspace configuration
-├── LICENSE.txt                 # License file
-├── .gitignore                 # Git ignore rules
-└── README.md                  # This file
+│   └── Cargo.toml                # Package configuration
+├── contributing/                 # Issue management and workflow scripts
+│   ├── 0_issue_create.sh         # Create GitHub issues with branches
+│   ├── 1_issue_start.sh          # Start working on issues
+│   ├── 2_issue_commit.sh         # Commit all files changed
+│   └── 3_issue_finish.sh         # Finish issues with PRs
+├── scripts/                      # Development and automation scripts
+│   ├── run_install.sh            # Install Git Flow, Pandoc, PlantUML
+│   ├── run_issue_list.sh         # List GitHub issues
+│   ├── run_pandoc.sh             # Run Pandoc document conversion
+│   └── run_plantuml.sh           # Generate PlantUML diagrams
+├──  data/                        # Documentation assets
+├──  doc/                         # Documentation markup
+├── Cargo.toml                    # Workspace configuration
+├── LICENSE.txt                   # License file
+├── .gitignore                    # Git ignore rules
+└── README.md                     # Readme
 ```
 
 ---
 
-## Scripts Folder Explanation
+## Scripts and Contributing Folders Explanation
 
-The `scripts/` folder contains automation scripts for development workflow:
+### Contributing Folder
+The `contributing/` folder contains issue management and workflow scripts:
 
-### Installation & Setup
-- **`run_install.sh`**: 
-  - Automatically installs Git Flow, Pandoc, PlantUML and all dependencies
-  - Supports macOS (Homebrew) and Ubuntu Linux (APT)
-  - Includes verification tests and setup guidance
-  - Usage: `./scripts/run_install.sh`
-
-### Issue Management (GitHub Integration)
+#### Issue Management (GitHub Integration)
 - **`0_issue_create.sh`**: 
   - Creates GitHub issues and corresponding Git Flow feature branches
   - Usage: `./0_issue_create.sh "issue title" "description"`
@@ -144,9 +139,19 @@ The `scripts/` folder contains automation scripts for development workflow:
   - Merges feature branches back to develop using Git Flow
   - Automatically closes GitHub issues when PRs are created
 
+### Scripts Folder
+The `scripts/` folder contains development and automation scripts:
+
+#### Installation & Setup
+- **`run_install.sh`**: 
+  - Automatically installs Git Flow, Pandoc, PlantUML and all dependencies
+  - Supports macOS (Homebrew) and Ubuntu Linux (APT)
+  - Includes verification tests and setup guidance
+  - Usage: `./scripts/run_install.sh`
+
+#### Issue Management & Documentation Tools
 - **`run_issue_list.sh`**: Lists all GitHub issues using `gh issue list`
 
-### Documentation & Tools
 - **`run_pandoc.sh`**: 
   - Converts documentation between formats (Markdown, PDF, DOC, ODT)
   - Handles batch processing of documentation files
@@ -177,10 +182,10 @@ This repository uses **Git Flow** branching strategy for organized development:
 
 1. **Fork the Repository**: Create your own fork of the project
 2. **Git Flow Init**: run $git flow init and use default branches name
-3. **Create an Issue**: Use our automated script to create issues [0_issue_create.sh](./scripts/0_issue_create.sh)
-4. **Start Feature Branch**: Use [1_issue_start.sh](./scripts/1_issue_start.sh) start working on the issue:
-5. **Commit Feature Branch**: Use [2_issue_commit.sh](./scripts/2_issue_commit.sh)
-6. **Finish Feature Branch**: Use [3_issue_finish.sh](./scripts/3_issue_finish.sh)
+3. **Create an Issue**: Use our automated script to create issues [0_issue_create.sh](./contributing/0_issue_create.sh)
+4. **Start Feature Branch**: Use [1_issue_start.sh](./contributing/1_issue_start.sh) start working on the issue:
+5. **Commit Feature Branch**: Use [2_issue_commit.sh](./contributing/2_issue_commit.sh)
+6. **Finish Feature Branch**: Use [3_issue_finish.sh](./contributing/3_issue_finish.sh)
 7. **Code Review**: Participate in the review process
 
 
@@ -195,24 +200,24 @@ Use our automated scripts for streamlined contributions:
 
 # Create a new issue and feature branch
 # type: [doc|feature]
-./scripts/0_issue_create.sh type "Title" "Detailed description"
+./contributing/0_issue_create.sh type "Title" "Detailed description"
 
 #examples:
 
 # Create a documentation issue
-#./scripts/0_issue_create.sh doc "Update API docs" "The agent tab section needs doc ..."
+#./contributing/0_issue_create.sh doc "Update API docs" "The agent tab section needs doc ..."
 
 # Create a feature request  
-#./scripts/0_issue_create.sh feature "Add dark mode" "Implement dark theme support for better user experience ..."
+#./contributing/0_issue_create.sh feature "Add dark mode" "Implement dark theme support for better user experience ..."
 
 # Start working on an existing issue
-./scripts/1_issue_start.sh 123
+./contributing/1_issue_start.sh 123
 
 # Commit your changes
-./scripts/2_issue_commit.sh "Add new feature implementation"
+./contributing/2_issue_commit.sh "Add new feature implementation"
 
 # Finish your work and create a pull request
-./scripts/3_issue_finish.sh 123
+./contributing/3_issue_finish.sh 123
 ```
 ---
 
