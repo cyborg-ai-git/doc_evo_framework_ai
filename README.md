@@ -85,14 +85,6 @@ This script will automatically install Git Flow, Pandoc, PlantUML, and all their
 
 ```
 app_EVO framework DOC/
-├── app_EVO framework DOC/        # Main CLI application
-│   ├── src/
-│   │   └── main.rs               # Application entry point
-│   ├── benches/                  # Performance benchmarks
-│   │   └── bench_app_EVO framework DOC.rs
-│   ├── tests/                    # Integration tests
-│   │   └── test_app_EVO framework DOC.rs
-│   └── Cargo.toml                # Package configuration
 ├── contributing/                 # Issue management and workflow scripts
 │   ├── 0_issue_create.sh         # Create GitHub issues with branches
 │   ├── 1_issue_start.sh          # Start working on issues
@@ -105,7 +97,7 @@ app_EVO framework DOC/
 │   └── run_plantuml.sh           # Generate PlantUML diagrams
 ├──  data/                        # Documentation assets
 ├──  doc/                         # Documentation markup
-├── Cargo.toml                    # Workspace configuration
+├── config.toml                   # Doc configuration
 ├── LICENSE.txt                   # License file
 ├── .gitignore                    # Git ignore rules
 └── README.md                     # Readme
