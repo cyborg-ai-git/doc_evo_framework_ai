@@ -14,7 +14,7 @@ skinparam BackgroundColor transparent
 !define IFoundationColor #ffa600
 !define IGuiColor #b700ff
 !define IApiColor #00eeff
- 
+!define IAiColor #ffa600
 
 ' Define the interfaces with their respective colors
 interface IEvo <<(I, IEvoColor)>> {
@@ -48,6 +48,11 @@ interface IApi <<(I, IApiColor)>> IApiColor{
     +on_stop()
 }
 
+interface IAi <<(I, IAiColor)>> IAiColor{
+    +get_models()
+    +do_agent_run(e_ai_agent: EAiAgentPublic)
+    +do_agent_stop(id_agent: TypeID))
+}
 
 interface IBridge<K> <<(I, IBridgeColor)>> IBridgeColor{
     +set_on_connected(callback: OnConnected<K>)
@@ -95,7 +100,9 @@ ID <|-- IGui IGuiColor
 
 IEvo <|-- IApi IApiColor
 ID <|-- IApi IApiColor
-IControl <|-- IApi IApiColor
+
+IEvo <|-- IAi IAiColor
+ID <|-- IAi IAiColor
 
 IEvo -down-> ID #transparent
 'ID -left-> ITime #transparent

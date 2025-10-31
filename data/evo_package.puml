@@ -2,33 +2,16 @@
 !theme plain
 
 ' Global dark theme
-skinparam backgroundColor #00000FF
+skinparam BackgroundColor transparent
 skinparam defaultFontColor #FFFFFFF
 
 package "Evo Framework" #333333{
-
-
 
  package "evo_framework"  #333333{
 
 
   }
 
-  package "evo_packages"  #333333{
-  package "evo_package_n"  #333333{
-         }
-     package "evo_package_2"  #333333{
-
-
-          }
-      package "evo_package_1"  #333333{
-
-
-       }
-
-
-
-    }
 
    package "evo_core"  #333333{
 
@@ -40,10 +23,19 @@ package "Evo Framework" #333333{
        [evo_core_api]  #333333
         [evo_core_ai] #333333
          [evo_core_memory] #333333
-          [evo_core_storage] #333333
+          [evo_core_memento] #333333
           [evo_core_bridge] #333333
           [evo_core_gui] #333333
    }
+
+       package "evo_packages"  #333333{
+
+             [evo_api]  #00eeff
+             [evo_entity] #09b620
+             [evo_ai]  #ffa600
+             [evo_gui] #09b620
+            }
+
 
 
 }
