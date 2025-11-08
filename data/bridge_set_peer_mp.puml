@@ -60,7 +60,7 @@ deactivate DB
 
 == Certificate Delivery ==
 MP -[$MASTER_PEER_COLOR]> PA: Cert Package
-note left PA: 1. Verify Master Signature\n2. Store Securely
+note left PA: 1. Verify Master Response
 deactivate MP
 
 @enduml

@@ -51,7 +51,7 @@ The Entity Layer represents a revolutionary approach to data representation:
 - Cache-friendly data layouts
 
 #### Performance Characteristics
-- Microsecond-level serialization
+- Nanosecond-level serialization
 - Nanosecond-level deserialization
 - Minimal memory copy operations
 - Compile-time type checking
