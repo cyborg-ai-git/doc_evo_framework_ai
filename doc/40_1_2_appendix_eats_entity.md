@@ -3,7 +3,6 @@
 
 EATS (Evo Ai Tokens System) is a high-performance, token-efficient serialization framework designed specifically for communication with Large Language Models (LLMs). It provides a compact, delimiter-based format that minimizes token usage while maintaining fast serialization/deserialization speeds and robust error handling.
 
-**Note:** All PlantUML diagram files use the prefix `eats_` to identify them as part of the Evo Ai Tokens System.
 
 ### Key Features
 
@@ -17,9 +16,7 @@ EATS (Evo Ai Tokens System) is a high-performance, token-efficient serialization
 
 ## Architecture
 
-<div align="center">
-  <img src="data/eats_architecture_overview.svg" alt="Architecture Overview" width="800"/>
-</div>
+![EATS Architecture Overview](data/eats_architecture_overview.svg)
 
 The system consists of four main layers:
 
@@ -38,8 +35,8 @@ Parses compact strings back into entity structures with robust error handling.
 ---
 
 ## Serialization Format
-![eats Format Structure](data/eats_format_structure.svg)
 
+![EATS Format Structure](data/eats_format_structure.svg)
 
 ### Main Entity Line Format
 
@@ -89,9 +86,9 @@ Level¦Key¦EntityID¦InstanceID¦Timestamp¦Fields...¦
 ```
 
 - **Level**: Nesting depth (1-255)
-  - 1 = direct child
-  - 2 = grandchild
-  - etc.
+   - 1 = direct child
+   - 2 = grandchild
+   - etc.
 - **Key**: Attribute name in parent entity
 - **Rest**: Same format as main entity line
 
@@ -267,9 +264,7 @@ ETest0 (root)
 
 ## Serialization Process
 
-<div align="center">
-  <img src="data/eats_serialization_flow.svg" alt="Serialization Flow" width="900"/>
-</div>
+![EATS Serialization Flow](data/eats_serialization_flow.svg)
 
 ### Steps
 
@@ -293,9 +288,7 @@ ETest0 (root)
 
 ## Deserialization Process
 
-<div align="center">
-  <img src="data/eats_deserialization_flow.svg" alt="Deserialization Flow" width="900"/>
-</div>
+![EATS Deserialization Flow](data/eats_deserialization_flow.svg)
 
 ### Steps
 
@@ -339,9 +332,7 @@ The parser provides robust error handling with descriptive messages:
 
 ## Token Optimization
 
-<div align="center">
-  <img src="data/eats_token_optimization.svg" alt="Token Optimization" width="800"/>
-</div>
+![EATS Token Optimization](data/eats_token_optimization.svg)
 
 ### Optimization Strategies
 
@@ -670,9 +661,9 @@ Optional compression for large entity graphs:
 
 ---
 
-## Conclusion
+## EATS Conclusion
 
-The EVO AI Entity Serialization System provides an optimal balance of:
+The EATS Entity serialization provides an optimal balance of:
 
 - **Token Efficiency**: 40% reduction vs JSON
 - **Performance**: Sub-microsecond serialization
@@ -684,10 +675,6 @@ This makes it ideal for high-performance LLM communication where token costs and
 
 ---
 
-## References
-
-- **Repository**: [CyborgAI EVO Framework](https://github.com/cyborg-ai-git)
-- **License**: CC BY-NC-ND 4.0 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
-- **Version**: 2025.11
+> EATS is now in beta version the preformances and tokens count will be optimized with new **eats_finetunes** direct binary entities
 
 \pagebreak
