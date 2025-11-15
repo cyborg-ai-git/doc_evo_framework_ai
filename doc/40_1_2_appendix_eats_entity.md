@@ -38,10 +38,8 @@ Parses compact strings back into entity structures with robust error handling.
 ---
 
 ## Serialization Format
+![eats Format Structure](data/eats_format_structure.svg)
 
-<div align="center">
-  <img src="data/eats_format_structure.svg" alt="Format Structure" width="800"/>
-</div>
 
 ### Main Entity Line Format
 
