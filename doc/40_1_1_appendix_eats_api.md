@@ -1,4 +1,4 @@
-# **Evo Framework AI** Tokenization System
+# **Evo AI Tokenization System (EATS) ** 
 
 ##  Problem Statement
 

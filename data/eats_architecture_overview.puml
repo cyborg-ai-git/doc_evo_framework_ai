@@ -1,0 +1,65 @@
+@startuml architecture_overview
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+
+title AI Entity Serialization System - Architecture Overview
+
+package "Entity Layer" {
+    [Entity Struct] as Entity
+    [IAiEntity Trait] as Trait
+}
+
+package "Serialization Layer" {
+    [to_ai()] as ToAI
+    [UAiEntity Helpers] as Helpers
+    [Inline Functions] as Functions
+}
+
+package "Format Layer" {
+    [Compact Format] as Format
+    [Delimiter-Based] as Delimiter
+    [Level-Based Nesting] as Nesting
+}
+
+package "Deserialization Layer" {
+    [from_ai()] as FromAI
+    [Parser Functions] as Parser
+    [Token Counter] as Counter
+}
+
+package "LLM Communication" {
+    [Compact String] as String
+    [Token Optimized] as Token
+}
+
+Entity --> Trait : implements
+Trait --> ToAI : serialization
+ToAI --> Helpers : uses
+Helpers --> Functions : inline functions
+Functions --> Format : generates
+Format --> Delimiter : uses
+Format --> Nesting : supports
+Format --> String : produces
+String --> Token : optimized for
+
+String --> FromAI : deserialization
+FromAI --> Parser : uses
+Parser --> Helpers : uses
+Parser --> Entity : reconstructs
+
+Counter --> String : analyzes
+
+note right of Format
+  Format: EntityID¦ID¦Time¦Fields¦
+  Example: 611dd51¦abc123...¦1763212259¦true¦42¦...
+end note
+
+note right of Token
+  Token Efficiency:
+  - 507 tokens vs ~800 for JSON
+  - 40% reduction
+  - 2.83 bytes/token
+end note
+
+@enduml

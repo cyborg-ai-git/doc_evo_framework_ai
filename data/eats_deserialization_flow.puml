@@ -1,0 +1,72 @@
+@startuml deserialization_flow
+!theme plain
+skinparam backgroundColor #FFFFFF
+
+title Deserialization Flow (from_ai)
+
+actor "Application" as App
+participant "from_ai()" as FromAI
+participant "UAiEntity" as Helper
+participant "Parser" as Parser
+participant "Entity" as Entity
+participant "LLM" as LLM
+
+App -> LLM : receive compact_string
+LLM -> App : compact_string
+
+App -> FromAI : Entity::from_ai(string, level)
+activate FromAI
+
+FromAI -> Entity : create default()
+FromAI -> Helper : do_split_code(string)
+Helper -> Parser : split by '\n'
+Parser -> FromAI : lines[]
+
+loop for each line
+    alt main entity line
+        FromAI -> Helper : do_split_line(line, field_count)
+        Helper -> Parser : split by '¦'
+        Parser -> FromAI : fields[]
+        
+        FromAI -> Helper : from_ai_id(fields[1])
+        alt ID is empty
+            Helper -> Entity : set_id(UId::id())
+            note right: Generate new ID
+        else ID provided
+            Helper -> Entity : set_id(parsed_id)
+        end
+        
+        FromAI -> Helper : from_ai(fields[2])
+        alt Time is empty
+            Helper -> Entity : set_time(0)
+        else Time provided
+            Helper -> Entity : set_time(parsed_time)
+        end
+        
+        loop for each field
+            FromAI -> Helper : from_ai*(fields[i])
+            Helper -> Entity : set_field(value)
+        end
+    else nested entity line
+        FromAI -> Helper : parse_nested_line(line, level+1, key)
+        alt matches level and key
+            Helper -> FromAI : entity_data
+            FromAI -> FromAI : NestedEntity::from_ai(data, level+1)
+            note right: Recursive parsing
+            FromAI -> Entity : set_nested(nested_entity)
+        end
+    end
+end
+
+FromAI -> App : return entity
+deactivate FromAI
+
+note right of Parser
+    Robust parsing:
+    - Level-based nesting
+    - UTF-8 safe
+    - Error handling
+    - Backward compatible
+end note
+
+@enduml
