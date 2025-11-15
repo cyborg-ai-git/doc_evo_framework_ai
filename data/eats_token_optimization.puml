@@ -1,0 +1,69 @@
+@startuml token_optimization
+!theme plain
+skinparam backgroundColor #FFFFFF
+
+title Token Optimization Strategies
+
+rectangle "JSON Format" as JSON #FFE6E6 {
+    rectangle "Field Names" as JFN
+    rectangle "Quotes" as JQ
+    rectangle "Brackets" as JB
+    rectangle "Commas" as JC
+    rectangle "Whitespace" as JW
+    
+    note bottom
+        Example:
+        {"id": "abc123", "name": "test"}
+        ~800 tokens for complex entity
+    end note
+}
+
+rectangle "AI Format" as AI #E6FFE6 {
+    rectangle "Entity ID\n(7 chars)" as AID
+    rectangle "Delimiter\n(1 char)" as AD
+    rectangle "Values Only" as AV
+    rectangle "No Quotes\n(primitives)" as ANQ
+    rectangle "Compact IDs" as ACI
+    
+    note bottom
+        Example:
+        611dd51¦abc123¦test
+        ~507 tokens for same entity
+        40% reduction!
+    end note
+}
+
+rectangle "Optimization Techniques" as OPT #E6E6FF {
+    rectangle "Hex Entity IDs\n(28 bits)" as O1
+    rectangle "Omit Field Names\n(schema-based)" as O2
+    rectangle "Single Delimiter\n(¦)" as O3
+    rectangle "No Whitespace" as O4
+    rectangle "Primitives Unquoted" as O5
+    rectangle "Base64 for Binary" as O6
+    rectangle "Level-Based Nesting" as O7
+}
+
+JSON -down-> AI : "Optimize"
+AI -down-> OPT : "Uses"
+
+note right of O1
+    611dd51 vs "ETest0"
+    1 token vs 2 tokens
+end note
+
+note right of O2
+    Schema provides structure
+    LLM knows field order
+end note
+
+note right of O3
+    ¦ = 1 token
+    vs {, }, :, , = 4 tokens
+end note
+
+note right of O6
+    AQIDBAU= vs [1,2,3,4,5]
+    2 tokens vs 11 tokens
+end note
+
+@enduml

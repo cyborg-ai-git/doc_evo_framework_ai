@@ -1,4 +1,4 @@
-# **Evo Framework AI** Tokenization System
+# **Evo AI Tokenization System (EATS) ** 
 
 ##  Problem Statement
 
@@ -46,7 +46,7 @@ Current JSON-based systems create bottlenecks in:
 
 ### Core Innovation: ASCII Delimiter Protocol
 
-Our system replaces JSON with a streamlined delimiter-based approach using ASCII Unit Separator (`\x1F`) for maximum efficiency.
+Our system replaces JSON with a streamlined delimiter-based approach using ASCII Unit Separator (`¦`) for maximum efficiency.
 
 **System Architecture:**
 ```
@@ -56,21 +56,61 @@ Cyborg AI: User Request → Delimiter Tokenization → Direct Execution
 
 ### Protocol Specification
 
+
+Where **¦** (Broken Bar, U+00A6) is Used:
+Historically:
+
+Old character encoding variant: In some legacy systems, it was an alternative to the regular vertical bar |
+IBM compatibility: Used in certain IBM codepages and EBCDIC
+Typography: Sometimes used for visual variation from solid pipe
+
+Modern usage:
+
+Extremely rare in practice
+Not used as an operator in programming languages
+Not a standard delimiter in any major format (CSV, TSV, etc.)
+Occasionally appears in older documents or legacy systems
+Sometimes used decoratively in text 
+
+
+Technical details:
+
+2 bytes in UTF-8 (C2 A6)
+Part of Latin-1 Supplement block
+Often confused with regular pipe | (U+007C)
+
+As a Delimiter:
+PROS:
+
+✅ Very rare in normal text
+✅ Visually similar to common pipe delimiter
+✅ Only 2 bytes (smaller than ⋆)
+✅ Won't conflict with most syntax
+✅ Available on some keyboards (AltGr+Shift+\ on some layouts)
+
+CONS:
+
+❌ Visually confusing with regular pipe |
+❌ Still hard to type on most keyboards
+❌ Not widely recognized
+❌ No semantic meaning to users
+❌ Might render poorly in some fonts
+
 **Syntax Format:**
 ```
-\x1FAPI_ID\x1FPARAM1\x1FPARAM2\x1F...\x1F
+¦API_ID¦PARAM1¦PARAM2¦...¦
 ```
 
 **Component Breakdown:**
-- `\x1F`: ASCII Unit Separator (hex 1F, decimal 31)
+- `¦`: ASCII Unit Separator (hex 1F, decimal 31)
 - `API_ID`: Numeric identifier for target function
 - `PARAM_N`: Sequential parameters without type declaration
-- Terminating `\x1F`: End-of-message marker
+- Terminating `¦`: End-of-message marker
 
 **Performance Comparison:**
 ```
 Cyborg AI Example:
-\x1F3453245345345\x1Fls -la\x1F
+¦3453245345345¦ls -la¦
 
 Token Count: ~3 tokens
 Processing Time: ~0.8ms
@@ -139,8 +179,8 @@ Runtime API expansion without system restart:
 Built-in API exploration mechanism:
 
 ```
-\x1F0\x1FTARGET_API_ID\x1F  // Query API documentation
-Response: \x1FTARGET_API_ID\x1FPARAM_SCHEMA\x1F
+¦0¦TARGET_API_ID¦  // Query API documentation
+Response: ¦TARGET_API_ID¦PARAM_SCHEMA¦
 ```
 
 **Advantages:**
@@ -165,7 +205,7 @@ Graceful failure modes:
 ```markdown
 # Cyborg AI Agent Setup
 You are an AI agent using the Cyborg tokenization protocol.
-Use format: \x1FAPI_ID\x1FAPI_DESCRIPTION\x1F
+Use format: ¦API_ID¦API_DESCRIPTION¦
 where 
 - API_ID: is the id of the api ,
 - API_DESCRIPTION: the description of what api do
@@ -284,12 +324,5 @@ The system is production-ready and offers immediate benefits for any organizatio
 | ErrorAiNotValidIdApi     | Unknown API ID     | Query documentation    |
 | ErrorAiNotValidParameter | Parameter mismatch | Validate parameters    |
 
-
-### Appendix C: Reference Implementations
-
-Complete implementations available at:
-- GitHub: `https://github.com/cyborg-ai/tokenization`
-- Documentation: `https://docs.cyborg-ai.com/tokenization`
-- Examples: `https://examples.cyborg-ai.com`
 
 \pagebreak

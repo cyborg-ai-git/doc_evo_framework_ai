@@ -1,45 +1,32 @@
 @startuml
 !theme plain
-
 ' Global dark theme
 skinparam BackgroundColor transparent
 skinparam defaultFontColor #FFFFFFF
 
 package "Evo Framework" #333333{
-
- package "evo_framework"  #333333{
-
-
-  }
-
-
    package "evo_core"  #333333{
-
-     [evo_core_log]  #333333
-      [evo_core_id]  #333333
-      [evo_core_time]  #333333
-      [evo_core_crypto]  #333333
-      [evo_core_entity]  #333333
-       [evo_core_api]  #333333
-        [evo_core_ai] #333333
-         [evo_core_memory] #333333
-          [evo_core_memento] #333333
-          [evo_core_bridge] #333333
-          [evo_core_gui] #333333
+    [evo_core_id]  #333333
+    [evo_core_time]  #333333
+    [evo_core_log]  #333333
+    [evo_core_crypto]  #333333
+    [evo_core_entity]  #333333
+    [evo_core_entity_ai]  #333333
+    [evo_core_entity]  #333333
+    [evo_core_api_ai]  #333333
+    [evo_core_ai] #333333
+    [evo_core_memento] #333333
+    [evo_core_bridge] #333333
+    [evo_core_gui] #333333
    }
 
-       package "evo_packages"  #333333{
-
-             [evo_api]  #00eeff
-             [evo_entity] #09b620
-             [evo_ai]  #ffa600
-             [evo_gui] #09b620
-            }
-
-
-
+   package "evo_packages"  #333333{
+     [evo_event]  #aaaaaa
+     [evo_api]  #00eeff
+     [evo_api_ai]  #00eeff
+     [evo_entity] #09b620
+     [evo_entity_ai] #09b620
+     [evo_gui] #b700ff
+   }
 }
-
-
-
 @enduml

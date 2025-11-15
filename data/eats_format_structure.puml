@@ -1,0 +1,68 @@
+@startuml format_structure
+!theme plain
+skinparam backgroundColor #FFFFFF
+
+title AI Serialization Format Structure
+
+package "Main Entity Line" {
+    rectangle "Entity ID\n(7 hex chars)" as EID #LightBlue
+    rectangle "Instance ID\n(64 hex chars)" as IID #LightGreen
+    rectangle "Timestamp\n(u64)" as TIME #LightYellow
+    rectangle "Field 1" as F1 #LightCoral
+    rectangle "Field 2" as F2 #LightCoral
+    rectangle "Field N" as FN #LightCoral
+    rectangle "End\nDelimiter" as END #LightGray
+}
+
+package "Nested Entity Lines" {
+    rectangle "Level\n(1-255)" as L1 #LightBlue
+    rectangle "Key\n(attribute name)" as K1 #LightGreen
+    rectangle "Nested Entity\n(same format)" as NE1 #LightYellow
+}
+
+package "Map Entity Lines" {
+    rectangle "Level\n(1-255)" as L2 #LightBlue
+    rectangle "Key\n(map name)" as K2 #LightGreen
+    rectangle "Map Entity\n(same format)" as ME1 #LightYellow
+}
+
+EID -right-> IID : ¦
+IID -right-> TIME : ¦
+TIME -right-> F1 : ¦
+F1 -right-> F2 : ¦
+F2 -right-> FN : ¦
+FN -right-> END : ¦
+
+L1 -right-> K1 : ¦
+K1 -right-> NE1 : ¦
+
+L2 -right-> K2 : ¦
+K2 -right-> ME1 : ¦
+
+note bottom of EID
+    Entity ID: 611dd51
+    Derived from EVO_VERSION hash
+    Unique identifier (28 bits)
+end note
+
+note bottom of IID
+    Instance ID: abc123...
+    Unique per entity instance
+    Can be empty (¦¦) for auto-generation
+end note
+
+note bottom of TIME
+    Timestamp: 1763212259692436780
+    Unix timestamp in nanoseconds
+    Can be empty for default (0)
+end note
+
+note bottom of L1
+    Level indicates nesting depth:
+    - 0: Root entity (implicit)
+    - 1: Direct children
+    - 2: Grandchildren
+    - 255: Max depth
+end note
+
+@enduml

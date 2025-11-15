@@ -1,0 +1,62 @@
+@startuml serialization_flow
+!theme plain
+skinparam backgroundColor #FFFFFF
+
+title Serialization Flow (to_ai)
+
+actor "Application" as App
+participant "Entity" as Entity
+participant "to_ai()" as ToAI
+participant "UAiEntity" as Helper
+participant "String Buffer" as Buffer
+participant "LLM" as LLM
+
+App -> Entity : entity.to_ai(level)
+activate Entity
+
+Entity -> Buffer : create String
+Entity -> Helper : to_ai_start(buffer, entity_id)
+Helper -> Buffer : append "611dd51"
+
+Entity -> Helper : to_ai_hex(buffer, id)
+Helper -> Buffer : append "¦abc123..."
+
+Entity -> Helper : to_ai(buffer, time)
+Helper -> Buffer : append "¦1763212259"
+
+loop for each field
+    Entity -> Helper : to_ai*(buffer, field)
+    Helper -> Buffer : append "¦value"
+end
+
+Entity -> Helper : to_ai_end(buffer)
+Helper -> Buffer : append "¦"
+
+alt has nested entities
+    Entity -> Helper : to_ai_entity(buffer, level, key, entity)
+    Helper -> Buffer : append "\n1¦key¦..."
+    note right
+        Nested entities at level+1
+        Format: level¦key¦EntityID¦...
+    end note
+end
+
+alt has maps
+    loop for each map entry
+        Entity -> Helper : to_ai_map(buffer, level, key, map)
+        Helper -> Buffer : append "\n1¦key¦..."
+    end
+end
+
+Entity -> App : return compact_string
+deactivate Entity
+
+App -> LLM : send compact_string
+note right
+    Optimized format:
+    - Minimal tokens
+    - Fast parsing
+    - Human readable
+end note
+
+@enduml

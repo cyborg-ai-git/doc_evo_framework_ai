@@ -7,7 +7,7 @@
 * **FIPS 202**: [SHA-3 Standard](https://csrc.nist.gov/pubs/fips/202/final)
 * **FIPS 203**: [Module-Lattice-Based Key-Encapsulation Mechanism Standard](https://csrc.nist.gov/pubs/fips/203/ipd)
 * **FIPS 204**: [Module-Lattice-Based Digital Signature Standard](https://csrc.nist.gov/pubs/fips/204/ipd)
-**Ascon-AEAD128** [Authenticated Encryption with Associated Data (AEAD)](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf)
+* **Ascon-AEAD128** [Authenticated Encryption with Associated Data (AEAD)](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-232.pdf)
 ### Special Publications (SP 800 Series)
 
 #### Cryptographic Guidelines
