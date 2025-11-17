@@ -1,5 +1,24 @@
 # Evo Framework Benchmarks
 
+## Time Units Reference Guide
+
+### Quick Reference Table
+
+| Unit        | Symbol  | Full Name   | Seconds        | Scientific Notation |
+|-------------|---------|-------------|----------------|---------------------|
+| Secon d     | s       | Second      | 1              | 10⁰ s               |
+| Millisecond | ms      | Millisecond | 0.001          | 10⁻³ s              |
+| Microsecond | μs (us) | Microsecond | 0.000001       | 10⁻⁶ s              |
+| Nanosecond  | ns      | Nanosecond  | 0.000000001    | 10⁻⁹ s              |
+| Picosecond  | ps      | Picosecond  | 0.000000000001 | 10⁻¹² s             |
+
+### Conversion Table
+
+### From Seconds
+
+| From  | To Milliseconds | To Microseconds | To Nanoseconds   | To Picoseconds       |
+|-------|-----------------|-----------------|------------------|----------------------|
+| 1 s   | 1,000 ms        | 1,000,000 μs    | 1,000,000,000 ns | 1,000,000,000,000 ps |
 > (x86_64) linux ubuntu
 
 ## evo_core_id

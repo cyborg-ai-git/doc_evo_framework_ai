@@ -6,8 +6,8 @@ EATS (Evo Ai Tokens System) is a high-performance, token-efficient serialization
 
 ### Key Features
 
-- **40% Token Reduction** compared to JSON format
-- **Fast Performance**: 6 µs serialization, 17 µs deserialization
+- **40 - 50% Token Reduction** compared to JSON format
+- **Fast Performance**: 6 µs serialization, 17 µs deserialization (*beta)
 - **Robust Parsing**: UTF-8 safe, level-based nesting, comprehensive error handling
 - **Generic Design**: Works with any entity type implementing IAiEntity trait
 - **Backward Compatible**: Supports both legacy names and compact IDs
@@ -41,7 +41,7 @@ Parses compact strings back into entity structures with robust error handling.
 ### Main Entity Line Format
 
 ```
-EntityID¦InstanceID¦Timestamp¦Field1¦Field2¦...¦FieldN¦
+EntityID|InstanceID|Field1|Field2|...|FieldN|
 ```
 
 **Components:**
@@ -49,20 +49,21 @@ EntityID¦InstanceID¦Timestamp¦Field1¦Field2¦...¦FieldN¦
 1. **Entity ID** (7 hex characters)
    - Derived from EVO_VERSION hash
    - Unique identifier for entity type
-   - Example: `611dd51`
-   - Token cost: 1 token
+   - Example: `8qa30seqbYE`
+   - Token cost: ~6 token
 
-2. **Instance ID** (64 hex characters)
+2. **Instance ID** (base64 characters)
    - Unique identifier for this specific entity instance
-   - Can be empty (`¦¦`) for auto-generation
-   - Example: `abc123...def456`
-   - Token cost: 16 tokens
+   - Can be empty (`||`) for auto-generation
+   - Example: `s4WcOuKu2flddJ3bwApAhQdqsj/pdnSHQNA2ad0Gbeo=`
+   - Token cost: 30-40 tokens 
+   - Output Token cost: **0** tokens (auto-generation)
 
 3. **Timestamp** (u64)
    - Unix timestamp in nanoseconds
-   - Can be empty for default value (0)
+   - Automatically generated
    - Example: `1763212259692436780`
-   - Token cost: 2-3 tokens
+   - Token cost: **0** tokens
 
 4. **Fields** (variable)
    - Entity-specific field values
@@ -71,18 +72,18 @@ EntityID¦InstanceID¦Timestamp¦Field1¦Field2¦...¦FieldN¦
    - Binary: base64 encoded (e.g., `AQIDBAU=`)
    - Enums: variant name (e.g., `VAl02`)
 
-5. **End Delimiter** (`¦`)
+5. **End Delimiter** (`|`)
    - Marks end of main entity line
 
 ### Nested Entity Format
 
 ```
-Level¦Key¦EntityID¦InstanceID¦Timestamp¦Fields...¦
+Level|Key|EntityID|InstanceID|Timestamp|Fields...|
 ```
 
 **Example:**
 ```
-1¦attribute_entity1¦37a7ab1¦xyz789...¦1763212260¦true¦"Nested"¦
+1|attribute_entity1|37a7ab1|xyz789...|1763212260|true|"Nested"|
 ```
 
 - **Level**: Nesting depth (1-255)
@@ -95,15 +96,15 @@ Level¦Key¦EntityID¦InstanceID¦Timestamp¦Fields...¦
 ### Map Entity Format
 
 ```
-Level¦MapKey¦EntityID¦InstanceID¦Timestamp¦Fields...¦
+Level|MapKey|EntityID|InstanceID|Timestamp|Fields...|
 ```
 
 Multiple lines with same level and key for multiple map entries.
 
 **Example:**
 ```
-1¦attribute_map0¦37a7ab1¦aaa111...¦1763212261¦true¦"Map Entry 1"¦
-1¦attribute_map0¦37a7ab1¦bbb222...¦1763212262¦false¦"Map Entry 2"¦
+1|attribute_map0|37a7ab1|aaa111...|1763212261|true|"Map Entry 1"|
+1|attribute_map0|37a7ab1|bbb222...|1763212262|false|"Map Entry 2"|
 ```
 
 ---
@@ -124,132 +125,129 @@ ETest0 (root)
 
 ### EATS Format (Compact)
 ```
-611dd51¦bc247aa7...¦1763212259692436780¦true¦42¦AQIDBAU=¦3.14159¦VAl02¦VAl12¦2.71828¦-123¦"English"¦-9876543210¦4242...¦"Test String"¦456¦9876543210¦
-1¦attribute_entity1¦37a7ab1¦8b4e08cf...¦1763212259692493647¦true¦"Nested String 1"¦"Entity1 Name"¦
-2¦attribute_entity2¦c9d5c5d¦ffb40e9e...¦1763212259692495883¦"Deeply Nested String"¦
-3¦attribute_entity1¦37a7ab1¦c47c7309...¦1763212259692497290¦false¦"Deep String"¦"Deep Entity"¦
-1¦attribute_entity2¦c9d5c5d¦9b687722...¦1763212259692509608¦"Entity2 String"¦
-1¦attribute_map0¦37a7ab1¦c77e4563...¦1763212259692511850¦true¦"Map Entity 1A"¦"Map1A"¦
-1¦attribute_map0¦37a7ab1¦7304b735...¦1763212259692542037¦false¦"Map Entity 1B"¦"Map1B"¦
-1¦attribute_map1¦c9d5c5d¦1351bce1...¦1763212259692547883¦"Map Entity 2A"¦
-1¦attribute_map1¦c9d5c5d¦80774ab6...¦1763212259692589009¦"Map Entity 2B"¦
+611dd51|s4WcOuKu2flddJ3bwApAhQdqsj/pdnSHQNA2ad0Gbeo=|1763331862842012977|true|42|AQIDBAU=|3.14159|0|1|2.71828|-123|"English"|-9876543210|QkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkI=|"Test String \n\n|| \n\n"|456|9876543210|
+1|attribute_entity1|37a7ab1|aQquXtE79XzOxqySj1sxnU+HSzIWc7YNOkqnyrnzBrI=|1763331862842034494|true|"Nested String 1"|"Entity1 Name"|
+2|attribute_entity2|c9d5c5d|BBfDPGvX7f99MLw02rfYKV37LzQELuq1tr9hzMiDq1A=|1763331862842035543|"Deeply Nested String"|
+3|attribute_entity1|37a7ab1|0VQYo47eX6jduNXbu8KH3IAWbYUacGRBNXhenTnhP6I=|1763331862842036218|false|"Deep String"|"Deep Entity"|
+1|attribute_entity2|c9d5c5d|dQG09T8zJ2BTUeUIo6N/WqTiZStSOgFGcHeD1C1cXo8=|1763331862842042154|"Entity2 String"|
+1|attribute_map0|37a7ab1|9UJOepfYliyvrpuG00yEw/LgBl1gG6ugXZ7JPozOJ6Q=|1763331862842043131|true|"Map Entity 1A"|"Map1A"|
+1|attribute_map0|37a7ab1|VBEDSHOu9CAFm5nE8fTeLC0t/LGxelpGDYS0f5t1+pI=|1763331862842052072|false|"Map Entity 1B"|"Map1B"|
+1|attribute_map1|c9d5c5d|/O2T4GE9OGkcFWaO9TA/4d5M+6ntovwYFSM1kO3M1Uc=|1763331862842053981|"Map Entity 2A"|
+1|attribute_map1|c9d5c5d|6R4XHjrmZjbA51kg7/rJj5awEmr3JSeXVeQCXtIf6kA=|1763331862842073264|"Map Entity 2B"|
 ```
 
 **EATS Statistics:**
 - **Characters**: 1,362
-- **Bytes**: 1,435
-- **Tokens**: ~507
+- **Bytes**: 1,166
+- **Tokens**: 633
 - **Lines**: 9
 
-### JSON Format (Traditional)
+### JSON Format (pretty print)
 ```json
 {
-  "_type": "evo_entity_test.ETest0",
-  "id": "bc247aa7bc247aa7bc247aa7bc247aa7bc247aa7bc247aa7bc247aa7bc247aa7",
-  "time": 1763212259692436780,
-  "attribute_bool": true,
-  "attribute_byte": 42,
-  "attribute_bytes": "AQIDBAU=",
-  "attribute_double": 3.14159,
-  "attribute_enum0": "VAl02",
-  "attribute_enum1": "VAl12",
-  "attribute_float": 2.71828,
-  "attribute_int": -123,
-  "attribute_language": "English",
-  "attribute_long": -9876543210,
-  "attribute_sha256": "4242424242424242424242424242424242424242424242424242424242424242",
-  "attribute_string": "Test String",
-  "attribute_uint": 456,
-  "attribute_ulong": 9876543210,
-  "attribute_entity1": {
-    "_type": "evo_entity_test.ETest1",
-    "id": "8b4e08cf8b4e08cf8b4e08cf8b4e08cf8b4e08cf8b4e08cf8b4e08cf8b4e08cf",
-    "time": 1763212259692493647,
-    "attribute_bool": true,
-    "attribute_string": "Nested String 1",
-    "name": "Entity1 Name",
-    "attribute_entity2": {
-      "_type": "evo_entity_test.ETest2",
-      "id": "ffb40e9effb40e9effb40e9effb40e9effb40e9effb40e9effb40e9effb40e9e",
-      "time": 1763212259692495883,
-      "attribute_string": "Deeply Nested String",
-      "attribute_entity1": {
-        "_type": "evo_entity_test.ETest1",
-        "id": "c47c7309c47c7309c47c7309c47c7309c47c7309c47c7309c47c7309c47c7309",
-        "time": 1763212259692497290,
-        "attribute_bool": false,
-        "attribute_string": "Deep String",
-        "name": "Deep Entity",
-        "attribute_entity2": null
+   "type": "8qa30seqbYE",
+   "id": "s4WcOuKu2flddJ3bwApAhQdqsj/pdnSHQNA2ad0Gbeo=",
+   "time": 1763331862842012977,
+   "attribute_bool": 1,
+   "attribute_byte": 42,
+   "attribute_bytes": "AQIDBAU=",
+   "attribute_double": 3.14159,
+   "attribute_enum0": "VAl02",
+   "attribute_enum1": "VAl12",
+   "attribute_float": 2.718280076980591,
+   "attribute_int": -123,
+   "attribute_language": "English",
+   "attribute_long": -9876543210,
+   "attribute_sha256": "QkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkI=",
+   "attribute_string": "Test String \n\n|| \n\n",
+   "attribute_uint": 456,
+   "attribute_ulong": 9876543210,
+   "attribute_entity1": {
+      "type": "c9d5c5d",
+      "id": "aQquXtE79XzOxqySj1sxnU+HSzIWc7YNOkqnyrnzBrI=",
+      "time": 1763331862842034494,
+      "attribute_bool": 1,
+      "attribute_string": "Nested String 1",
+      "name": "Entity1 Name",
+      "attribute_entity2": {
+         "_type": "37a7ab1",
+         "id": "BBfDPGvX7f99MLw02rfYKV37LzQELuq1tr9hzMiDq1A=",
+         "time": 1763331862842035543,
+         "attribute_string": "Deeply Nested String",
+         "attribute_entity1": {
+            "_type": "c9d5c5d",
+            "id": "0VQYo47eX6jduNXbu8KH3IAWbYUacGRBNXhenTnhP6I=",
+            "time": 1763331862842036218,
+            "attribute_bool": 0,
+            "attribute_string": "Deep String",
+            "name": "Deep Entity",
+            "attribute_entity2": null
+         }
       }
-    }
-  },
-  "attribute_entity2": {
-    "_type": "evo_entity_test.ETest2",
-    "id": "9b6877229b6877229b6877229b6877229b6877229b6877229b6877229b687722",
-    "time": 1763212259692509608,
-    "attribute_string": "Entity2 String",
-    "attribute_entity1": null
-  },
-  "attribute_map0": {
-    "c77e4563c77e4563c77e4563c77e4563c77e4563c77e4563c77e4563c77e4563": {
-      "_type": "evo_entity_test.ETest1",
-      "id": "c77e4563c77e4563c77e4563c77e4563c77e4563c77e4563c77e4563c77e4563",
-      "time": 1763212259692511850,
-      "attribute_bool": true,
-      "attribute_string": "Map Entity 1A",
-      "name": "Map1A",
-      "attribute_entity2": null
-    },
-    "7304b7357304b7357304b7357304b7357304b7357304b7357304b7357304b735": {
-      "_type": "evo_entity_test.ETest1",
-      "id": "7304b7357304b7357304b7357304b7357304b7357304b7357304b7357304b735",
-      "time": 1763212259692542037,
-      "attribute_bool": false,
-      "attribute_string": "Map Entity 1B",
-      "name": "Map1B",
-      "attribute_entity2": null
-    }
-  },
-  "attribute_map1": {
-    "1351bce11351bce11351bce11351bce11351bce11351bce11351bce11351bce1": {
-      "_type": "evo_entity_test.ETest2",
-      "id": "1351bce11351bce11351bce11351bce11351bce11351bce11351bce11351bce1",
-      "time": 1763212259692547883,
-      "attribute_string": "Map Entity 2A",
+   },
+   "attribute_entity2": {
+      "type": "37a7ab1",
+      "id": "dQG09T8zJ2BTUeUIo6N/WqTiZStSOgFGcHeD1C1cXo8=",
+      "time": 1763331862842042154,
+      "attribute_string": "Entity2 String",
       "attribute_entity1": null
-    },
-    "80774ab680774ab680774ab680774ab680774ab680774ab680774ab680774ab6": {
-      "_type": "evo_entity_test.ETest2",
-      "id": "80774ab680774ab680774ab680774ab680774ab680774ab680774ab680774ab6",
-      "time": 1763212259692589009,
-      "attribute_string": "Map Entity 2B",
-      "attribute_entity1": null
-    }
-  }
+   },
+   "attribute_map0": {
+      "9UJOepfYliyvrpuG00yEw/LgBl1gG6ugXZ7JPozOJ6Q=": {
+         "type": "c9d5c5d",
+         "id": "9UJOepfYliyvrpuG00yEw/LgBl1gG6ugXZ7JPozOJ6Q=",
+         "time": 1763331862842043131,
+         "attribute_bool": 1,
+         "attribute_string": "Map Entity 1A",
+         "name": "Map1A",
+         "attribute_entity2": null
+      },
+      "VBEDSHOu9CAFm5nE8fTeLC0t/LGxelpGDYS0f5t1+pI=": {
+         "_type": "c9d5c5d",
+         "id": "VBEDSHOu9CAFm5nE8fTeLC0t/LGxelpGDYS0f5t1+pI=",
+         "time": 1763331862842052072,
+         "attribute_bool": 0,
+         "attribute_string": "Map Entity 1B",
+         "name": "Map1B",
+         "attribute_entity2": null
+      }
+   },
+   "attribute_map1": {
+      "/O2T4GE9OGkcFWaO9TA/4d5M+6ntovwYFSM1kO3M1Uc=": {
+         "type": "37a7ab1",
+         "id": "/O2T4GE9OGkcFWaO9TA/4d5M+6ntovwYFSM1kO3M1Uc=",
+         "time": 1763331862842053981,
+         "attribute_string": "Map Entity 2A",
+         "attribute_entity1": null
+      },
+      "6R4XHjrmZjbA51kg7/rJj5awEmr3JSeXVeQCXtIf6kA=": {
+         "type": "37a7ab1",
+         "id": "6R4XHjrmZjbA51kg7/rJj5awEmr3JSeXVeQCXtIf6kA=",
+         "time": 1763331862842073264,
+         "attribute_string": "Map Entity 2B",
+         "attribute_entity1": null
+      }
+   }
 }
+
 ```
 
 **JSON Statistics:**
-- **Characters**: 3,847
-- **Bytes**: 3,847
-- **Tokens**: ~850-900
-- **Lines**: 72
+- **Characters**: 2729
+- **Tokens**: **1146**
 
 ### Format Comparison
 
-| Metric | EATS | JSON | Savings |
-|--------|------|------|---------|
-| **Characters** | 1,362 | 3,847 | **65% fewer** |
-| **Bytes** | 1,435 | 3,847 | **63% fewer** |
-| **Tokens** | 507 | ~875 | **42% fewer** |
-| **Lines** | 9 | 72 | **88% fewer** |
-| **Compression Ratio** | 2.83 bytes/token | 4.40 bytes/token | **36% better** |
+| Metric                | EATS             | JSON             | Savings        |
+|-----------------------|------------------|------------------|----------------|
+| **Characters**        | 1166             | 2729             | **58% fewer**  |
+| **Bytes**             | 1166             | 2729             | **58% fewer**  |
+| **Tokens**            | 633              | 1166             | **46% fewer**  |
 
 **Key Advantages of EATS:**
 1. **No field names** - Schema provides structure (saves ~30%)
 2. **Compact entity IDs** - `611dd51` vs `evo_entity_test.ETest0` (saves 50% per type)
-3. **Single delimiter** - `¦` vs JSON syntax `{}:,` (saves 75% on structure)
+3. **Single delimiter** - `|` vs JSON syntax `{}:,` (saves 75% on structure)
 4. **No whitespace** - Compact format (saves 10-15%)
 5. **Flat nesting** - Level-based lines vs nested objects (saves 20%)
 6. **No null values** - Omitted fields vs explicit `null` (saves 5-10%)
@@ -257,7 +255,7 @@ ETest0 (root)
 **Token Efficiency Breakdown:**
 - **Entity type names**: JSON uses 25+ chars (`evo_entity_test.ETest0`), EATS uses 7 chars (`611dd51`)
 - **Field names**: JSON repeats field names for every entity, EATS omits them entirely
-- **Structural tokens**: JSON uses `{`, `}`, `:`, `,`, `"` extensively, EATS uses only `¦`
+- **Structural tokens**: JSON uses `{`, `}`, `:`, `,`, `"` extensively, EATS uses only `|`
 - **Whitespace**: JSON typically formatted with indentation, EATS is compact
 
 ---
@@ -294,7 +292,7 @@ ETest0 (root)
 
 1. **Split by Lines**: Separate main line from nested entities
 2. **Parse Main Line**:
-   - Split by delimiter (`¦`)
+   - Split by delimiter (`|`)
    - Validate field count
    - Parse Entity ID (accept both hex ID and legacy name)
    - Parse Instance ID (generate if empty)
@@ -347,7 +345,7 @@ The parser provides robust error handling with descriptive messages:
 - **Savings**: ~30% overall
 
 #### 3. Single Delimiter
-- Use `¦` instead of JSON syntax (`{`, `}`, `:`, `,`)
+- Use `|` instead of JSON syntax (`{`, `}`, `:`, `,`)
 - **Savings**: 75% on structural tokens
 
 #### 4. Primitives Unquoted
@@ -409,9 +407,9 @@ Without level checking, the parser might incorrectly assign the nested `attribut
 Each nested entity line includes its nesting level:
 
 ```
-611dd51¦...¦                          ← Level 0 (implicit)
-1¦attribute_entity1¦37a7ab1¦...¦      ← Level 1 (child of level 0)
-2¦attribute_entity1¦37a7ab1¦...¦      ← Level 2 (child of level 1)
+611dd51|...|                          ← Level 0 (implicit)
+1|attribute_entity1|37a7ab1|...|      ← Level 1 (child of level 0)
+2|attribute_entity1|37a7ab1|...|      ← Level 2 (child of level 1)
 ```
 
 The parser checks both the key name AND the level to ensure correct assignment.
@@ -436,9 +434,9 @@ do_token_count(text: &str) -> usize
 
 ### Tokenization Rules
 
-1. **Alphanumeric sequences**: ~1 token per 4 characters
+1. **Alphanumeric sequences**: ~1 token per 3 characters
 2. **Numbers**: 1-2 tokens depending on length
-3. **Special characters**: 1 token each
+3. **Special characters**: 1-2 token each
 4. **Delimiters**: 1 token each
 5. **Whitespace**: Ignored
 
@@ -505,12 +503,12 @@ hex_id = format!("{:07x}", (evo_version >> 36) & 0xFFFFFFF)
 
 **Results:**
 
-| Entity | EVO_VERSION | Hex ID |
-|--------|-------------|--------|
-| ETest0 | 6997983723661432662 | 611dd51 |
-| ETest1 | 4010362126130004310 | 37a7ab1 |
-| ETest2 | 14543748076857083330 | c9d5c5d |
-| ETest3 | 15520205264705978858 | d762d87 |
+| Entity  | EVO_VERSION          | Hex ID  |
+|---------|----------------------|---------|
+| ETest0  | 6997983723661432662  | 611dd51 |
+| ETest1  | 4010362126130004310  | 37a7ab1 |
+| ETest2  | 14543748076857083330 | c9d5c5d |
+| ETest3  | 15520205264705978858 | d762d87 |
 
 ### Benefits
 
@@ -553,7 +551,7 @@ attribute_byte=BYTE
 attribute_double=DOUBLE
 attribute_entity1=ENTITY 37a7ab1
 attribute_entity2=ENTITY c9d5c5d
-attribute_enum0=ENUM
+attribute_enum0=ENUM 
 attribute_enum1=ENUM
 attribute_float=FLOAT
 attribute_int=INT
@@ -567,48 +565,27 @@ attribute_ulong=ULONG
 
 ### Type Mappings
 
-| Schema Type | Rust Type | Serialization | Token Cost |
-|-------------|-----------|---------------|------------|
-| BOOL | bool | `true`/`false` | 1 |
-| BYTE | u8 | `42` | 1 |
-| INT | i32 | `-123` | 1 |
-| UINT | u32 | `456` | 1 |
-| LONG | i64 | `-9876543210` | 2 |
-| ULONG | u64 | `9876543210` | 2 |
-| FLOAT | f32 | `2.71828` | 1 |
-| DOUBLE | f64 | `3.14159` | 1 |
-| STRING | String | `"text"` | 1-2 |
-| BYTES | Vec<u8> | `AQIDBAU=` | 2-4 |
-| SHA256 | [u8; 32] | `4242...` (64 hex) | 16 |
-| ID | [u8; 32] | `abc123...` (64 hex) | 16 |
-| ENUM | Enum | `VAl02` | 1 |
-| ENTITY | Option<Arc<T>> | Nested line | Variable |
-| MAP | MapEntity<T> | Multiple lines | Variable |
+| Schema Type | Rust Type      | Serialization        | Token Cost |
+|-------------|----------------|----------------------|------------|
+| BOOL        | bool           | `true`/`false`       | 1          |
+| BYTE        | u8             | `42`                 | 1          |
+| INT         | i32            | `-123..`             | 2          |
+| UINT        | u32            | `456..`              | ~3         |
+| LONG        | i64            | `-9876543210`        | ~5         |
+| ULONG       | u64            | `9876543210`         | ~4         |
+| FLOAT       | f32            | `2.71828`            | ~4         |
+| DOUBLE      | f64            | `3.14159`            | ~4         |
+| STRING      | String         | `"...text"`          | Variable   |
+| BYTES       | Vec<u8>        | `...AQIDBAU=`        | Variable   |
+| SHA256      | [u8; 32]       | `4242...` (64 hex)   | ~40        |
+| SHA512      | [u8; 64]       | `4242...` (128 hex)  | ~80        |
+| ID          | [u8; 32]       | `abc123...` (base64) | ~35        |
+| ENUM        | Enum (u8)      | `0`                  | 1          |
+| ENTITY      | Option<Arc<T>> | Nested line          | Variable   |
+| MAP         | MapEntity<T>   | Multiple lines       | Variable   |
 
 ---
 
-## Backward Compatibility
-
-### Supporting Legacy Names
-
-The parser accepts both compact hex IDs and legacy string names:
-
-```
-// New format (preferred)
-611dd51¦...¦
-
-// Legacy format (still supported)
-ETest0¦...¦
-```
-
-### Migration Strategy
-
-1. **Phase 1**: Deploy new serialization (outputs hex IDs)
-2. **Phase 2**: Parser accepts both formats
-3. **Phase 3**: All systems use hex IDs
-4. **Phase 4**: (Optional) Remove legacy name support
-
----
 
 ## Best Practices
 
@@ -665,7 +642,7 @@ Optional compression for large entity graphs:
 
 The EATS Entity serialization provides an optimal balance of:
 
-- **Token Efficiency**: 40% reduction vs JSON
+- **Token Efficiency**: 40 - 50%  reduction vs JSON
 - **Performance**: Sub-microsecond serialization
 - **Robustness**: Comprehensive error handling
 - **Flexibility**: Generic design for any entity type

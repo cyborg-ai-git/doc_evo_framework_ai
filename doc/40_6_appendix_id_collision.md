@@ -1,5 +1,36 @@
 # Appendix: TypeID Collision Analysis - SHA256 vs Integer Types
+## Quick Reference Table
 
+| Type   | Bits | Bytes | Min | Max                                                                                                     |
+|--------|------|-------|-----|---------------------------------------------------------------------------------------------------------|
+| `u8`   | 8    | 1     | 0   | 255                                                                                                     |
+| `u16`  | 16   | 2     | 0   | 65,535                                                                                                  |
+| `u32`  | 32   | 4     | 0   | 4,294,967,295                                                                                           |
+| `u64`  | 64   | 8     | 0   | 18,446,744,073,709,551,615                                                                              |
+| `u128` | 128  | 16    | 0   | 340,282,366,920,938,463,463,374,607,431,768,211,455                                                     |
+| `u256` | 256  | 32    | 0   | 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,936 |
+
+## Scientific Notation
+
+| Type   | Max Value (approx)  |
+|--------|---------------------|
+| `u8`   | 2.55 × 10²          |
+| `u16`  | 6.55 × 10⁴          |
+| `u32`  | 4.29 × 10⁹          |
+| `u64`  | 1.84 × 10¹⁹         |
+| `u128` | 3.40 × 10³⁸         |
+| `u256` | 1.16 × 10⁷⁷         |
+
+## Hexadecimal Representation
+
+| Type   | Max Value (Hex)                                                          |
+|--------|--------------------------------------------------------------------------|
+| `u8`   | `0xFF`                                                                   |
+| `u16`  | `0xFFFF`                                                                 |
+| `u32`  | `0xFFFFFFFF`                                                             |
+| `u64`  | `0xFFFFFFFFFFFFFFFF`                                                     |
+| `u128` | `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF`                                     |
+| `u256` | `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF`     |
 ## TypeID System Overview
 
 **TypeID Definition**: `TypeID = SHA256(entity_data)` - A 256-bit cryptographic hash serving as unique entity identifier
