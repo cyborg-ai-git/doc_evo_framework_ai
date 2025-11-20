@@ -98,6 +98,10 @@ pandoc \
   --metadata subtitle="$SUBTITLE" \
   --metadata author="$AUTHOR" \
   --metadata version="$VERSION" \
+  --variable geometry:left=1.5cm \
+  --variable geometry:right=1.5cm \
+  --variable geometry:top=2cm \
+  --variable geometry:bottom=2cm \
   --no-highlight \
   --number-sections \
   --toc \
