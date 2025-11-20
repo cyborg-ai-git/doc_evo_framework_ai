@@ -493,7 +493,7 @@ ETest2: 14543748076857083330
 ETest3: 15520205264705978858
 ```
 
-### Compact Hex ID Generation
+### Compact Base62 ID Generation
 
 The system extracts 28 bits (7 hex characters) from the EVO_VERSION:
 
@@ -503,17 +503,17 @@ hex_id = format!("{:07x}", (evo_version >> 36) & 0xFFFFFFF)
 
 **Results:**
 
-| Entity  | EVO_VERSION          | Hex ID  |
-|---------|----------------------|---------|
-| ETest0  | 6997983723661432662  | 611dd51 |
-| ETest1  | 4010362126130004310  | 37a7ab1 |
-| ETest2  | 14543748076857083330 | c9d5c5d |
-| ETest3  | 15520205264705978858 | d762d87 |
+| Entity  | EVO_VERSION           | Base62 ID   |
+|---------|-----------------------|-------------|
+| ETest0  | 6997983723661432662   | 7OGnjfgSgDp |
+| ETest1  | 3908215793078601309   | 81p3cFwKv94 |
+| ETest2  | 2411458769750179800   | Ibk7bqdn6OH |
+| ETest3  | 16016939536193427216  | 1NeyJdxmStC |
 
 ### Benefits
 
-- **Unique**: 28 bits = 268 million combinations
-- **Compact**: 7 characters = 1 token
+- **Unique**: 64 bits 
+- **Compact**: 11 chars vs 20 chars
 - **Collision-Resistant**: Hash-based derivation
 - **Universal**: Works across packages and systems
 
@@ -565,24 +565,44 @@ attribute_ulong=ULONG
 
 ### Type Mappings
 
-| Schema Type | Rust Type      | Serialization        | Token Cost |
-|-------------|----------------|----------------------|------------|
-| BOOL        | bool           | `true`/`false`       | 1          |
-| BYTE        | u8             | `42`                 | 1          |
-| INT         | i32            | `-123..`             | 2          |
-| UINT        | u32            | `456..`              | ~3         |
-| LONG        | i64            | `-9876543210`        | ~5         |
-| ULONG       | u64            | `9876543210`         | ~4         |
-| FLOAT       | f32            | `2.71828`            | ~4         |
-| DOUBLE      | f64            | `3.14159`            | ~4         |
-| STRING      | String         | `"...text"`          | Variable   |
-| BYTES       | Vec<u8>        | `...AQIDBAU=`        | Variable   |
-| SHA256      | [u8; 32]       | `4242...` (64 hex)   | ~40        |
-| SHA512      | [u8; 64]       | `4242...` (128 hex)  | ~80        |
-| ID          | [u8; 32]       | `abc123...` (base64) | ~35        |
-| ENUM        | Enum (u8)      | `0`                  | 1          |
-| ENTITY      | Option<Arc<T>> | Nested line          | Variable   |
-| MAP         | MapEntity<T>   | Multiple lines       | Variable   |
+| Rust Type      | Serialization        | Token Cost |
+|----------------|----------------------|------------|
+| bool           | `true`/`false`       | 1          |
+| u8             | `0...255`            | 1          |
+| i32            | `-123..`             | 2          |
+| u32            | `456..`              | ~3         |
+| i64            | `-9876543210`        | ~8         |
+| u64            | 18446744073709551615 | ~7         |
+| f32            | `2.71828`            | ~4         |
+| f64            | `3.14159`            | ~4         |
+| String         | `"...text"`          | Variable   |
+| Vec<u8>        | `...AQIDBAU=`        | Variable   |
+| [u8; 32]       | `4242...` (64 hex)   | ~40        |
+| [u8; 64]       | `4242...` (128 hex)  | ~80        |
+| [u8; 32]       | `abc123...` (base64) | ~35        |
+| Enum (u8)      | 0...255              | 1          |
+
+### EATS Type Mappings
+
+| Schema Type | Serialization        | Token Cost |
+|-------------|----------------------|------------|
+| BOOL        | `true`/`false`       | 1          |
+| BYTE        | `0...255`            | 1          |
+| INT         | `-123..`             | 2          |
+| UINT        | `456..`              | ~3         |
+| LONG        | `-9876543210`        | ~8         |
+| ULONG       | 18446744073709551615 | ~7         |
+| FLOAT       | `2.71828`            | ~4         |
+| DOUBLE      | `3.14159`            | ~4         |
+| STRING      | `"...text"`          | Variable   |
+| BYTES       | `...AQIDBAU=`        | Variable   |
+| SHA256      | `4242...` (64 hex)   | ~40        |
+| SHA512      | `4242...` (128 hex)  | ~80        |
+| ID          | `abc123...` (base64) | ~35        |
+| ENUM        | 0...255              | 1          |
+| ENTITY      | Nested line          | Variable   |
+| MAP         | Multiple lines       | Variable   |
+| MAP_ID      | ID_0 ID_1...ID_N     | Variable   |
 
 ---
 
