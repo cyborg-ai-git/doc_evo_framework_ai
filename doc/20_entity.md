@@ -1,4 +1,5 @@
-# Evo Entity Layer: Advanced Data Representation and Serialization (IEntity)
+# \textcolor{green}{Evo Entity Layer: Advanced Data Representation and Serialization (IEntity)}
+
 
 ![evo entity](data/evo_layer_entity.svg)
 

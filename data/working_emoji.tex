@@ -6,14 +6,23 @@
 \providecommand{\pandocbounded}[1]{#1}
 
 % Set main fonts
-\setmainfont{Noto Sans}
+\setmainfont{Noto Sans}[
+  BoldFont=Noto Sans Bold,
+  ItalicFont=Noto Sans Italic,
+  BoldItalicFont=Noto Sans Bold Italic
+]
 
-% Fallback emoji font configuration
-% Use Noto Sans as fallback to prevent crashes
-\newfontfamily\emojifont{Noto Sans}
+% Set monospace font that supports box-drawing characters
+\setmonofont{DejaVu Sans Mono}[Scale=0.9]
 
-% If Apple Color Emoji fails, the document will still compile but emojis won't render
-% For Linux systems, create a separate config file that uses Noto Color Emoji
+% Use Symbola for cross-platform emoji support
+\newfontfamily\emojifont{Symbola}
+
+% Set Japanese font for CJK characters
+\newfontfamily\japanesefont{Noto Sans CJK JP}[Scale=1.0]
+
+% Command to render Japanese text
+\newcommand{\jp}[1]{{\japanesefont #1}}
 
 % Simple emoji command
 \newcommand{\emoji}[1]{{\emojifont #1}}
@@ -49,10 +58,100 @@
 \newunicodechar{🛡}{\emoji{🛡}}
 \newunicodechar{🔑}{\emoji{🔑}}
 \newunicodechar{🎨}{\emoji{🎨}}
+\newunicodechar{💋}{\emoji{💋}}
+\newunicodechar{🔷}{\emoji{🔷}}
+\newunicodechar{🔶}{\emoji{🔶}}
+\newunicodechar{🔴}{\emoji{🔴}}
+\newunicodechar{🟢}{[GREEN]}
+\newunicodechar{🏆}{\emoji{🏆}}
+\newunicodechar{🥇}{\emoji{🥇}}
+\newunicodechar{🥈}{\emoji{🥈}}
+\newunicodechar{🥉}{\emoji{🥉}}
 
-% Mathematical symbols
+% Mathematical symbols - keep as-is using Symbola font
 \newunicodechar{≈}{\emoji{≈}}
 \newunicodechar{→}{\emoji{→}}
+\newunicodechar{≤}{\emoji{≤}}
+\newunicodechar{√}{\emoji{√}}
+\newunicodechar{↔}{\emoji{↔}}
+\newunicodechar{⋆}{\emoji{⋆}}
+\newunicodechar{★}{\emoji{★}}
+\newunicodechar{◇}{\emoji{◇}}
+\newunicodechar{░}{\emoji{░}}
+
+% Japanese characters - use Japanese font
+\newunicodechar{ス}{\jp{ス}}
+\newunicodechar{す}{\jp{す}}
+\newunicodechar{カ}{\jp{カ}}
+\newunicodechar{つ}{\jp{つ}}
+\newunicodechar{え}{\jp{え}}
+\newunicodechar{レ}{\jp{レ}}
+\newunicodechar{サ}{\jp{サ}}
+\newunicodechar{け}{\jp{け}}
+\newunicodechar{へ}{\jp{へ}}
+\newunicodechar{ワ}{\jp{ワ}}
+\newunicodechar{さ}{\jp{さ}}
+\newunicodechar{ほ}{\jp{ほ}}
+\newunicodechar{き}{\jp{き}}
+\newunicodechar{て}{\jp{て}}
+\newunicodechar{ソ}{\jp{ソ}}
+\newunicodechar{く}{\jp{く}}
+\newunicodechar{い}{\jp{い}}
+\newunicodechar{と}{\jp{と}}
+\newunicodechar{の}{\jp{の}}
+\newunicodechar{メ}{\jp{メ}}
+\newunicodechar{む}{\jp{む}}
+\newunicodechar{ル}{\jp{ル}}
+\newunicodechar{ト}{\jp{ト}}
+\newunicodechar{わ}{\jp{わ}}
+\newunicodechar{ツ}{\jp{ツ}}
+\newunicodechar{セ}{\jp{セ}}
+
+% Other symbols - use emoji font
+\newunicodechar{♫}{\emoji{♫}}
+\newunicodechar{☎}{\emoji{☎}}
+
+% Greek letters - use emoji font
+\newunicodechar{α}{\emoji{α}}
+\newunicodechar{δ}{\emoji{δ}}
+\newunicodechar{φ}{\emoji{φ}}
+\newunicodechar{τ}{\emoji{τ}}
+\newunicodechar{λ}{\emoji{λ}}
+\newunicodechar{π}{\emoji{π}}
+\newunicodechar{Δ}{\emoji{Δ}}
+\newunicodechar{Ε}{\emoji{Ε}}
+\newunicodechar{ε}{\emoji{ε}}
+
+% Box-drawing characters for tree structures
+\newunicodechar{├}{+}
+\newunicodechar{─}{-}
+\newunicodechar{│}{|}
+\newunicodechar{└}{+}
+\newunicodechar{┌}{+}
+\newunicodechar{┐}{+}
+\newunicodechar{┘}{+}
+\newunicodechar{┬}{+}
+\newunicodechar{┴}{+}
+\newunicodechar{┼}{+}
+\newunicodechar{━}{=}
+\newunicodechar{┃}{|}
+\newunicodechar{┏}{+}
+\newunicodechar{┓}{+}
+\newunicodechar{┗}{+}
+\newunicodechar{┛}{+}
 
 % Handle variation selectors (invisible characters)
 \newunicodechar{️}{}  % Variation Selector-16
+
+% Override booktabs to add vertical lines to tables
+\usepackage{array}
+\renewcommand{\toprule}{\hline}
+\renewcommand{\midrule}{\hline}
+\renewcommand{\bottomrule}{\hline}
+
+% Add vertical lines between columns in longtable
+\usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{%
+  \setlength{\arrayrulewidth}{0.5pt}%
+  \arrayrulecolor{white}%
+}

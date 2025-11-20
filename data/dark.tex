@@ -258,6 +258,10 @@ $highlighting-macros$
 $endif$
 $if(tables)$
 \usepackage{longtable,booktabs,array}
+\usepackage{colortbl}
+% Add vertical lines to tables for better readability
+\setlength{\arrayrulewidth}{0.5pt}
+\arrayrulecolor{white}
 $if(multirow)$
 \usepackage{multirow}
 $endif$
