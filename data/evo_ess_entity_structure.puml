@@ -1,0 +1,146 @@
+@startuml evo_ess_entity_structure
+!theme plain
+!define IEntityColor #09b620
+title ETest0 Entity Structure - Complete Layout
+
+skinparam class {
+    BackgroundColor #E8F4F8
+    BorderColor #2C5F77
+    ArrowColor #2C5F77
+}
+
+class ETest0 #09b620 {
+    **Header (Fixed Size)**
+    --
+    _header: ETest0Header
+    --
+    **Variable Size Fields**
+    --
+    attribute_bytes: Vec<u8>
+    attribute_entity1: Option<Arc<ETest1>>
+    attribute_entity2: Option<Arc<ETest2>>
+    attribute_language: String
+    attribute_map0: MapEntity<ETest1>
+    attribute_map1: MapEntity<ETest2>
+    attribute_map_id: MapId
+    attribute_string: String
+    --
+    **Not Serialized**
+    --
+    attribute_not_serialize_*: ...
+    ==
+    **Methods**
+    --
+    + to_bytes() -> Result<Vec<u8>, EnumError>
+    + from_bytes(data: &[u8]) -> Result<Self, EnumError>
+    + to_string() -> String
+}
+
+class ETest0Header #09b620 {
+    **Fixed Fields (176 bytes)**
+    --
+    id: TypeID [32 bytes]
+    time: u64 [8 bytes]
+    attribute_bool: u8
+    attribute_byte: u8
+    attribute_bytes_len: u64
+    attribute_double: f64
+    attribute_entity1_len: u64
+    attribute_entity2_len: u64
+    attribute_enum0: u8
+    attribute_enum1: u8
+    attribute_float: f32
+    attribute_int: i32
+    attribute_language_len: u64
+    attribute_long: i64
+    attribute_map0_len: u64
+    attribute_map1_len: u64
+    attribute_map_id_len: u64
+    attribute_sha256: [u8; 32]
+    attribute_string_len: u64
+    attribute_uint: u32
+    attribute_ulong: u64
+    ==
+    **Traits**
+    --
+    #[derive(FromBytes, IntoBytes)]
+    #[repr(C, packed)]
+    ==
+    **Methods**
+    --
+    + to_bytes() -> Result<Vec<u8>, EnumError>
+    + from_bytes(data: &[u8]) -> Result<Self, EnumError>
+}
+
+class ETest1 #09b620 {
+    _header: ETest1Header
+    --
+    attribute_bool: bool
+    attribute_string: String
+    attribute_entity2: Option<Arc<ETest2>>
+    name: String
+}
+
+class ETest2 #09b620 {
+    _header: ETest2Header
+    --
+    attribute_string: String
+    attribute_entity1: Option<Arc<ETest1>>
+}
+
+class "MapEntity<T>" as MapEntity {
+    **Generic Entity Container**
+    --
+    _map: FxHashMap<TypeID, Arc<T>>
+    ==
+    **Methods**
+    --
+    + do_set(entity: Arc<T>)
+    + do_get(id: &TypeID) -> Option<&Arc<T>>
+    + do_del(id: &TypeID)
+    + to_bytes() -> Result<Vec<u8>, EnumError>
+    + from_bytes(data: &[u8]) -> Result<Self, EnumError>
+}
+
+class MapId {
+    **ID-only Container**
+    --
+    _map: FxHashMap<TypeID, ()>
+    ==
+    **Methods**
+    --
+    + do_set(id: TypeID)
+    + contains(id: &TypeID) -> bool
+    + to_bytes() -> Result<Vec<u8>, EnumError>
+    + from_bytes(data: &[u8]) -> Result<Self, EnumError>
+}
+
+ETest0 *-- ETest0Header : contains
+ETest0 o-- ETest1 : nested entity
+ETest0 o-- ETest2 : nested entity
+ETest0 *-- MapEntity : contains map0
+ETest0 *-- MapEntity : contains map1
+ETest0 *-- MapId : contains
+
+ETest1 o-- ETest2 : can contain
+ETest2 o-- ETest1 : can contain
+
+MapEntity --> ETest1 : stores
+MapEntity --> ETest2 : stores
+
+note right of ETest0Header
+    **Zero-Copy Header**
+    • Fixed size: 176 bytes
+    • Stores lengths of variable fields
+    • Direct memory mapping
+end note
+
+note bottom of MapEntity
+    **Generic Container**
+    • Type-safe storage
+    • Arc<T> for shared ownership
+    • FxHashMap for performance
+    • Supports any IEntity type
+end note
+
+@enduml

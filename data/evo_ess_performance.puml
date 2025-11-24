@@ -1,0 +1,119 @@
+@startuml evo_ess_performance
+!theme plain
+!define IEntityColor #09b620
+title ESS Performance Characteristics *(TODO: to update benches times)
+
+skinparam activity {
+    BackgroundColor #E8F4F8
+    BorderColor #2C5F77
+    BarColor #09b620
+}
+
+|Serialization|
+start
+:ETest0::to_bytes();
+note right
+    **Performance: ~510ns**
+    • Header serialization: ~30ns
+    • Nested entities: ~200ns
+    • Maps: ~250ns
+    • Strings: ~30ns
+end note
+
+:Serialize nested entities;
+note right
+    ETest1: ~112ns
+    ETest2: ~44ns
+    (parallel processing possible)
+end note
+
+:Serialize maps;
+note right
+    MapEntity<ETest1>: ~134ns
+    MapEntity<ETest2>: ~153ns
+end note
+
+:Allocate buffer\n(single allocation);
+note right
+    Vec::with_capacity(total_size)
+    No reallocations!
+end note
+
+:Write all data\nsequentially;
+note right
+    • Version: 8 bytes
+    • Header: 176 bytes
+    • Variable data: N bytes
+end note
+
+|Network/Disk|
+:Transfer bytes;
+note right
+    **Network (LAN): ~100µs**
+    **Network (WAN): ~50ms**
+    **Disk (SSD): ~100µs**
+    **Disk (HDD): ~10ms**
+    
+    ⚠️ I/O is 200-100,000x slower
+    than serialization!
+end note
+
+|Deserialization|
+:ETest0::from_bytes();
+note right
+    **Performance: ~1,524ns**
+    • Header deserialization: ~17ns
+    • Validation: ~50ns
+    • Nested entities: ~400ns
+    • Maps: ~700ns
+    • Strings: ~357ns
+end note
+
+:Validate header\nand version;
+note right
+    • Size check
+    • Version match
+    • Bounds validation
+end note
+
+:Deserialize nested\nentities;
+note right
+    ETest1: ~329ns
+    ETest2: ~85ns
+    (sequential due to offsets)
+end note
+
+:Deserialize maps;
+note right
+    MapEntity<ETest1>: ~323ns
+    MapEntity<ETest2>: ~377ns
+end note
+
+:Construct entity;
+note right
+    • Zero-copy header
+    • Arc<T> for nested entities
+    • Owned collections
+end note
+
+stop
+
+legend right
+    **Performance Summary**
+    |= Operation |= Time |= Relative |
+    | Header to_bytes | 30ns | 1x |
+    | Header from_bytes | 17ns | 0.6x |
+    | Full to_bytes | 510ns | 17x |
+    | Full from_bytes | 1,524ns | 51x |
+    | Network (LAN) | 100µs | 3,333x |
+    | Disk (SSD) | 100µs | 3,333x |
+    | Network (WAN) | 50ms | 166,666x |
+    
+    **Key Insights:**
+    • Serialization is NEVER the bottleneck
+    • I/O dominates (200-100,000x slower)
+    • Zero-copy provides 0% overhead
+    • Safe code = same performance as unsafe
+endlegend
+
+@enduml

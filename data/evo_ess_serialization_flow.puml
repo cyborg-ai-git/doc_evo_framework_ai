@@ -1,0 +1,146 @@
+@startuml evo_ess_serialization_flow
+!theme plain
+!define IEntityColor #09b620
+!define PEER_A_COLOR #FFB6C1
+!define PEER_B_COLOR #87CEEB
+!define BRIDGE_COLOR #ff0000
+title ESS Serialization Flow - Bridge Layer Communication
+
+skinparam sequence {
+    ArrowColor #2C5F77
+    ActorBorderColor #2C5F77
+    LifeLineBorderColor #2C5F77
+    ParticipantBackgroundColor #E8F4F8
+    ParticipantBorderColor #2C5F77
+}
+
+actor "PeerA\n(Sender)" as PeerA PEER_A_COLOR
+participant "ETest0" as entity #09b620
+participant "Header" as header #09b620
+participant "Nested\nEntities" as nested #09b620
+participant "MapEntity" as map
+participant "Buffer" as buffer
+queue "Bridge\nChannel" as bridge BRIDGE_COLOR
+actor "PeerB\n(Receiver)" as PeerB PEER_B_COLOR
+
+== Serialization Phase (PeerA) ==
+
+PeerA -> entity : to_bytes()
+activate entity
+
+entity -> nested : Serialize nested entities
+activate nested
+nested --> entity : Vec<u8> (entity1_bytes)
+nested --> entity : Vec<u8> (entity2_bytes)
+deactivate nested
+
+entity -> map : Serialize maps
+activate map
+map --> entity : Vec<u8> (map0_bytes)
+map --> entity : Vec<u8> (map1_bytes)
+deactivate map
+
+entity -> entity : Calculate total size
+note right
+    total_size = HEADER_SIZE
+        + entity1_len
+        + entity2_len
+        + map0_len
+        + map1_len
+        + string_len
+        + ...
+end note
+
+entity -> header : Update length fields
+activate header
+header -> header : Set entity1_len, entity2_len, etc.
+deactivate header
+
+entity -> buffer : Allocate Vec<u8>(total_size)
+activate buffer
+
+entity -> buffer : Write version (8 bytes)
+entity -> header : as_bytes()
+header --> entity : &[u8]
+entity -> buffer : Write header bytes
+
+entity -> buffer : Write entity1_bytes
+entity -> buffer : Write entity2_bytes
+entity -> buffer : Write map0_bytes
+entity -> buffer : Write map1_bytes
+entity -> buffer : Write strings
+
+buffer --> entity : Complete byte array
+deactivate buffer
+
+entity --> PeerA : Result<Vec<u8>, EnumError>
+deactivate entity
+
+PeerA -> bridge : Send bytes to bridge
+activate bridge
+note right
+    **Bridge Channel Transfer**
+    Size: 176+ bytes
+    Universal ID routing
+end note
+
+== Deserialization Phase (PeerB) ==
+
+bridge -> PeerB : Receive bytes from bridge
+deactivate bridge
+
+PeerB -> entity : from_bytes(data)
+activate entity
+
+entity -> entity : Validate size (>= HEADER_SIZE)
+
+entity -> header : from_bytes(&data[0..HEADER_SIZE])
+activate header
+header -> header : Verify version
+header -> header : Read from prefix (zero-copy)
+header --> entity : ETest0Header
+deactivate header
+
+entity -> entity : Calculate offsets from lengths
+note right
+    offset = HEADER_SIZE
+    entity1_offset = offset
+    offset += entity1_len
+    entity2_offset = offset
+    ...
+end note
+
+entity -> nested : from_bytes(&data[entity1_offset..])
+activate nested
+nested --> entity : Option<Arc<ETest1>>
+deactivate nested
+
+entity -> nested : from_bytes(&data[entity2_offset..])
+activate nested
+nested --> entity : Option<Arc<ETest2>>
+deactivate nested
+
+entity -> map : from_bytes(&data[map0_offset..])
+activate map
+map --> entity : MapEntity<ETest1>
+deactivate map
+
+entity -> map : from_bytes(&data[map1_offset..])
+activate map
+map --> entity : MapEntity<ETest2>
+deactivate map
+
+entity -> entity : Construct ETest0 instance
+
+entity --> PeerB : Result<ETest0, EnumError>
+deactivate entity
+
+note over PeerA, PeerB
+    **Bridge Layer Summary**
+    • Version verification ensures compatibility
+    • Universal ID enables entity tracking
+    • Zero-copy serialization
+    • Type-safe communication
+end note
+
+@enduml

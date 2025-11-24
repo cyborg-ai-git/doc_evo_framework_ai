@@ -1,0 +1,100 @@
+@startuml evo_ess_overview
+!theme plain
+!define IEntityColor #09b620
+title Evo Entity Serialization System (ESS) - Overview
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FEFEFE
+skinparam component {
+    BackgroundColor<<safe>> #90EE90
+    BackgroundColor<<unsafe>> #FFB6C1
+    BackgroundColor<<core>> #87CEEB
+    BackgroundColor<<entity>> #09b620
+    BorderColor #333333
+}
+
+package "Evo ESS Architecture" {
+    
+    component "Entity Layer" <<core>> {
+        [ETest0] <<entity>> as entity
+        [ETest0Header] <<entity>> as header
+        note right of header
+            Zero-copy header
+            176 bytes
+            #[repr(C, packed)]
+        end note
+    }
+    
+    component "Serialization Layer" <<safe>> {
+        [to_bytes()] as serialize
+        [from_bytes()] as deserialize
+        note right of serialize
+            Uses zerocopy traits
+            100% memory safe
+        end note
+    }
+    
+    component "Container Layer" <<core>> {
+        [MapEntity<T>] as map
+        [MapId] as mapid
+        note right of map
+            Generic entity storage
+            FxHashMap based
+            Arc<T> values
+        end note
+    }
+    
+    component "Bridge Layer" {
+        [Bridge Channel] as bridge
+        [Network] as network
+        [Disk] as disk
+        [IPC] as ipc
+        note right of bridge
+            Universal ID routing
+            Version verification
+            Peer-to-peer communication
+        end note
+    }
+    
+    component "Zerocopy Traits" <<safe>> {
+        [FromBytes]
+        [IntoBytes]
+        [Immutable]
+        [KnownLayout]
+    }
+}
+
+entity --> header : contains
+entity --> map : contains
+entity --> mapid : contains
+
+header ..> serialize : implements
+serialize ..> FromBytes : uses
+serialize ..> IntoBytes : uses
+
+deserialize ..> FromBytes : uses
+deserialize ..> Immutable : uses
+deserialize ..> KnownLayout : uses
+
+serialize --> bridge : sends to
+serialize --> network : sends to
+serialize --> disk : writes to
+serialize --> ipc : shares via
+
+bridge --> deserialize : receives from
+network --> deserialize : receives from
+disk --> deserialize : reads from
+ipc --> deserialize : receives from
+
+note bottom of "Evo ESS Architecture"
+    **Key Features:**
+    • Zero-copy serialization (0 bytes overhead)
+    • Type-safe with compile-time verification
+    • High performance serialization
+    • Nested entity support
+    • Generic container support
+    • Bridge layer optimized (universal IDs, version safety)
+    • Peer-to-peer entity sharing
+end note
+
+@enduml

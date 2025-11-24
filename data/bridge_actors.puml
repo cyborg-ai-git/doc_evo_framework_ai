@@ -5,13 +5,6 @@
 skinparam backgroundColor #000000
 skinparam defaultFontColor #FFFFFF
 
-'Colors definition
-!$PEER_A_COLOR = "#87CEEB"
-!$MASTER_PEER_COLOR = "#90EE90"
-!$REPOSITORY_COLOR = "#00FFFF"
-!$PEER_B_COLOR = "#FFB6C1"
-!$PEER_N_COLOR = "#DDA0DD"
-!$SYSTEM_COLOR = "#FFFFFF"
 
 'Styling for dark theme
 skinparam note {
@@ -78,9 +71,10 @@ skinparam backgroundColor #000000
 skinparam defaultFontColor #FFFFFF
 
 'Colors definition
-!$PEER_A_COLOR = "#87CEEB"
+!$PEER_A_COLOR = "#FFB6C1"
+!$PEER_B_COLOR = "#87CEEB"
 !$MASTER_PEER_COLOR = "#90EE90"
-!$PEER_B_COLOR = "#FFB6C1"
+!$REPOSITORY_COLOR = "#00FFFF"
 !$PEER_N_COLOR = "#DDA0DD"
 !$SYSTEM_COLOR = "#FFFFFF"
 
