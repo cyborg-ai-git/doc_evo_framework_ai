@@ -2,6 +2,9 @@
 
 ' Set background color
 skinparam BackgroundColor transparent
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 50
 
 ' Define colors for each interface
 !define IEvoColor #FFFFFF
@@ -15,107 +18,117 @@ skinparam BackgroundColor transparent
 !define IGuiColor #b700ff
 !define IApiColor #00eeff
 !define IAiColor #ffa600
+!define IQueryColor #FFFFFF
 
-' Define the interfaces with their respective colors
+' Level 1: Core
 interface IEvo <<(I, IEvoColor)>> {
-    +{static} evo_version() : TypeEvoVersion
-    +get_evo_version() : TypeEvoVersion
+    +{static} evo_version() : u64
+    +get_evo_version() : u64
 }
 
-interface ID<TypeID> <<(I, IDColor)>> {
-    +get_id() : TypeID
-    +set_id(id: TypeID)
-}
 
+
+interface ID <<(I, IDColor)>> {
+    +get_id() : [u8; 32]
+    +set_id(id: [u8; 32])
+}
 interface ITime <<(I, ITimeColor)>> {
-    +get_time() : TypeTime
-    +set_time(time: TypeTime)
-}
-interface IEntity<TypeID> <<(I, IEntityColor)>> IEntityColor{
-    +to_bytes() : BYTES
-    +from_bytes(data: BYTES) : IEntity
-    +to_string() : STRING
+    +get_time() : u64
+    +set_time(time: u64)
 }
 
 
+' Level 3: Entities
+interface IEntity <<(I, IEntityColor)>> IEntityColor{
+    +to_bytes() : Result<Vec<u8>, EnumError>
+    +from_bytes(data: &[u8]) : Result<Self, EnumError>
+    +from_bytes_instance(data: &[u8]) : Result<Arc<IEntity>, EnumError>
+    +to_string() : String
+    +as_any() : &Any
+    +as_any_mut() : &mut Any
+    +into_any() : Box<Any>
+}
+interface IAiEntity <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_schema() : String
+    +to_ai(level: u8) : String
+    +{static} from_ai(ai_entity: &str, level: u8) : Result<Self, EnumErrorMessage>
+}
+interface IAiEnum <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_schema() : &str
+    +to_ai() : String
+    +{static} from_ai(code: &str) : Result<Self, EnumErrorMessage>
+}
+
+
+' Level 4: Logic & Storage
 interface IControl <<(I, IControlColor)>> IControlColor{
-    +on_start()
-    +on_stop()
+    +do_init() : Result<(), EnumError>
+    +do_start() : Result<(), EnumError>
+    +do_stop() : Result<(), EnumError>
 }
-
-interface IApi <<(I, IApiColor)>> IApiColor{
-    +on_start()
-    +on_stop()
+interface IMemory<V> <<(I, IMemoryColor)>> IMemoryColor {
+    + do_set(entity: Arc<V>)
+    + do_set_with_id(id: TypeID, entity: Arc<V>)
+    + do_get(id: &TypeID) : Option<&Arc<V>>
+    + do_get_mut(id: &TypeID) : Option<&mut Arc<V>>
+    + do_query<Q>(query: &Q) : Vec<&Arc<V>>
+    + do_del(id: &TypeID)
+    + do_clear()
+    + to_bytes() : Result<Vec<u8>, EnumError>
+    + {static} from_bytes(data: &[u8]) : Result<Self, EnumError>
 }
-
-interface IAi <<(I, IAiColor)>> IAiColor{
-    +get_models()
-    +do_agent_run(e_ai_agent: EAiAgentPublic)
-    +do_agent_stop(id_agent: TypeID))
+interface IQuery<V> <<(I, IQueryColor)>> {
+    +matches(key: &[u8; 32], value: &V) : bool
 }
-
-interface IBridge<K> <<(I, IBridgeColor)>> IBridgeColor{
-    +set_on_connected(callback: OnConnected<K>)
-    +set_on_disconnected(callback: OnDisconnected<K>)
-    +set_on_error(callback: OnError<K>)
-    +set_on_message(callback: OnMessage<K>)
-    +do_connect()
-    +do_disconnect()
-}
-
-interface IMemory<TypeID, IEntity> <<(I, IMemoryColor)>> IMemoryColor {
-    + do_set(entity: IEntity)
-    + do_set_with_id(id: TypeID, entity: IEntity)
-    + do_get(id: TypeID) : IEntity?
-    + do_query<TypeID, IEntity, Q>(query: IQuery) : [IEntity]
-    + do_del(id: TypeID)
-} 
-
-
-
-interface IGui<K> <<(I, IGuiColor)>> IGuiColor {
-    + on_start()
-    + on_stop()
-    + do_view(obj: Any?)
-    + do_hide(obj: Any?)
-    + do_update(obj: Any?)
+interface IAiApi <<(I, IAiColor)>> IAiColor{
+    +get_ai_schemas() : String
+    +do_init_ai() : Result<(), EnumError>
+    +get_ai_api(id_api: &u64, ai_entity: &str) : Result<(TypeID, Box<IEntity>), EnumErrorMessage>
 }
 
 
+' Level 5: Interface & Bridge
+interface IBridge <<(I, IBridgeColor)>> IBridgeColor{
+    +get_bridge_kind() : u8
+    +is_connected() : bool
+    +do_init() : Result<(), EnumError>
+    +do_connect() : Result<(), EnumError>
+    +do_disconnect(id_client: Option<TypeID>) : Result<(), EnumError>
+    +do_send(id_peer_to: &TypeID, data: &[u8]) : Result<(), EnumError>
+}
+interface IGui<Input, Output> <<(I, IGuiColor)>> IGuiColor {
+    + on_view() : Result<(), EnumError>
+    + on_hide() : Result<(), EnumError>
+    + do_view(obj: Input) : Result<Output, EnumError>
+    + do_hide(obj: Input) : Result<(), EnumError>
+    + do_update(obj: Input) : Result<Output, EnumError>
+}
 
 ' Define the relationships between interfaces
-IEvo <|-- IControl IControlColor
-
+IEvo <|-- ID IDColor
+IEvo <|-- ITime ITimeColor
 IEvo <|-- IEntity IEntityColor
+IEvo <|-- IControl IControlColor
+IEvo <|-- IBridge IBridgeColor
+IEvo <|-- IGui IGuiColor
+IEvo <|-- IAiApi IAiColor
+IEvo <|-- IAiEntity IAiColor
+IEvo <|-- IAiEnum IAiColor
+
+
 ID <|-- IEntity IEntityColor
 ITime <|-- IEntity IEntityColor
-
-IEvo <|-- IBridge IBridgeColor
+ID <|-- IControl IControlColor
 ID <|-- IBridge IBridgeColor
-
-IEvo <|-- IMemory IMemoryColor
-
-IEvo <|-- IGui IGuiColor
 ID <|-- IGui IGuiColor
 
-IEvo <|-- IApi IApiColor
-ID <|-- IApi IApiColor
+IEntity <.. IMemory IMemoryColor : uses
+IQuery <.. IMemory IMemoryColor : uses
 
-IEvo <|-- IAi IAiColor
-ID <|-- IAi IAiColor
-
-IEvo -down-> ID #transparent
-'ID -left-> ITime #transparent
-'ID -down-> IControl #transparent
-IMemory -left-> IBridge #transparent
-
-IControl -down-> IGui #transparent
-IControl -right-> IApi #transparent
-IEntity -down-> IGui #transparent
-IEntity -down-> IBridge #transparent
-IEntity -up-> IControl #transparent
-IMemory -down-> IGui #transparent
-IBridge -down-> IGui #transparent
-
+' Enforce layout levels
+IEvo -[hidden]down- ID
+ID -[hidden]down- IEntity
+IEntity -[hidden]down- IControl
+IControl -[hidden]down- IBridge
 
 @enduml
