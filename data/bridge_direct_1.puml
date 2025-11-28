@@ -51,9 +51,10 @@ skinparam sequence {
 }
 
 ' Colors
-!$PEER_A_COLOR = "#87CEEB"
+!$PEER_A_COLOR = "#FFB6C1"
+!$PEER_B_COLOR = "#87CEEB"
 !$MASTER_PEER_COLOR = "#90EE90"
-!$PEER_B_COLOR = "#FFB6C1"
+
 !$SYSTEM_COLOR = "#FFFFFF"
 !$MEMORY_COLOR = "#FFFFFF"
 !$BRIDGE_COLOR = "#ff0000"

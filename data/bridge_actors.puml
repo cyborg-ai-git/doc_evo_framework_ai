@@ -5,13 +5,6 @@
 skinparam backgroundColor #000000
 skinparam defaultFontColor #FFFFFF
 
-'Colors definition
-!$PEER_A_COLOR = "#87CEEB"
-!$MASTER_PEER_COLOR = "#90EE90"
-!$REPOSITORY_COLOR = "#00FFFF"
-!$PEER_B_COLOR = "#FFB6C1"
-!$PEER_N_COLOR = "#DDA0DD"
-!$SYSTEM_COLOR = "#FFFFFF"
 
 'Styling for dark theme
 skinparam note {
@@ -62,6 +55,21 @@ note right of MP_CARD
   - Handles disconnection events
 end note
 
+actor "RelayPeer" as RP $MASTER_PEER_COLOR
+card "RelayPeer Specifications" as RP_CARD
+note right of RP_CARD
+  - Signaling server
+  - Has PK_MP (Public Key)
+  - Has SK_MP (Secret Key)
+  - Manages MAP_REGISTER and MAP_OFFER
+  - Handles connection signaling
+  - Verifies HMAC signatures
+  - Routes SDP messages
+  - Manages peer connections
+  - Handles disconnection events
+end note
+
+
 ' System Components
 database "Foundation" as DB $MASTER_PEER_COLOR
 card "Foundation" as SYS_CARD
@@ -78,9 +86,11 @@ skinparam backgroundColor #000000
 skinparam defaultFontColor #FFFFFF
 
 'Colors definition
-!$PEER_A_COLOR = "#87CEEB"
+!$PEER_A_COLOR = "#FFB6C1"
+!$PEER_B_COLOR = "#87CEEB"
 !$MASTER_PEER_COLOR = "#90EE90"
-!$PEER_B_COLOR = "#FFB6C1"
+!$RELAY_PEER_COLOR = "#FFFFDD"
+!$REPOSITORY_COLOR = "#00FFFF"
 !$PEER_N_COLOR = "#DDA0DD"
 !$SYSTEM_COLOR = "#FFFFFF"
 
@@ -114,7 +124,7 @@ skinparam database {
     FontColor #000000
 }
 
-title PQCES Actors Overview
+title EPQB Actors Overview
 
 ' Master Peer (Trust Anchor / CA)
 actor "EMasterPeer" as MP $MASTER_PEER_COLOR
@@ -129,6 +139,14 @@ note right of MP_CARD
   - Public key directory & trust anchors
   - Certificate issuance & revocation data
   - Cryptographic material storage
+end note
+
+actor "ERelayPeer" as RP $RELAY_PEER_COLOR
+card "ERelayPeer Specifications" as RP_CARD
+note right of RP_CARD
+  **Maintains:**
+  - Peer bridge registry
+  - Signaling bridge events
 end note
 
 ' Certificate Repository
@@ -180,12 +198,14 @@ note right of PN_CARD
 end note
 
 ' Layout adjustments
-MP -[hidden]-> PA
+MP -[hidden]-> RP
+RP -[hidden]-> PA
 PA -[hidden]-> PB
 PB -[hidden]-> PN
 PN -[hidden]-> DB
 
-MP_CARD -[hidden]-> PA_CARD
+MP_CARD -[hidden]-> RP_CARD
+RP_CARD -[hidden]-> PA_CARD
 PA_CARD -[hidden]-> PB_CARD
 PB_CARD -[hidden]-> PN_CARD
 PN_CARD -[hidden]-> SYS_CARD

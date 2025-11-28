@@ -2,11 +2,11 @@
 
 ![evo bridge](data/evo_layer_bridge.svg)
 
-The **Post Quantum Cryptographic Entity System (PQCES)** is a bridge layer of **Evo Framework AI** designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. 
+The **Evo Post Quantum Bridge (EPQB)** is a bridge layer of **Evo Framework AI** designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. 
 
 Built from the ground up with quantum-resistance in mind, this system leverages NIST-standardized post-quantum cryptographic algorithms to establish a future-proof security architecture. 
 
-**PQCES** implements a hierarchical trust model with specialized cryptographic roles, robust certificate management, and defense-in-depth security measures to protect against both classical and quantum threats. This system is particularly suitable for applications requiring long-term security assurances, distributed trust, and resilient communication channels in potentially hostile network environments.
+**EPQB** implements a hierarchical trust model with specialized cryptographic roles, robust certificate management, and defense-in-depth security measures to protect against both classical and quantum threats. This system is particularly suitable for applications requiring long-term security assurances, distributed trust, and resilient communication channels in potentially hostile network environments.
 
 This cryptographic architecture provides a quantum-resistant foundation for distributed systems communication, combining NIST-standardized post-quantum algorithms with robust protocol design. The system enables secure peer authentication, confidential data exchange, and scalable trust management through three core mechanisms:
 
@@ -25,7 +25,7 @@ This document describes a post-quantum cryptographic system designed for secure 
 
 ## Bridge Entities
 
-The **Evo Bridge PQCES** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
+The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
 
 > TODO:add uml diagrams...
 
@@ -122,13 +122,13 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 - **WebRTC**: Direct peer-to-peer communication with NAT traversal
 - **Raw TCP/UDP**: Low-level protocols for maximum performance
 - **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities
-- **EvoQuic** *(Coming Soon)*: Custom quantum-resistant protocol optimized for PQCES
+- **EvoQuic** *(Coming Soon)*: Custom quantum-resistant protocol optimized for EPQB
 
 
 > TODO: to insert diagrams
 ### Virtual PQVpn
 VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
-**PQCES** automatically finds compatible servers and encrypts connections to them
+**EPQB** automatically finds compatible servers and encrypts connections to them
 PQVpn protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
 
 #### Decentralized PQVpn
@@ -371,7 +371,7 @@ Network Actions represent standardized communication protocol units.
 - **Cryptographic Agility:** Modular design supports algorithm updates
   - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
 
-## **PQCES** Protocol Flow Diagrams
+## **EPQB** Protocol Flow Diagrams
 
 ### Certificate Issuance Sequence (api: set_peer)
 

@@ -1,0 +1,91 @@
+@startuml evo_ess_memory_layout
+!theme plain
+!define IEntityColor #09b620
+title ESS Memory Layout - Serialized Format
+
+skinparam rectangle {
+    BackgroundColor<<header>> #09b620
+    BackgroundColor<<data>> #E0F2F7
+    BackgroundColor<<nested>> #09b620
+    BackgroundColor<<map>> #DDA0DD
+    BorderColor #333333
+}
+
+rectangle "Serialized ETest0 (Complete Binary Format)" {
+    
+    rectangle "Version\n8 bytes" as version <<header>> {
+        note right
+            EVO_VERSION: u64
+            6997983723661432662
+            Little-endian
+        end note
+    }
+    
+    rectangle "ETest0Header\n176 bytes" as header <<header>> {
+        rectangle "id: TypeID\n32 bytes" as id
+        rectangle "time: u64\n8 bytes" as time
+        rectangle "Primitive Fields\n~40 bytes" as primitives
+        rectangle "Length Fields\n~96 bytes" as lengths {
+            note right
+                attribute_bytes_len: u64
+                attribute_entity1_len: u64
+                attribute_entity2_len: u64
+                attribute_language_len: u64
+                attribute_map0_len: u64
+                attribute_map1_len: u64
+                attribute_map_id_len: u64
+                attribute_string_len: u64
+                ...
+            end note
+        }
+    }
+    
+    rectangle "Variable Data Section" as vardata <<data>> {
+        
+        rectangle "attribute_bytes\n(length from header)" as bytes <<data>>
+        
+        rectangle "attribute_entity1\n(nested ETest1)" as entity1 <<nested>> {
+            rectangle "ETest1 Version\n8 bytes" as e1_ver
+            rectangle "ETest1 Header" as e1_head
+            rectangle "ETest1 Data" as e1_data
+            rectangle "Nested ETest2\n(if present)" as e1_nested <<nested>>
+        }
+        
+        rectangle "attribute_entity2\n(nested ETest2)" as entity2 <<nested>> {
+            rectangle "ETest2 Version\n8 bytes" as e2_ver
+            rectangle "ETest2 Header" as e2_head
+            rectangle "ETest2 Data" as e2_data
+        }
+        
+        rectangle "attribute_language\n(UTF-8 string)" as lang <<data>>
+        
+        rectangle "attribute_map0\n(MapEntity<ETest1>)" as map0 <<map>> {
+            rectangle "Map Length: u32\n4 bytes" as map0_len
+            rectangle "Entry 1" as map0_e1 {
+                rectangle "Value Length: u32" as map0_e1_len
+                rectangle "ETest1 Bytes" as map0_e1_data
+            }
+            rectangle "Entry 2" as map0_e2 {
+                rectangle "Value Length: u32" as map0_e2_len
+                rectangle "ETest1 Bytes" as map0_e2_data
+            }
+            rectangle "..." as map0_more
+        }
+        
+        rectangle "attribute_map1\n(MapEntity<ETest2>)" as map1 <<map>> {
+            rectangle "Map Length: u32\n4 bytes" as map1_len
+            rectangle "Entries..." as map1_entries
+        }
+        
+        rectangle "attribute_map_id\n(MapId)" as mapid <<map>> {
+            rectangle "Map Length: u32\n4 bytes" as mapid_len
+            rectangle "ID 1: TypeID\n32 bytes" as mapid_1
+            rectangle "ID 2: TypeID\n32 bytes" as mapid_2
+            rectangle "..." as mapid_more
+        }
+        
+        rectangle "attribute_string\n(UTF-8 string)" as string <<data>>
+    }
+}
+
+@enduml
