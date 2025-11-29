@@ -1,0 +1,8 @@
+
+@startyaml
+EPeerId:
+	_DOC_: EPeerId _DOC_
+	name: STRING
+	
+	
+@endyaml

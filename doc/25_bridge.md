@@ -1,6 +1,7 @@
-# Evo Bridge Layer (IBridge)
-
 ![evo bridge](data/evo_layer_bridge.svg)
+\pagebreak
+
+# \textcolor{red}{Evo Bridge Layer (IBridge)}
 
 The **Evo Post Quantum Bridge (EPQB)** is a bridge layer of **Evo Framework AI** designed to facilitate secure, authenticated communication in distributed peer-to-peer networks. 
 
@@ -27,11 +28,15 @@ This document describes a post-quantum cryptographic system designed for secure 
 
 The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
 
-> TODO:add uml diagrams...
 
 ### Core Entity Types
 
+
+
 #### EPeerSecret - Private Cryptographic Identity
+
+![e_peer_secret_schema](data/e_peer_secret_schema.svg)
+
 
 The foundational private entity containing all secret cryptographic material for a peer.
 
@@ -51,6 +56,8 @@ The foundational private entity containing all secret cryptographic material for
 
 #### EPeerPublic - Public Cryptographic Identity
 
+![e_peer_public_schema](data/e_peer_public_schema.svg)
+
 The public counterpart containing verifiable cryptographic material and network configuration.
 
 **Cryptographic Components:**
@@ -69,6 +76,8 @@ The public counterpart containing verifiable cryptographic material and network 
 
 #### EPeerCertificate - Authenticated Identity Credential
 
+![e_peer_certificate_schema](data/e_peer_certificate_schema.svg)
+
 A digitally signed certificate that establishes trust and authenticity for peer identities.
 
 **Certificate Structure:**
@@ -82,9 +91,11 @@ A digitally signed certificate that establishes trust and authenticity for peer 
 - Hierarchical trust anchored by Master Peer
 - Supports certificate chaining for scalable trust delegation
 - Includes revocation mechanisms for compromised identities
-- Compatible with X.509v3 extensions for interoperability
 
-#### EApiEvent - Secure Communication Container
+
+#### EBridgeEvent - Secure Communication Container
+
+![e_bridge_event_schema](data/e_bridge_event_schema.svg)
 
 The standardized message format for all peer-to-peer communications.
 
@@ -129,7 +140,7 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 ### Virtual PQVpn
 VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
 **EPQB** automatically finds compatible servers and encrypts connections to them
-PQVpn protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
+**PQVpn** protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
 
 #### Decentralized PQVpn
 The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security

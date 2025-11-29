@@ -1,6 +1,7 @@
-# Evo Memory Layer (IMemory)
-
 ![evo memory](data/evo_layer_memory.svg)
+\pagebreak
+
+# \textcolor{yellow}{Evo Memory Layer (IMemory)}
 
 A sophisticated memory management system supporting:
 

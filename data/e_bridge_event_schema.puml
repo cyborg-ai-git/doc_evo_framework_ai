@@ -1,0 +1,12 @@
+
+@startyaml
+EBridgeEvent:
+	_DOC_: EBridgeEvent _DOC_
+	data: BYTES
+	e_error: ENTITY evo_entity_error.EError
+	enumBridgeEvent: ENUM EnumBridgeEvent
+	id_bridge: ID
+	id_bridge_bind: ID
+	
+	
+@endyaml

@@ -1,0 +1,32 @@
+@startuml
+
+' Set background color
+skinparam BackgroundColor transparent
+
+' Define colors for each interface
+!define IEvoColor #FFFFFF
+!define IDColor #FFFFFF
+!define ITimeColor #FFFFFF
+!define IEntityColor #09b620
+!define IAiColor #ffa600
+
+interface IAiEnum <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_id() -> String
+    +{static} get_ai_schema() -> String
+    +to_ai() -> String
+    +{static} from_ai(str_ai: String) -> Self
+}
+
+enum EnumPeerCrypto IEntityColor{
+    - PqKyberDilithium = 0
+    - PqKyberFalcon = 1
+    - PqKyberSphincs = 2
+    - PqZkStarks = 3
+    - PkFhe = 4
+
+  + fn from(value: EnumPeerCrypto) -> u8
+   + fn from(value: u8) -> EnumPeerCrypto
+}
+
+IAiEnum <|-- EnumPeerCrypto  IAiColor
+@enduml
