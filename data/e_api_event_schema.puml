@@ -1,0 +1,19 @@
+
+@startyaml
+EApiEvent:
+	_DOC_: EApiEvent _DOC_
+	data: BYTES
+	enum_action_state: ENUM EnumActionState
+	id_action: ID
+	id_agent: ID
+	id_from: ID
+	id_relay: ID
+	id_to: ID
+	is_ai: BOOL
+	is_output: BOOL
+	length: ULONG
+	progress: BYTE
+	seek: ULONG
+	
+	
+@endyaml

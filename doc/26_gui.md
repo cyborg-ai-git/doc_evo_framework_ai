@@ -1,6 +1,7 @@
-# Evo Gui module: Unified Cross-Platform Interface Generation
-
 ![evo gui](data/evo_layer_gui.svg)
+\pagebreak
+
+# \textcolor{magenta}{Evo Gui Layer (IGui)}
 
 ## Design Philosophy
 

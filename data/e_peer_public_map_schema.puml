@@ -1,0 +1,8 @@
+
+@startyaml
+EPeerPublicMap:
+	_DOC_: EPeerPublicMap _DOC_ 
+	map_e_peer_public: MAP EPeerPublic
+	
+	
+@endyaml

@@ -1,0 +1,8 @@
+
+@startyaml
+EPeerCertificateMap:
+	_DOC_: EPeerCertificateMap _DOC_ 
+	map_e_certificate: MAP EPeerCertificate
+	
+	
+@endyaml

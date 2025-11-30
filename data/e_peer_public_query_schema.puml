@@ -1,0 +1,8 @@
+
+@startyaml
+EPeerPublicQuery:
+	_DOC_: EPeerQuery _DOC_
+	id_e_peer_public: ID
+	
+	
+@endyaml

@@ -1,7 +1,7 @@
-# \textcolor{green}{Evo Entity Layer: Advanced Data Representation and Serialization (IEntity)}
-
-
 ![evo entity](data/evo_layer_entity.svg)
+\pagebreak
+
+# \textcolor{green}{Evo Entity Layer (IEntity)}
 
 The Entity Layer represents the fundamental data abstraction mechanism of the Evo Framework, designed to provide an ultra-efficient, flexible, and performant approach to data representation and transmission.
 

@@ -1,0 +1,79 @@
+@startuml
+
+' Set background color
+skinparam BackgroundColor transparent
+
+' Define colors for each interface
+!define IEvoColor #FFFFFF
+!define IDColor #FFFFFF
+!define ITimeColor #FFFFFF
+!define IEntityColor #09b620
+
+!define IAiColor #ffa600
+
+interface IEvo <<(I, IEvoColor)>> {
+    +{static} evo_version() -> TypeEvoVersion
+    +get_evo_version() -> TypeEvoVersion
+}
+
+interface ID<TypeID> <<(I, IDColor)>> {
+    +get_id() -> TypeID
+    +set_id(id: TypeID)
+}
+
+interface ITime <<(I, ITimeColor)>> {
+    +get_time() -> TypeTime
+    +set_time(time: TypeTime)
+}
+interface IEntity<TypeID> <<(I, IEntityColor)>> IEntityColor{
+    +to_bytes() -> Vec<u8>
+    +from_bytes(data: BYTES) -> Self
+    +to_string() -> String
+}
+
+interface IAiEntity <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_id() -> String
+    +{static} get_ai_schema() -> String
+    +to_ai() -> String
+    +{static} from_ai(str_ai: String) -> Self
+}
+
+struct EPeerCertificate IEntityColor{}
+IEntity <|-- EPeerCertificate  IEntityColor
+IAiEntity <|-- EPeerCertificate  IAiColor
+
+struct EPeerCertificateMap IEntityColor{}
+IEntity <|-- EPeerCertificateMap  IEntityColor
+IAiEntity <|-- EPeerCertificateMap  IAiColor
+
+struct EPeerId IEntityColor{}
+IEntity <|-- EPeerId  IEntityColor
+IAiEntity <|-- EPeerId  IAiColor
+
+struct EPeerPublic IEntityColor{}
+IEntity <|-- EPeerPublic  IEntityColor
+IAiEntity <|-- EPeerPublic  IAiColor
+
+struct EPeerPublicMap IEntityColor{}
+IEntity <|-- EPeerPublicMap  IEntityColor
+IAiEntity <|-- EPeerPublicMap  IAiColor
+
+struct EPeerPublicQuery IEntityColor{}
+IEntity <|-- EPeerPublicQuery  IEntityColor
+IAiEntity <|-- EPeerPublicQuery  IAiColor
+
+struct EPeerSecret IEntityColor{}
+IEntity <|-- EPeerSecret  IEntityColor
+IAiEntity <|-- EPeerSecret  IAiColor
+
+
+' Define the relationships between interfaces
+
+IEvo <|-- IEntity IEntityColor
+ID <|-- IEntity IEntityColor
+ITime <|-- IEntity IEntityColor
+
+IEvo -down-> ID #transparent
+'ID -left-> ITime #transparent
+
+@enduml

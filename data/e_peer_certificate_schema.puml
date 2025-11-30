@@ -1,0 +1,14 @@
+
+@startyaml
+EPeerCertificate:
+	_DOC_: EPeerCertificate _DOC_ 
+	cid: ID
+	data_e_peer_public: BYTES
+	enumPeerCrypto: ENUM EnumPeerCrypto
+	id_signer: ID
+	ipns: STRING
+	sign: BYTES
+	url: STRING
+	
+	
+@endyaml

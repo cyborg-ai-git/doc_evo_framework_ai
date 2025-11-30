@@ -1,0 +1,13 @@
+
+@startyaml
+EPeerPublic:
+	_DOC_: EPeer _DOC_
+	enumPeerCrypto: ENUM EnumPeerCrypto
+	enumPeerVisibility: ENUM EnumPeerVisibility
+	map_bridge: MAP evo_entity_bridge.EBridgeEvoPublic
+	name: STRING
+	pk: BYTES
+	pk_sign: BYTES
+	
+	
+@endyaml

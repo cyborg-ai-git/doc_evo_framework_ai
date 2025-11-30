@@ -127,8 +127,8 @@ skinparam database {
 title EPQB Actors Overview
 
 ' Master Peer (Trust Anchor / CA)
-actor "EMasterPeer" as MP $MASTER_PEER_COLOR
-card "EMasterPeer Specifications" as MP_CARD
+actor "MasterPeer" as MP $MASTER_PEER_COLOR
+card "MasterPeer Specifications" as MP_CARD
 note right of MP_CARD
   **Cryptographic Capabilities:**
   - Kyber-1024 (NIST Level 5) KEM
@@ -141,8 +141,8 @@ note right of MP_CARD
   - Cryptographic material storage
 end note
 
-actor "ERelayPeer" as RP $RELAY_PEER_COLOR
-card "ERelayPeer Specifications" as RP_CARD
+actor "RelayPeer" as RP $RELAY_PEER_COLOR
+card "RelayPeer Specifications" as RP_CARD
 note right of RP_CARD
   **Maintains:**
   - Peer bridge registry
@@ -162,8 +162,8 @@ note right of SYS_CARD
 end note
 
 ' PeerA (Single-Peer Client)
-actor "EPeerA" as PA $PEER_A_COLOR
-card "EPeerA Specifications" as PA_CARD
+actor "PeerA" as PA $PEER_A_COLOR
+card "PeerA Specifications" as PA_CARD
 note right of PA_CARD
   - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
   - Kyber-1024 keypair for key exchange
@@ -174,8 +174,8 @@ note right of PA_CARD
 end note
 
 ' PeerB (Multi-Peer Client)
-actor "EPeerB" as PB $PEER_B_COLOR
-card "EPeerB Specifications" as PB_CARD
+actor "PeerB" as PB $PEER_B_COLOR
+card "PeerB Specifications" as PB_CARD
 note right of PB_CARD
   - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
   - Kyber-1024 keypair for key exchange
@@ -186,8 +186,8 @@ note right of PB_CARD
 end note
 
 ' PeerN (Generic Peer)
-actor "EPeerN" as PN $PEER_N_COLOR
-card "EPeerN Specifications" as PN_CARD
+actor "PeerN" as PN $PEER_N_COLOR
+card "PeerN Specifications" as PN_CARD
 note right of PN_CARD
   - Unique Peer ID (32-byte hash, e.g. BLAKE3 from peer Public Key)
   - Kyber-1024 keypair for key exchange

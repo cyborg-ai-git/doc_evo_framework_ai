@@ -1,6 +1,7 @@
-# Evo Api Layer (IApi)
-
 ![evo api](data/evo_layer_api.svg)
+\pagebreak
+
+# \textcolor{cyan}{Evo Api Layer (IApi)}
 
 The **Evo IApi module** is a comprehensive framework module designed to create secure, extensible application programming interfaces within the Evo ecosystem. This framework serves as the foundational layer for building both standalone and distributed API services that can operate seamlessly in offline and online environments.
 

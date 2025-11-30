@@ -1,6 +1,7 @@
-# Evo Control Layer (IControl)
-
 ![evo control](data/evo_layer_control.svg)
+\pagebreak
+
+# \textcolor{blue}{Evo Control Layer (IControl)}
 
 The Control layer manages the application's core logic, handling message flow and inter-component communication. It supports multiple communication paradigms:
 

@@ -1,0 +1,78 @@
+@startuml
+
+' Set background color
+skinparam BackgroundColor transparent
+
+' Define colors for each interface
+!define IEvoColor #FFFFFF
+!define IDColor #FFFFFF
+!define ITimeColor #FFFFFF
+!define IEntityColor #09b620
+
+!define IAiColor #ffa600
+
+interface IEvo <<(I, IEvoColor)>> {
+    +{static} evo_version() -> TypeEvoVersion
+    +get_evo_version() -> TypeEvoVersion
+}
+
+interface ID<TypeID> <<(I, IDColor)>> {
+    +get_id() -> TypeID
+    +set_id(id: TypeID)
+}
+
+interface ITime <<(I, ITimeColor)>> {
+    +get_time() -> TypeTime
+    +set_time(time: TypeTime)
+}
+interface IEntity<TypeID> <<(I, IEntityColor)>> IEntityColor{
+    +to_bytes() -> Vec<u8>
+    +from_bytes(data: BYTES) -> Self
+    +to_string() -> String
+}
+
+interface IAiEntity <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_id() -> String
+    +{static} get_ai_schema() -> String
+    +to_ai() -> String
+    +{static} from_ai(str_ai: String) -> Self
+}
+
+struct EBridgeEvent IEntityColor{
+    - id: TypeID
+    - time: u64
+    - data: Vec<u8>
+    - e_error: Option<EError>
+    - enum_bridge_event: u8
+    - id_bridge: TypeID
+    - id_bridge_bind: TypeID
+
+ + get_id(&self) -> TypeID
+    + set_id(&mut self, _id: TypeID)
+ + get_time(&self) -> u64
+    + set_time(&mut self, _time: u64)
+ + get_data(&self) -> Vec<u8>
+    + set_data(&mut self, _data: Vec<u8>)
+ + get_e_error(&self) -> Option<EError>
+    + set_e_error(&mut self, _e_error: Option<EError>)
+ + get_enum_bridge_event(&self) -> u8
+    + set_enum_bridge_event(&mut self, _enum_bridge_event: u8)
+ + get_id_bridge(&self) -> TypeID
+    + set_id_bridge(&mut self, _id_bridge: TypeID)
+ + get_id_bridge_bind(&self) -> TypeID
+    + set_id_bridge_bind(&mut self, _id_bridge_bind: TypeID)
+
+}
+
+' Define the relationships between interfaces
+
+IEvo <|-- IEntity IEntityColor
+ID <|-- IEntity IEntityColor
+ITime <|-- IEntity IEntityColor
+
+IEntity <|-- EBridgeEvent  IEntityColor
+IAiEntity <|-- EBridgeEvent  IAiColor
+IEvo -down-> ID #transparent
+'ID -left-> ITime #transparent
+
+@enduml

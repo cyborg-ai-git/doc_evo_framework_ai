@@ -1,0 +1,11 @@
+
+@startyaml
+EApiCrypto:
+	_DOC_: EApiCrypto 
+	enumApiCryptoState: ENUM EnumApiCryptoState
+	enumBridgeCrypto: ENUM EnumApiCrypto
+	send_server: BYTES
+	shared_secret: BYTES
+	
+	
+@endyaml
