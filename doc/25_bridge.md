@@ -122,38 +122,6 @@ The standardized message format for all peer-to-peer communications.
 - Replay attack prevention through nonce management
 - Support for both synchronous and asynchronous communication patterns
 
-### Virtual IPv6 Architecture (VIP6)
-
-#### Decentralized Identity System
-
-The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
-
-> No more login username or weak password, your password is your e_peer_secret , so is important to not share or expose the EPeerSecret
-
-**Key Characteristics:**
-- **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
-- **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
-- **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
-- **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
-
-**Supported Transport Protocols:**
-- **WebSocket**: Real-time bidirectional communication for web applications (Migration)
-- **WebRTC**: Direct peer-to-peer communication with NAT traversal (Migration)
-- **Raw TCP/UDP**: Low-level protocols for maximum performance (Migration)
-- **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities (Migration)
-- **Mcp**: Ai Model Context Protocol (Migration)
-- **EvoPqBridge** *(Coming Soon)*: Custom quantum-resistant protocol optimized for EPQB (Default)
-
-
-> TODO: to insert diagrams
-### Virtual PQVpn
-VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
-**EPQB** automatically finds compatible servers and encrypts connections to them
-**PQVpn** protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
-
-#### Decentralized PQVpn
-The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security
-
 #### Blockchain-Based Decentralization
 
 The identity system leverages blockchain technology to achieve true decentralization.
@@ -395,6 +363,52 @@ Network Actions represent standardized communication protocol units.
 - **Forward Secrecy:** Ephemeral session keys derived from KEM exchanges
 - **Cryptographic Agility:** Modular design supports algorithm updates
   - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
+
+
+### Virtual IPv6 Architecture (VIP6)
+
+#### Decentralized Identity System
+
+The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
+
+> No more login username or weak password, your password is your e_peer_secret , so is important to not share or expose the EPeerSecret
+
+**Key Characteristics:**
+- **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
+- **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
+- **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
+- **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
+
+![bridge_vip6_portability](../data/bridge_vip6_portability.svg)
+
+**Key Concepts:**
+1.  **Static Client Configuration**: **PeerAClient** connects to a stable `PeerID` of **PeerB>> . PeerAClient is unaware of PeerB's physical location or IP address.
+2.  **VIP6 Resolution Address**: This layer acts as a dynamic address translator. It resolves the stable `PeerID` to the current physical IP address (IPv4 or IPv6) of PeerB.
+3.  **Seamless Migration Scenario**:
+- **Azure**: PeerB starts on Azure (IP: `20.x.x.x`). VIP6 resolves the ID to this Azure IP. PeerAClient connects seamlessly.
+- **AWS**: PeerB migrates to AWS (IP: `54.x.x.x`). It keeps the same Identity (Keys). VIP6 updates the resolution. PeerAClient connects to the same ID without configuration changes.
+- **Google Cloud**: PeerB migrates to Google Cloud (IP: `34.x.x.x`). Again, PeerAClient continues to connect to the same `PeerID`.
+
+VIP6 ensures that **PeerB** is truly portable across different environments (Azure, AWS, GCP, Local) without disrupting connectivity or requiring **PeerAClient** to be reconfigured.
+
+**Supported Transport Protocols:**
+- **WebSocket**: Real-time bidirectional communication for web applications (Migration)
+- **WebRTC**: Direct peer-to-peer communication with NAT traversal (Migration)
+- **Raw TCP/UDP**: Low-level protocols for maximum performance (Migration)
+- **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities (Migration)
+- **Mcp**: Ai Model Context Protocol (Migration)
+- **EvoPqBridge** *(Coming Soon)*: Custom quantum-resistant protocol optimized for EPQB (Default)
+
+
+> TODO: to insert diagrams
+### Virtual PQVpn
+VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
+**EPQB** automatically finds compatible servers and encrypts connections to them
+**PQVpn** protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
+
+#### Decentralized PQVpn
+The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security
+
 
 ## **EPQB** Protocol Flow Diagrams
 

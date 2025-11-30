@@ -1,0 +1,70 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+}
+
+' Colors definition
+!$LOCAL_PEER_COLOR = "#87CEEB"
+!$PROD_PEER_COLOR = "#FFB6C1"
+!$VIP6_COLOR = "#DDA0DD"
+
+' Participants
+actor "LocalPeer\n(Dev Env)" as LP $LOCAL_PEER_COLOR
+participant "VIP6 Network" as VN $VIP6_COLOR
+actor "ProductionPeer\n(Cloud)" as PP $PROD_PEER_COLOR
+
+title VIP6: Local Peer to Production Peer
+
+autonumber
+
+== Addressing ==
+note over LP: Knows ProductionPeer VIP6 ID\n(Derived from Public Key)
+
+== Connection Establishment ==
+LP -[$LOCAL_PEER_COLOR]> VN: Connect(VIP6 ID: ProdPeer)
+activate VN $VIP6_COLOR
+
+VN -[$VIP6_COLOR]> PP: Route Connection Request
+activate PP $PROD_PEER_COLOR
+
+note right PP: Authenticates LocalPeer\nusing EPQB Certificates
+
+PP --[$PROD_PEER_COLOR]> VN: Accept Connection
+deactivate PP
+
+VN --[$VIP6_COLOR]> LP: Connection Established
+deactivate VN
+
+== Secure Tunnel ==
+note over LP, PP: End-to-End Encrypted Tunnel (Kyber/Aes256)\nTransparent to underlying network (NAT/Firewall)
+
+LP -[$LOCAL_PEER_COLOR]> PP: Deploy/Debug/Monitor
+PP --[$PROD_PEER_COLOR]> LP: Logs/Metrics/Data
+
+@enduml

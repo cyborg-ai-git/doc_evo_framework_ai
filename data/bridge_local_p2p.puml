@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+}
+
+' Colors definition
+!$PEER_A_COLOR = "#87CEEB"
+!$PEER_B_COLOR = "#FFB6C1"
+!$CACHE_COLOR = "#fbff00"
+!$SYSTEM_COLOR = "#FFFFFF"
+
+' Participants
+actor "PeerA" as PA $PEER_A_COLOR
+database "Local Memento\n(Cache)" as DB $CACHE_COLOR
+actor "PeerB" as PB $PEER_B_COLOR
+
+title EPQB Local P2P with Cached Memento
+
+autonumber
+
+== Discovery Phase ==
+PA -[$PEER_A_COLOR]> DB: Query(PeerB ID)
+activate DB $SYSTEM_COLOR
+note right DB: Check local certified cache\nfor PeerB's certificate
+DB --[$SYSTEM_COLOR]> PA: Return Certificate (Signed by MasterPeer)
+deactivate DB
+
+== Verification Phase ==
+PA -[$PEER_A_COLOR]> PA: Verify Certificate
+note left PA: 1. Verify MasterPeer Signature\n2. Check Expiration\n3. Extract PeerB Public Keys
+
+== Connection Phase ==
+PA -[$PEER_A_COLOR]> PB: AKE Request (Kyber Encapsulated)
+activate PB $PEER_B_COLOR
+note right PB: 1. Decapsulate Shared Secret\n2. Verify PeerA Identity
+PB --[$PEER_B_COLOR]> PA: AKE Response (Encrypted)
+deactivate PB
+
+note over PA, PB: Secure P2P Channel Established (Aes256_Gcm)
+
+@enduml
