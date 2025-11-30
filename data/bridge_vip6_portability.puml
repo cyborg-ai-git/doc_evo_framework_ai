@@ -1,0 +1,95 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+}
+
+' Colors definition
+!$PEER_A_COLOR = "#FFB6C1"
+!$PEER_B_COLOR = "#87CEEB"
+!$VIP6_LAYER_COLOR = "#555555"
+!$ENV_AZURE_COLOR = "#007FFF"
+!$ENV_AWS_COLOR = "#FF9900"
+!$ENV_GCP_COLOR = "#4285F4"
+
+' Participants
+actor "PeerAClient" as CL $PEER_A_COLOR
+participant "VIP6" as VIP $VIP6_LAYER_COLOR
+actor "PeerB\n(Azure)\nIP: 20.x.x.x" as AZ $PEER_B_COLOR
+actor "PeerB\n(AWS)\nIP: 54.x.x.x" as AWS $PEER_B_COLOR
+actor "PeerB\n(Google Cloud)\nIP: 34.x.x.x" as GCP $PEER_B_COLOR
+
+title VIP6: Peer Portability (Azure -> AWS -> GCP)
+
+autonumber
+
+== Scenario 1: PeerB on Azure ==
+CL -> VIP: Connect(PeerID: B)
+activate VIP $VIP6_LAYER_COLOR
+note right VIP: Resolves PeerID: B\n-> Physical IP: 20.x.x.x (Azure)
+VIP -> AZ: Forward Connection
+activate AZ $PEER_B_COLOR
+AZ --> VIP: Connected
+VIP --> CL: Connection Established
+deactivate VIP
+note left CL: PeerAClient connected to PeerID: B\nUnaware of Azure IP
+
+== Migration: PeerB Moves to AWS ==
+AZ -> AZ: Stop
+deactivate AZ
+note over AZ, AWS: PeerB migrates (Same Identity/Keys)
+activate AWS $PEER_B_COLOR
+
+== Scenario 2: PeerB on AWS ==
+CL -> VIP: Connect(PeerID: B)
+activate VIP $VIP6_LAYER_COLOR
+note right VIP: Resolves PeerID: B\n-> Physical IP: 54.x.x.x (AWS)
+VIP -> AWS: Forward Connection
+AWS --> VIP: Connected
+VIP --> CL: Connection Established
+deactivate VIP
+note left CL: PeerAClient Config UNCHANGED\nStill connecting to PeerID: B
+
+== Migration: PeerB Moves to Google Cloud ==
+AWS -> AWS: Stop
+deactivate AWS
+note over AWS, GCP: PeerB migrates (Same Identity/Keys)
+activate GCP $PEER_B_COLOR
+
+== Scenario 3: PeerB on Google Cloud ==
+CL -> VIP: Connect(PeerID: B)
+activate VIP $VIP6_LAYER_COLOR
+note right VIP: Resolves PeerID: B\n-> Physical IP: 34.x.x.x (GCP)
+VIP -> GCP: Forward Connection
+GCP --> VIP: Connected
+VIP --> CL: Connection Established
+deactivate VIP
+deactivate GCP
+note left CL: PeerAClient Config UNCHANGED\nStill connecting to PeerID: B
+
+@enduml

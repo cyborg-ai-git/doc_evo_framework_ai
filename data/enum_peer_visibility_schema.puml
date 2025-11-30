@@ -1,0 +1,9 @@
+@startyaml
+!define IEntityColor #09b620
+EnumPeerVisibility :
+	  - Public = 0
+      - Private = 1
+      - Client = 2
+      - Relay = 3
+      - Validator = 4
+@endyaml

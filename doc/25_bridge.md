@@ -28,22 +28,29 @@ This document describes a post-quantum cryptographic system designed for secure 
 
 The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
 
+> NB: Beta Version Only PkKyberDilitium is supported
+
+### Enum Entity Types
+
+![enum_peer_crypto_schema](data/enum_peer_crypto_schema.svg)
+
+
+![enum_peer_visibility_schema](data/enum_peer_visibility_schema.svg)
+
 
 ### Core Entity Types
-
-
 
 #### EPeerSecret - Private Cryptographic Identity
 
 ![e_peer_secret_schema](data/e_peer_secret_schema.svg)
 
-
-The foundational private entity containing all secret cryptographic material for a peer.
+The foundational private entity containing all secret cryptographic material for a peer. 
+The cryptography algorithm is dynamic so is possible to migrate to other more secure PQ algorithm if is founded security issue
 
 **Cryptographic Components:**
-
-- **Kyber Secret Key (sk)**: NIST-standardized post-quantum key encapsulation mechanism private key (Kyber-1024)
-- **Dilithium Secret Key (sk_sign)**: NIST-standardized post-quantum digital signature private key (Dilithium-5)
+- **Enum Peer Crypto (enu_peer_crypto)**: The cryptography algorithm for example 0->PqKyberDilitium (Kyber-1024, Dilithium-5)
+- **Secret Key (sk)**: The Secret key for KEM
+- **Secret Key Sign (sk_sign)**:  he Secret key for sign
 - **Private Bridge Configuration**: Local network settings, security policies, and operational parameters
 - **Unique Identifier (id)**: Cryptographically derived from hash_256(pk + pk_sign) ensuring tamper-proof identity binding
 
@@ -62,8 +69,9 @@ The public counterpart containing verifiable cryptographic material and network 
 
 **Cryptographic Components:**
 
-- **Kyber Public Key (pk)**: Derived from the corresponding secret key sk, enables secure key encapsulation
-- **Dilithium Public Key (pk_sign)**: Derived from sk_sign, enables signature verification
+- **Enum Peer Crypto (enu_peer_crypto)**: The cryptography algorithm for example 0->PqKyberDilitium (Kyber-1024, Dilithium-5)
+- **Public Key (pk)**: Derived from the corresponding secret key sk, enables secure key encapsulation
+- **Public Key (pk_sign)**: Derived from sk_sign, enables signature verification
 - **Public Bridge Configuration**: Network endpoints, supported protocols, and capability advertisements
 - **Derived Identifier**: Matches EPeerSecret.id through hash_256(pk + pk_sign) for identity verification
 
@@ -93,9 +101,9 @@ A digitally signed certificate that establishes trust and authenticity for peer 
 - Includes revocation mechanisms for compromised identities
 
 
-#### EBridgeEvent - Secure Communication Container
+#### EApiBridge - Secure Communication Container
 
-![e_bridge_event_schema](data/e_bridge_event_schema.svg)
+![e_api_bridge_schema](data/e_api_bridge_schema.svg)
 
 The standardized message format for all peer-to-peer communications.
 
@@ -113,37 +121,6 @@ The standardized message format for all peer-to-peer communications.
 - Message authentication and integrity protection
 - Replay attack prevention through nonce management
 - Support for both synchronous and asynchronous communication patterns
-
-### Virtual IPv6 Architecture (VIP6)
-
-#### Decentralized Identity System
-
-The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
-
-> No more login username or weak password, your password is your e_peer_secret , so is important to not share or expose the EPeerSecret
-
-**Key Characteristics:**
-- **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
-- **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
-- **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
-- **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
-
-**Supported Transport Protocols:**
-- **WebSocket**: Real-time bidirectional communication for web applications
-- **WebRTC**: Direct peer-to-peer communication with NAT traversal
-- **Raw TCP/UDP**: Low-level protocols for maximum performance
-- **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities
-- **EvoQuic** *(Coming Soon)*: Custom quantum-resistant protocol optimized for EPQB
-
-
-> TODO: to insert diagrams
-### Virtual PQVpn
-VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
-**EPQB** automatically finds compatible servers and encrypts connections to them
-**PQVpn** protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
-
-#### Decentralized PQVpn
-The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security
 
 #### Blockchain-Based Decentralization
 
@@ -270,6 +247,8 @@ The Master Peer serves as the trust anchor and certificate authority within the 
 - Public key directory
 - Cryptographic material storage
 
+> Master Peer are multiple to make it decentralized system and Peer* check the nearest to make the fastest connection
+
 #### Peer 
 
 Regular Peers are standard network participants with established identities.
@@ -289,6 +268,9 @@ Regular Peers are standard network participants with established identities.
 ### Relay Peer
 Relay peer is important to Nat peer that can not tunnelling connection, the relay peer , check if peer is an enemy banned so block the connection otherwise, send the EApiEvent to the correct peer, only the destination peer can decrypt correctly the data
 Relay peer also not expose your address so the peer can be totally anonymus for safe privacy
+
+> Every Peer can be also a Relay Peer to create  decentralized sun mesh network (...)
+
 
 #### Network Action (EAction)
 
@@ -382,7 +364,59 @@ Network Actions represent standardized communication protocol units.
 - **Cryptographic Agility:** Modular design supports algorithm updates
   - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
 
+
+### Virtual IPv6 Architecture (VIP6)
+
+#### Decentralized Identity System
+
+The peer **ID** functions as a secure, decentralized addressing system that provides several advantages over traditional networking.
+
+> No more login username or weak password, your password is your e_peer_secret , so is important to not share or expose the EPeerSecret
+
+**Key Characteristics:**
+- **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
+- **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
+- **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
+- **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
+
+![bridge_vip6_portability](../data/bridge_vip6_portability.svg)
+
+**Key Concepts:**
+1.  **Static Client Configuration**: **PeerAClient** connects to a stable `PeerID` of **PeerB>> . PeerAClient is unaware of PeerB's physical location or IP address.
+2.  **VIP6 Resolution Address**: This layer acts as a dynamic address translator. It resolves the stable `PeerID` to the current physical IP address (IPv4 or IPv6) of PeerB.
+3.  **Seamless Migration Scenario**:
+- **Azure**: PeerB starts on Azure (IP: `20.x.x.x`). VIP6 resolves the ID to this Azure IP. PeerAClient connects seamlessly.
+- **AWS**: PeerB migrates to AWS (IP: `54.x.x.x`). It keeps the same Identity (Keys). VIP6 updates the resolution. PeerAClient connects to the same ID without configuration changes.
+- **Google Cloud**: PeerB migrates to Google Cloud (IP: `34.x.x.x`). Again, PeerAClient continues to connect to the same `PeerID`.
+
+VIP6 ensures that **PeerB** is truly portable across different environments (Azure, AWS, GCP, Local) without disrupting connectivity or requiring **PeerAClient** to be reconfigured.
+
+**Supported Transport Protocols:**
+- **WebSocket**: Real-time bidirectional communication for web applications (Migration)
+- **WebRTC**: Direct peer-to-peer communication with NAT traversal (Migration)
+- **Raw TCP/UDP**: Low-level protocols for maximum performance (Migration)
+- **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities (Migration)
+- **Mcp**: Ai Model Context Protocol (Migration)
+- **EvoPqBridge** *(Coming Soon)*: Custom quantum-resistant protocol optimized for EPQB (Default)
+
+
+> TODO: to insert diagrams
+### Virtual PQVpn
+VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
+**EPQB** automatically finds compatible servers and encrypts connections to them
+**PQVpn** protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
+
+#### Decentralized PQVpn
+The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end , no Man-in-the middle attack are possible, no data exposed for use privacy and security
+
+
 ## **EPQB** Protocol Flow Diagrams
+
+- api: set_peer
+- api: get_peer
+- api: del_peer
+
+\pagebreak
 
 ### Certificate Issuance Sequence (api: set_peer)
 
@@ -395,6 +429,7 @@ Network Actions represent standardized communication protocol units.
 ![bridge set_peer](data/bridge_set_peer_mp.svg)
 
 ---
+\pagebreak
 
 ### Secure Messaging Sequence (api:get peer)
 
@@ -407,9 +442,12 @@ First, PeerB requests PeerA's certificate from the Master Peer because don't hav
 |<-------- PeerA Certificate (Master Peer signed) ------|
 
 ```
+
 ![bridge get_peer](data/bridge_get_peer_mp.svg)
 
 ---
+
+\pagebreak
 
 Then, direct communication between PeerB and PeerA occurs:
 ```
@@ -429,9 +467,11 @@ Direct communication between PeerB and PeerA when certificate is already availab
 |--------- AKE Request + PeerB ID + Api Request ------->|
 |<-- Encrypted Response with new Secret Key ------------|
 ```
+
 ![bridge direct case 2](data/bridge_direct_2.svg)
 
 ---
+\pagebreak
 
 #### Case Revoke: Revoke Certificate (api: del_peer)
 If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the peer is no longer safe and must revoke the peer certificate so other peers know not to use the certificate, and PeerA becomes untrusted:
@@ -441,9 +481,12 @@ If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the 
 |--------- AKE Request + PeerA ID + Sign with compromized secret ------->|
 |<-- Encrypted EApiResult Response --------------------------------------|
 ```
+
 ![bridge revoke](data/bridge_del_peer_mp.svg)
 
 ---
+
+\pagebreak
 
 ## Testing and Validation
 
