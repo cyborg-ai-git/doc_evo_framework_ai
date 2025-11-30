@@ -1,0 +1,18 @@
+
+@startyaml
+EApiBridge:
+	_DOC_: EApiBridge is entity container 
+	data_cipher: BYTES
+	data_crypto: BYTES
+	data_e_peer_certificate: BYTES
+	data_e_peer_public: BYTES
+	data_sign: BYTES
+	enumApiCryptoState: ENUM EnumApiCryptoState
+	enumBridgeCrypto: ENUM EnumApiCrypto
+	enum_api_compress: ENUM EnumApiCompress
+	id_from: ID
+	id_relay: ID
+	id_to: ID
+	
+	
+@endyaml

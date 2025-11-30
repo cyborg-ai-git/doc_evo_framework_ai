@@ -1,0 +1,96 @@
+@startuml
+
+' Set background color
+skinparam BackgroundColor transparent
+
+' Define colors for each interface
+!define IEvoColor #FFFFFF
+!define IDColor #FFFFFF
+!define ITimeColor #FFFFFF
+!define IEntityColor #09b620
+
+!define IAiColor #ffa600
+
+interface IEvo <<(I, IEvoColor)>> {
+    +{static} evo_version() -> TypeEvoVersion
+    +get_evo_version() -> TypeEvoVersion
+}
+
+interface ID<TypeID> <<(I, IDColor)>> {
+    +get_id() -> TypeID
+    +set_id(id: TypeID)
+}
+
+interface ITime <<(I, ITimeColor)>> {
+    +get_time() -> TypeTime
+    +set_time(time: TypeTime)
+}
+interface IEntity<TypeID> <<(I, IEntityColor)>> IEntityColor{
+    +to_bytes() -> Vec<u8>
+    +from_bytes(data: BYTES) -> Self
+    +to_string() -> String
+}
+
+interface IAiEntity <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_id() -> String
+    +{static} get_ai_schema() -> String
+    +to_ai() -> String
+    +{static} from_ai(str_ai: String) -> Self
+}
+
+struct EApiBridge IEntityColor{
+    - id: TypeID
+    - time: u64
+    - data_cipher: Vec<u8>
+    - data_crypto: Vec<u8>
+    - data_e_peer_certificate: Vec<u8>
+    - data_e_peer_public: Vec<u8>
+    - data_sign: Vec<u8>
+    - enum_api_crypto_state: u8
+    - enum_bridge_crypto: u8
+    - enum_api_compress: u8
+    - id_from: TypeID
+    - id_relay: TypeID
+    - id_to: TypeID
+
+ + get_id(&self) -> TypeID
+    + set_id(&mut self, _id: TypeID)
+ + get_time(&self) -> u64
+    + set_time(&mut self, _time: u64)
+ + get_data_cipher(&self) -> Vec<u8>
+    + set_data_cipher(&mut self, _data_cipher: Vec<u8>)
+ + get_data_crypto(&self) -> Vec<u8>
+    + set_data_crypto(&mut self, _data_crypto: Vec<u8>)
+ + get_data_e_peer_certificate(&self) -> Vec<u8>
+    + set_data_e_peer_certificate(&mut self, _data_e_peer_certificate: Vec<u8>)
+ + get_data_e_peer_public(&self) -> Vec<u8>
+    + set_data_e_peer_public(&mut self, _data_e_peer_public: Vec<u8>)
+ + get_data_sign(&self) -> Vec<u8>
+    + set_data_sign(&mut self, _data_sign: Vec<u8>)
+ + get_enum_api_crypto_state(&self) -> u8
+    + set_enum_api_crypto_state(&mut self, _enum_api_crypto_state: u8)
+ + get_enum_bridge_crypto(&self) -> u8
+    + set_enum_bridge_crypto(&mut self, _enum_bridge_crypto: u8)
+ + get_enum_api_compress(&self) -> u8
+    + set_enum_api_compress(&mut self, _enum_api_compress: u8)
+ + get_id_from(&self) -> TypeID
+    + set_id_from(&mut self, _id_from: TypeID)
+ + get_id_relay(&self) -> TypeID
+    + set_id_relay(&mut self, _id_relay: TypeID)
+ + get_id_to(&self) -> TypeID
+    + set_id_to(&mut self, _id_to: TypeID)
+
+}
+
+' Define the relationships between interfaces
+
+IEvo <|-- IEntity IEntityColor
+ID <|-- IEntity IEntityColor
+ITime <|-- IEntity IEntityColor
+
+IEntity <|-- EApiBridge  IEntityColor
+IAiEntity <|-- EApiBridge  IAiColor
+IEvo -down-> ID #transparent
+'ID -left-> ITime #transparent
+
+@enduml

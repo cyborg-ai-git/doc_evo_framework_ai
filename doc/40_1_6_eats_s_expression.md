@@ -313,7 +313,6 @@ hello
 ```
 
 ```json
-// JSON
 [1, 2, 3, 4, 5]
 ```
 
@@ -325,7 +324,7 @@ hello
 ```
 
 ```json
-// JSON
+
 [42, "hello", 3.14, true, null]
 ```
 
@@ -337,7 +336,6 @@ hello
 ```
 
 ```json
-// JSON
 [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 ```
 
@@ -353,7 +351,7 @@ hello
 ```
 
 ```json
-// JSON
+
 {
   "name": "John Doe",
   "age": 30,
@@ -377,7 +375,7 @@ hello
 ```
 
 ```json
-// JSON
+
 {
   "user": {
     "id": 1001,

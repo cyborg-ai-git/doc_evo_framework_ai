@@ -1,0 +1,9 @@
+@startyaml
+!define IEntityColor #09b620
+EnumPeerCrypto :
+	  - PqKyberDilithium = 0
+        - PqKyberFalcon = 1
+        - PqKyberSphincs = 2
+        - PqZkStarks = 3
+        - PkFhe = 4
+@endyaml
