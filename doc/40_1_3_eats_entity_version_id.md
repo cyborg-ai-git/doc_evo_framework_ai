@@ -5,8 +5,11 @@
 **Context:** Universal hash-based IDs that are collision-resistant within the u64 domain space. (0 - 1.84 × 10¹⁹)
 vs others encode/decode system
 
-> For tokens count: evo_ai_eats o200k_base Use for GPT-5, GPT-4.1, GPT-4o, and other `o` series models like `o1`, `o3`, and `o4`.
+> NB: For u64 long digit use only models with >= 7B parameters (https://arxiv.org/html/2502.08680)
 > 
+> For tokens count: evo_ai_eats o200k_base Use for GPT-5, GPT-4.1, GPT-4o, and other `o` series models like `o1`, `o3`, and `o4`.
+
+
 | u64                  | u64 token  | hex              | hex token    |
 |----------------------|------------|------------------|--------------|
 | 655666005619824040   | 6          | a8d5441cc2641909 | 9            |

@@ -1,3 +1,5 @@
+> TODO: Draft to fix tokens count 
+> 
 # Hash Encoding Comparison: Base64 vs Base62 vs Hex
 
 ## Executive Summary

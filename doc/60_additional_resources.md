@@ -6,3 +6,4 @@
 * **BLAKE Hash Functions**: [Cryptographic Hashing](https://asecuritysite.com/blake/)
 * **OpenFHE Library**: [Fully Homomorphic Encryption](https://asecuritysite.com/openfhe)
 * **Rust ChaCha20-Poly1305**: [Authenticated Encryption](https://asecuritysite.com/rust/rust_chacha20poly)
+\pagebreak
