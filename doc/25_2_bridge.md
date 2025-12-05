@@ -1,3 +1,5 @@
+> TODO: Draft to add also diagrams ..
+
 # Security Analysis: EPQB Protocol
 ## Evo Post-Quantum Bridge - Comprehensive Security Assessment
 
@@ -17,7 +19,6 @@
 **Overall Security Rating: 9/10** 🟢
 
 EPQB implements a mutually authenticated, post-quantum secure communication protocol designed to provide complete security even over hostile, unencrypted transport layers.
-
 
 ## Attack Protection Matrix
 
@@ -113,59 +114,38 @@ EPQB implements a mutually authenticated, post-quantum secure communication prot
 
 EPQB operates on a **zero-trust transport model**:
 
-```
-┌───────────────────────────────────────────────────────────┐
-│ Security Principle: Never Trust The Network               │
-├───────────────────────────────────────────────────────────┤
-│ Assumptions:                                              │
-│  • Transport provides NO encryption                       │
-│  • Transport provides NO authentication                   │
-│  • Transport provides NO integrity protection             │
-│  • Attacker can read, modify, drop, replay any packet    │
-│                                                           │
-│ Result:                                                   │
-│  • All security MUST come from application layer         │
-│  • Protocol must be secure over ws:// (plain WebSocket)  │
-│  • Perfect for testing cryptographic soundness           │
-└───────────────────────────────────────────────────────────┘
-```
+> **Security Principle: Never Trust The Network**
+
+**Assumptions:**
+- Transport provides NO encryption
+- Transport provides NO authentication
+- Transport provides NO integrity protection
+- Attacker can read, modify, drop, replay any packet
+
+**Result:**
+- All security MUST come from application layer
+- Protocol must be secure over ws:// (plain WebSocket)
+- Perfect for testing cryptographic soundness
 
 ### Protocol Stack
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 5: Application Data                                   │
-│  └─ Business logic, user data                               │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 4: EPQB Encryption                                    │
-│  ├─ ChaCha20-Poly1305 / AES-256-GCM authenticated encryption│
-│  ├─ Fresh nonce per message                                 │
-│  └─ Entity ID per message                                   │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 3: EPQB Authentication                                │
-│  ├─ Mutual Kyber AKE (both parties authenticated)           │
-│  ├─ Dilithium signatures (initial handshake)                │
-│  └─ Implicit authentication (established connection)        │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 2: EPQB Message Framing                               │
-│  ├─ EApiBridge (message structure)                          │
-│  ├─ EApiEvent (payload structure)                           │
-│  └─ Entity system (unique ID per message)                   │
-├─────────────────────────────────────────────────────────────┤
-│ Layer 1: Transport (HOSTILE)                                │
-│  └─ WebSocket (ws://) - NO SECURITY                         │
-│     Attacker capabilities:                                  │
-│     • Read all packets (plaintext visibility)               │
-│     • Modify any packet (arbitrary changes)                 │
-│     • Drop packets (selective denial)                       │
-│     • Replay packets (store and resend)                     │
-│     • Inject packets (create fake messages)                 │
-│     • Reorder packets (change sequence)                     │
-└─────────────────────────────────────────────────────────────┘
+| Layer | Name | Components |
+|-------|------|------------|
+| **5** | Application Data | Business logic, user data |
+| **4** | EPQB Encryption | ChaCha20-Poly1305 / AES-256-GCM, Fresh nonce per message, Entity ID per message |
+| **3** | EPQB Authentication | Mutual Kyber AKE, Dilithium signatures (handshake), Implicit auth (established) |
+| **2** | EPQB Message Framing | EApiBridge, EApiEvent, Entity system (unique ID per message) |
+| **1** | Transport (HOSTILE) | WebSocket (ws://) - NO SECURITY |
 
-CRITICAL: Layers 2-5 provide ALL security guarantees
-         Layer 1 provides ZERO security
-```
+**Layer 1 Attacker Capabilities:**
+- Read all packets (plaintext visibility)
+- Modify any packet (arbitrary changes)
+- Drop packets (selective denial)
+- Replay packets (store and resend)
+- Inject packets (create fake messages)
+- Reorder packets (change sequence)
+
+> **CRITICAL:** Layers 2-5 provide ALL security guarantees. Layer 1 provides ZERO security.
 
 ### Core Components
 
@@ -186,182 +166,105 @@ CRITICAL: Layers 2-5 provide ALL security guarantees
 
 ### Cryptographic Algorithm Migration
 
-```
 EPQB supports easy migration if security issues are found:
-┌────────────────────────────────────────────────────────────┐
-│ Algorithm Agility:                                         │
-│  ✅ Algorithms are modular and replaceable                 │
-│  ✅ EnumApiCrypto allows switching crypto suites           │
-│  ✅ No protocol redesign needed for algorithm updates      │
-│  ✅ Can migrate Kyber → future PQ algorithm if needed      │
-│  ✅ Can migrate Dilithium → future PQ signature if needed  │
-│                                                            │
-│ Migration Process:                                         │
-│  1. Add new algorithm to EnumApiCrypto enum                │
-│  2. Update crypto library implementation                   │
-│  3. Peers negotiate supported algorithms                   │
-│  4. Gradual rollout without breaking existing connections  │
-└────────────────────────────────────────────────────────────┘
-```
+
+**Algorithm Agility:**
+- ✅ Algorithms are modular and replaceable
+- ✅ EnumApiCrypto allows switching crypto suites
+- ✅ No protocol redesign needed for algorithm updates
+- ✅ Can migrate Kyber → future PQ algorithm if needed
+- ✅ Can migrate Dilithium → future PQ signature if needed
+
+**Migration Process:**
+1. Add new algorithm to EnumApiCrypto enum
+2. Update crypto library implementation
+3. Peers negotiate supported algorithms
+4. Gradual rollout without breaking existing connections
 
 ### Certificate Management (No Expiry Required)
 
-```
-EPQB Certificate Model:
-┌────────────────────────────────────────────────────────────┐
-│ Traditional PKI Problems:                                  │
-│  ❌ Certificate expiry requires frequent updates           │
-│  ❌ Full certificate chain validation is complex           │
-│  ❌ Revocation lists (CRL/OCSP) add latency               │
-│  ❌ Clock synchronization issues                           │
-│                                                            │
-│ EPQB Solution:                                             │
-│  ✅ No certificate expiry dates required                   │
-│  ✅ Always use last-known EPeerPublic (cached)             │
-│  ✅ If connection fails → query Master Peer for latest     │
-│  ✅ Master Peer always has current valid certificate       │
-│  ✅ No certificate chain validation needed                 │
-└────────────────────────────────────────────────────────────┘
+| Aspect | Traditional PKI | EPQB |
+|--------|-----------------|------|
+| Certificate Expiry | ❌ Requires frequent updates | ✅ No expiry dates required |
+| Chain Validation | ❌ Complex multi-level | ✅ Single level |
+| Revocation | ❌ CRL/OCSP latency | ✅ Instant via Master Peer |
+| Clock Sync | ❌ Required | ✅ Not required |
 
-Connection Flow:
-┌────────────────────────────────────────────────────────────┐
-│ Step 1: Check local cache for EPeerPublic                  │
-│   IF cached → try direct connection                        │
-│   IF connection succeeds → done (no Master Peer needed)    │
-│                                                            │
-│ Step 2: If no cache or connection fails                    │
-│   Query Master Peer for latest EPeerPublic                 │
-│   Master Peer returns current valid certificate            │
-│   Cache new EPeerPublic for future use                     │
-│                                                            │
-│ Step 3: Connect using fresh EPeerPublic                    │
-│   Connection established with latest keys                  │
-└────────────────────────────────────────────────────────────┘
+**Connection Flow:**
 
-Security Benefits:
-├─ ✅ No expired certificate attacks (no expiry to exploit)
-├─ ✅ Always get latest keys from Master Peer
-├─ ✅ Revocation is instant (Master Peer removes peer)
-├─ ✅ No clock synchronization required
-├─ ✅ Simpler than traditional PKI
-└─ ✅ Reduced attack surface (no expiry validation bugs)
-```
+| Step | Action | Result |
+|------|--------|--------|
+| 1 | Check local cache for EPeerPublic | If cached → try direct connection |
+| 2 | If no cache or connection fails | Query Master Peer for latest EPeerPublic |
+| 3 | Connect using fresh EPeerPublic | Connection established with latest keys |
+
+**Security Benefits:**
+- ✅ No expired certificate attacks (no expiry to exploit)
+- ✅ Always get latest keys from Master Peer
+- ✅ Revocation is instant (Master Peer removes peer)
+- ✅ No clock synchronization required
+- ✅ Simpler than traditional PKI
+- ✅ Reduced attack surface (no expiry validation bugs)
 
 ### Simplified Trust Model (No Certificate Chain)
 
-```
-Traditional PKI:
-┌────────────────────────────────────────────────────────────┐
-│ Root CA → Intermediate CA → Intermediate CA → End Entity   │
-│                                                            │
-│ Problems:                                                  │
-│  ❌ Complex chain validation                               │
-│  ❌ Multiple points of failure                             │
-│  ❌ Large certificate sizes                                │
-│  ❌ Frequent client updates for root CA changes            │
-└────────────────────────────────────────────────────────────┘
+| Model | Chain | Problems/Advantages |
+|-------|-------|---------------------|
+| **Traditional PKI** | Root CA → Intermediate CA → Intermediate CA → End Entity | ❌ Complex chain validation, ❌ Multiple points of failure, ❌ Large certificate sizes |
+| **EPQB** | Master Peer → EPeerPublic | ✅ Single trust anchor, ✅ No intermediate certificates, ✅ Simpler validation |
 
-EPQB Trust Model:
-┌────────────────────────────────────────────────────────────┐
-│ Master Peer → EPeerPublic (signed by Master Peer)          │
-│                                                            │
-│ Advantages:                                                │
-│  ✅ Single trust anchor (Master Peer)                      │
-│  ✅ Master Peer embedded in client (no updates needed)     │
-│  ✅ No intermediate certificates                           │
-│  ✅ Smaller certificate size                               │
-│  ✅ Simpler validation logic                               │
-│  ✅ No chain traversal attacks                             │
-└────────────────────────────────────────────────────────────┘
-
-EPeerPublic contains all info for connection:
-├─ id: Peer identifier (derived from public keys)
-├─ pk: Kyber public key (for key exchange)
-├─ pk_sign: Dilithium public key (for signature verification)
-└─ Signed by Master Peer (proves authenticity)
-```
+**EPeerPublic contains:**
+- `id`: Peer identifier (derived from public keys)
+- `pk`: Kyber public key (for key exchange)
+- `pk_sign`: Dilithium public key (for signature verification)
+- Signed by Master Peer (proves authenticity)
 
 ### Offline Operation & Caching
 
-```
-EPQB Caching Strategy:
-┌────────────────────────────────────────────────────────────┐
-│ Scenario 1: Cached EPeerPublic available                   │
-│  ✅ Direct peer-to-peer connection                         │
-│  ✅ No Master Peer query needed                            │
-│  ✅ Works offline (if peer is reachable)                   │
-│  ✅ Reduced latency (no extra round-trip)                  │
-│                                                            │
-│ Scenario 2: No cache or stale cache                        │
-│  → Query Master Peer once                                  │
-│  → Cache result for future connections                     │
-│  → Subsequent connections use cache                        │
-│                                                            │
-│ Scenario 3: Peer key rotation                              │
-│  → Old cached key fails to connect                         │
-│  → Automatic fallback to Master Peer query                 │
-│  → Get new EPeerPublic, update cache                       │
-│  → Transparent to application                              │
-└────────────────────────────────────────────────────────────┘
+| Scenario | Behavior |
+|----------|----------|
+| **Cached EPeerPublic available** | ✅ Direct P2P connection, ✅ No Master Peer query needed, ✅ Works offline |
+| **No cache or stale cache** | Query Master Peer once → Cache result → Subsequent connections use cache |
+| **Peer key rotation** | Old key fails → Automatic fallback to Master Peer → Get new EPeerPublic → Transparent to application |
 
-Result: Minimal Master Peer dependency after initial setup
-```
+> **Result:** Minimal Master Peer dependency after initial setup
 
 ### Certificate Revocation (Key Compromise Protection)
 
-```
-Master Peer Revocation API:
-┌────────────────────────────────────────────────────────────┐
-│ API: do_api_del (UApiMasterPeer::on_api_del)               │
-│                                                            │
-│ Purpose: Revoke compromised or stolen peer certificates    │
-│                                                            │
-│ Use Cases:                                                 │
-│  • Peer secret key compromised/stolen                      │
-│  • Peer device lost or stolen                              │
-│  • Peer wants to rotate keys                               │
-│  • Administrative revocation                               │
-└────────────────────────────────────────────────────────────┘
+**Master Peer Revocation API:** `do_api_del` (UApiMasterPeer::on_api_del)
 
-Revocation Flow:
-┌────────────────────────────────────────────────────────────┐
-│ Step 1: Peer detects key compromise                        │
-│   → Peer calls do_api_del with signed request              │
-│   → Signature proves ownership (only owner can revoke)     │
-│                                                            │
-│ Step 2: Master Peer processes revocation                   │
-│   → Verifies Dilithium signature (SignatureInvalid if bad) │
-│   → Removes EPeerPublic from registry                      │
-│   → Returns confirmation                                   │
-│                                                            │
-│ Step 3: Revocation takes effect immediately                │
-│   → Future queries return "peer not found"                 │
-│   → Cached certificates become invalid on next MP query    │
-│   → Attacker with stolen keys cannot register new cert     │
-└────────────────────────────────────────────────────────────┘
+**Purpose:** Revoke compromised or stolen peer certificates
 
-Security Properties:
-├─ ✅ Only certificate owner can revoke (signature required)
-├─ ✅ Instant revocation (no CRL distribution delay)
-├─ ✅ No revocation list to download/check
-├─ ✅ Master Peer is single source of truth
-├─ ✅ Compromised keys cannot re-register (ID bound to keys)
-└─ ✅ Peers can verify revocation status via do_api_get
+**Use Cases:**
+- Peer secret key compromised/stolen
+- Peer device lost or stolen
+- Peer wants to rotate keys
+- Administrative revocation
 
-Verification API:
-┌────────────────────────────────────────────────────────────┐
-│ API: do_api_get (check if certificate still valid)         │
-│                                                            │
-│ Response:                                                  │
-│  • Certificate found → peer is valid, return EPeerPublic   │
-│  • Certificate not found → peer revoked or never existed   │
-│                                                            │
-│ High-security mode:                                        │
-│  → Always query Master Peer before connection              │
-│  → Ensures revoked certificates are never used             │
-│  → Trade-off: extra latency for security                   │
-└────────────────────────────────────────────────────────────┘
-```
+**Revocation Flow:**
+
+| Step | Action | Result |
+|------|--------|--------|
+| 1 | Peer detects key compromise | Peer calls `do_api_del` with signed request (signature proves ownership) |
+| 2 | Master Peer processes revocation | Verifies Dilithium signature → Removes EPeerPublic from registry → Returns confirmation |
+| 3 | Revocation takes effect immediately | Future queries return "peer not found", cached certs invalid on next MP query |
+
+**Security Properties:**
+- ✅ Only certificate owner can revoke (signature required)
+- ✅ Instant revocation (no CRL distribution delay)
+- ✅ No revocation list to download/check
+- ✅ Master Peer is single source of truth
+- ✅ Compromised keys cannot re-register (ID bound to keys)
+- ✅ Peers can verify revocation status via `do_api_get`
+
+**Verification API:** `do_api_get` (check if certificate still valid)
+
+| Response | Meaning |
+|----------|---------|
+| Certificate found | Peer is valid, return EPeerPublic |
+| Certificate not found | Peer revoked or never existed |
+
+> **High-security mode:** Always query Master Peer before connection. Ensures revoked certificates are never used. Trade-off: extra latency for security.
 
 ---
 
@@ -389,213 +292,152 @@ Verification API:
 
 #### Trust Model
 
-```
-TLS 1.3 Certificate Chain (Complex):
-┌────────────────────────────────────────────────────────────┐
-│ Root CA (self-signed, pre-installed in OS/browser)         │
-│    ↓ signs                                                 │
-│ Intermediate CA 1 (cross-signed, validity period)          │
-│    ↓ signs                                                 │
-│ Intermediate CA 2 (optional, more complexity)              │
-│    ↓ signs                                                 │
-│ End Entity Certificate (your server, expires in 1 year)    │
-│                                                            │
-│ Problems:                                                  │
-│  ❌ Multiple points of failure                             │
-│  ❌ Complex chain validation logic                         │
-│  ❌ Root CA compromise = catastrophic                      │
-│  ❌ Intermediate CA compromise = widespread damage         │
-│  ❌ Certificate expiry requires renewal automation         │
-│  ❌ Revocation (CRL/OCSP) adds latency and complexity      │
-└────────────────────────────────────────────────────────────┘
+**TLS 1.3 Certificate Chain (Complex):**
 
-EPQB Trust Model (Simple):
-┌────────────────────────────────────────────────────────────┐
-│ Master Peer (single trust anchor, embedded in client)      │
-│    ↓ signs                                                 │
-│ EPeerPublic (peer certificate, no expiry)                  │
-│                                                            │
-│ Advantages:                                                │
-│  ✅ Single point of trust (Master Peer)                    │
-│  ✅ No chain traversal needed                              │
-│  ✅ No expiry dates to manage                              │
-│  ✅ Instant revocation via Master Peer                     │
-│  ✅ Simpler validation logic                               │
-│  ✅ Smaller certificate size                               │
-└────────────────────────────────────────────────────────────┘
-```
+| Level | Component | Issues |
+|-------|-----------|--------|
+| 1 | Root CA (self-signed, pre-installed in OS/browser) | ❌ Root CA compromise = catastrophic |
+| 2 | Intermediate CA 1 (cross-signed, validity period) | ❌ Intermediate CA compromise = widespread damage |
+| 3 | Intermediate CA 2 (optional) | ❌ More complexity |
+| 4 | End Entity Certificate (expires in 1 year) | ❌ Requires renewal automation |
+
+**TLS 1.3 Problems:**
+- ❌ Multiple points of failure
+- ❌ Complex chain validation logic
+- ❌ Revocation (CRL/OCSP) adds latency and complexity
+
+**EPQB Trust Model (Simple):**
+
+| Level | Component | Advantages |
+|-------|-----------|------------|
+| 1 | Master Peer (single trust anchor, embedded in client) | ✅ Single point of trust |
+| 2 | EPeerPublic (peer certificate, no expiry) | ✅ No chain traversal needed |
+
+**EPQB Advantages:**
+- ✅ No expiry dates to manage
+- ✅ Instant revocation via Master Peer
+- ✅ Simpler validation logic
+- ✅ Smaller certificate size
 
 #### Quantum Security
 
-```
-TLS 1.3 Cryptography (Quantum Vulnerable):
-┌────────────────────────────────────────────────────────────┐
-│ Key Exchange:                                              │
-│  ❌ ECDHE (P-256, P-384, X25519) - Shor's algorithm breaks │
-│  ❌ DHE (finite field) - Shor's algorithm breaks           │
-│                                                            │
-│ Signatures:                                                │
-│  ❌ RSA - Shor's algorithm breaks                          │
-│  ❌ ECDSA - Shor's algorithm breaks                        │
-│  ❌ Ed25519 - Shor's algorithm breaks                      │
-│                                                            │
-│ Timeline: Quantum computers expected 2030-2040             │
-│ Risk: "Harvest now, decrypt later" attacks already ongoing │
-└────────────────────────────────────────────────────────────┘
+| Component | TLS 1.3 | EPQB |
+|-----------|---------|------|
+| **Key Exchange** | ❌ ECDHE (P-256, X25519) - Shor breaks | ✅ Kyber-1024 (ML-KEM) - Lattice-based, PQ-safe |
+| **Key Exchange** | ❌ DHE (finite field) - Shor breaks | ✅ NIST standardized (FIPS 203) |
+| **Signatures** | ❌ RSA, ECDSA, Ed25519 - Shor breaks | ✅ Dilithium-5 (ML-DSA) - Lattice-based, PQ-safe |
+| **Signatures** | | ✅ NIST standardized (FIPS 204) |
 
-EPQB Cryptography (Quantum Resistant):
-┌────────────────────────────────────────────────────────────┐
-│ Key Exchange:                                              │
-│  ✅ Kyber-1024 (ML-KEM) - Lattice-based, PQ-safe           │
-│  ✅ NIST standardized (FIPS 203)                           │
-│                                                            │
-│ Signatures:                                                │
-│  ✅ Dilithium-5 (ML-DSA) - Lattice-based, PQ-safe          │
-│  ✅ NIST standardized (FIPS 204)                           │
-│                                                            │
-│ Result: Ready for quantum computing era TODAY              │
-└────────────────────────────────────────────────────────────┘
-```
+> **Timeline:** Quantum computers expected 2030-2040. Risk: "Harvest now, decrypt later" attacks already ongoing.
+>
+> **EPQB Result:** Ready for quantum computing era TODAY.
 
 #### Library Dependencies
 
-```
-TLS 1.3 Implementation Dependencies:
-┌────────────────────────────────────────────────────────────┐
-│ OpenSSL:                                                   │
-│  ❌ ~500,000 lines of code                                 │
-│  ❌ Complex build system                                   │
-│  ❌ History of critical vulnerabilities (Heartbleed, etc.) │
-│  ❌ Difficult to audit                                     │
-│  ❌ Heavy memory footprint                                 │
-│                                                            │
-│ BoringSSL/LibreSSL:                                        │
-│  ⚠️ Still ~200,000+ lines of code                         │
-│  ⚠️ Fork maintenance overhead                             │
-│                                                            │
-│ Attack Surface: Large codebase = more vulnerabilities      │
-└────────────────────────────────────────────────────────────┘
+| Library | Lines of Code | Issues |
+|---------|---------------|--------|
+| **OpenSSL** | ~500,000 | ❌ Complex build, ❌ Heartbleed history, ❌ Difficult to audit, ❌ Heavy memory |
+| **BoringSSL/LibreSSL** | ~200,000+ | ⚠️ Fork maintenance overhead |
 
-EPQB Implementation Dependencies:
-┌────────────────────────────────────────────────────────────┐
-│ Crypto Libraries:                                          │
-│  ✅ pqcrypto-kyber (focused, auditable)                    │
-│  ✅ pqcrypto-dilithium (focused, auditable)                │
-│  ✅ chacha20poly1305 (minimal, well-audited)               │
-│                                                            │
-│ Benefits:                                                  │
-│  ✅ Minimal code footprint                                 │
-│  ✅ Each library does one thing well                       │
-│  ✅ Easier to audit and verify                             │
-│  ✅ Smaller attack surface                                 │
-│  ✅ No legacy code baggage                                 │
-└────────────────────────────────────────────────────────────┘
-```
+> **Attack Surface:** Large codebase = more vulnerabilities
+
+**EPQB Implementation Dependencies:**
+
+| Library | Purpose | Benefit |
+|---------|---------|---------|
+| pqcrypto-kyber | Key exchange | ✅ Focused, auditable |
+| pqcrypto-dilithium | Signatures | ✅ Focused, auditable |
+| chacha20poly1305 | AEAD | ✅ Minimal, well-audited |
+
+**EPQB Benefits:**
+- ✅ Minimal code footprint
+- ✅ Each library does one thing well
+- ✅ Easier to audit and verify
+- ✅ Smaller attack surface
+- ✅ No legacy code baggage
 
 #### Algorithm Agility
 
-```
-TLS 1.3 Algorithm Migration:
-┌────────────────────────────────────────────────────────────┐
-│ Process:                                                   │
-│  1. IETF standardization (years)                           │
-│  2. Library implementation (months)                        │
-│  3. Server/client updates (months-years)                   │
-│  4. Cipher suite negotiation complexity                    │
-│  5. Backward compatibility concerns                        │
-│                                                            │
-│ Example: Adding PQ to TLS                                  │
-│  → Hybrid key exchange proposals still in draft            │
-│  → No clear migration path                                 │
-│  → Compatibility issues with existing infrastructure       │
-└────────────────────────────────────────────────────────────┘
+| Aspect | TLS 1.3 | EPQB |
+|--------|---------|------|
+| **Step 1** | IETF standardization (years) | Add new algorithm to EnumApiCrypto enum |
+| **Step 2** | Library implementation (months) | Implement crypto wrapper |
+| **Step 3** | Server/client updates (months-years) | Deploy to peers |
+| **Step 4** | Cipher suite negotiation complexity | Automatic negotiation via enum |
+| **Step 5** | Backward compatibility concerns | Gradual rollout, old peers still work |
 
-EPQB Algorithm Migration:
-┌────────────────────────────────────────────────────────────┐
-│ Process:                                                   │
-│  1. Add new algorithm to EnumApiCrypto enum                │
-│  2. Implement crypto wrapper                               │
-│  3. Deploy to peers                                        │
-│  4. Automatic negotiation via enum                         │
-│                                                            │
-│ Example: Switching from Kyber to future PQ algorithm       │
-│  → Add new enum variant                                    │
-│  → Implement wrapper functions                             │
-│  → Gradual rollout, old peers still work                   │
-│  → No protocol redesign needed                             │
-└────────────────────────────────────────────────────────────┘
-```
+**Example - Adding PQ to TLS:**
+- ❌ Hybrid key exchange proposals still in draft
+- ❌ No clear migration path
+- ❌ Compatibility issues with existing infrastructure
+
+**Example - EPQB Algorithm Switch:**
+- ✅ Add new enum variant
+- ✅ Implement wrapper functions
+- ✅ No protocol redesign needed
 
 #### Decentralization vs Centralization
 
-```
-TLS 1.3 / PKI (Centralized):
-┌────────────────────────────────────────────────────────────┐
-│ Trust Hierarchy:                                           │
-│  • ~150 Root CAs trusted by browsers                       │
-│  • Any Root CA can sign for any domain                     │
-│  • Government pressure on CAs (surveillance)               │
-│  • CA business model conflicts (profit vs security)        │
-│  • Single CA compromise affects millions of sites          │
-│                                                            │
-│ Historical Incidents:                                      │
-│  • DigiNotar (2011) - Complete CA compromise               │
-│  • Symantec (2017) - Mass mis-issuance                     │
-│  • Let's Encrypt (2022) - Revocation of 3M certs           │
-└────────────────────────────────────────────────────────────┘
+**TLS 1.3 / PKI (Centralized):**
 
-EPQB (Decentralized P2P):
-┌────────────────────────────────────────────────────────────┐
-│ Trust Model:                                               │
-│  • Master Peer as registry (not CA)                        │
-│  • Peers generate own keys (self-sovereign)                │
-│  • Master Peer only stores/serves EPeerPublic              │
-│  • No third-party can sign for your identity               │
-│  • ID cryptographically bound to keys                      │
-│                                                            │
-│ Comparison to Blockchain:                                  │
-│  ✅ Similar decentralization philosophy                    │
-│  ✅ Self-sovereign identity (keys = identity)              │
-│  ✅ No central authority can forge identity                │
-│  ✅ More secure than blockchain (no ECC vulnerability)     │
-│  ✅ No consensus overhead (Master Peer is authoritative)   │
-│  ✅ Instant finality (no block confirmation wait)          │
-└────────────────────────────────────────────────────────────┘
-```
+| Aspect | Issue |
+|--------|-------|
+| Trust Hierarchy | ~150 Root CAs trusted by browsers |
+| Authority | Any Root CA can sign for any domain |
+| Pressure | Government pressure on CAs (surveillance) |
+| Conflicts | CA business model conflicts (profit vs security) |
+| Risk | Single CA compromise affects millions of sites |
+
+**Historical Incidents:**
+- DigiNotar (2011) - Complete CA compromise
+- Symantec (2017) - Mass mis-issuance
+- Let's Encrypt (2022) - Revocation of 3M certs
+
+**EPQB (Decentralized P2P):**
+
+| Aspect | Benefit |
+|--------|---------|
+| Registry | Master Peer as registry (not CA) |
+| Key Generation | Peers generate own keys (self-sovereign) |
+| Storage | Master Peer only stores/serves EPeerPublic |
+| Identity | No third-party can sign for your identity |
+| Binding | ID cryptographically bound to keys |
+
+**Comparison to Blockchain:**
+- ✅ Similar decentralization philosophy
+- ✅ Self-sovereign identity (keys = identity)
+- ✅ No central authority can forge identity
+- ✅ More secure than blockchain (no ECC vulnerability)
+- ✅ No consensus overhead (Master Peer is authoritative)
+- ✅ Instant finality (no block confirmation wait)
 
 #### Self-Signed Certificate Problem
 
-```
-TLS 1.3 Self-Signed Issues:
-┌────────────────────────────────────────────────────────────┐
-│ Problem:                                                   │
-│  • Self-signed certs not trusted by browsers               │
-│  • Users must manually add exceptions                      │
-│  • No way to verify identity without CA                    │
-│  • Internal/private networks still need CA infrastructure  │
-│                                                            │
-│ Workarounds:                                               │
-│  • Private CA (complex to manage)                          │
-│  • Let's Encrypt (requires public DNS)                     │
-│  • Ignore warnings (security risk)                         │
-└────────────────────────────────────────────────────────────┘
+**TLS 1.3 Self-Signed Issues:**
 
-EPQB Solution:
-┌────────────────────────────────────────────────────────────┐
-│ No Self-Signed Problem:                                    │
-│  • All peers register with Master Peer                     │
-│  • Master Peer signs EPeerPublic                           │
-│  • Any peer can verify any other peer                      │
-│  • Works for private networks (own Master Peer)            │
-│  • No browser/OS trust store dependency                    │
-│                                                            │
-│ Private Network Deployment:                                │
-│  1. Deploy your own Master Peer                            │
-│  2. Embed Master Peer public key in clients                │
-│  3. All internal peers register with your Master Peer      │
-│  4. Full trust chain without external CA                   │
-└────────────────────────────────────────────────────────────┘
-```
+| Problem | Impact |
+|---------|--------|
+| Self-signed certs not trusted by browsers | Users must manually add exceptions |
+| No way to verify identity without CA | Security gap |
+| Internal/private networks | Still need CA infrastructure |
+
+**TLS 1.3 Workarounds:**
+- Private CA (complex to manage)
+- Let's Encrypt (requires public DNS)
+- Ignore warnings (security risk)
+
+**EPQB Solution - No Self-Signed Problem:**
+- All peers register with Master Peer
+- Master Peer signs EPeerPublic
+- Any peer can verify any other peer
+- Works for private networks (own Master Peer)
+- No browser/OS trust store dependency
+
+**Private Network Deployment:**
+1. Deploy your own Master Peer
+2. Embed Master Peer public key in clients
+3. All internal peers register with your Master Peer
+4. Full trust chain without external CA
 
 ### Summary: Why EPQB Over TLS 1.3
 
@@ -619,328 +461,254 @@ EPQB Solution:
 
 #### 1.1 Eavesdropping (Packet Sniffing) - ✅ PROTECTED
 
-```
-Attack: Attacker reads all traffic on the network
+**Attack:** Attacker reads all traffic on the network
 
-Alice ────ws://───> [ATTACKER READS] ────ws://───> Bob
-     (plaintext)                         (plaintext)
+`Alice ────ws://───> [ATTACKER READS] ────ws://───> Bob`
 
-What Attacker Sees:
-┌────────────────────────────────────────────────────────┐
-│ • client_init: Kyber ciphertext (~1568 bytes)         │
-│ • signature: Dilithium signature (~2420 bytes)        │
-│ • encrypted_payload: AEAD ciphertext                  │
-└────────────────────────────────────────────────────────┘
+**What Attacker Sees:**
+- client_init: Kyber ciphertext (~1568 bytes)
+- signature: Dilithium signature (~2420 bytes)
+- encrypted_payload: AEAD ciphertext
 
-What Attacker CANNOT See:
-┌────────────────────────────────────────────────────────┐
-│ ❌ Message contents (encrypted with shared_secret)     │
-│ ❌ Shared secrets (Kyber-protected)                    │
-│ ❌ Private keys (never transmitted)                    │
-└────────────────────────────────────────────────────────┘
+**What Attacker CANNOT See:**
+- ❌ Message contents (encrypted with shared_secret)
+- ❌ Shared secrets (Kyber-protected)
+- ❌ Private keys (never transmitted)
 
-Protection: Kyber KEM derives shared secret, AEAD encrypts all data
-Result: CONFIDENTIALITY PRESERVED
-```
+> **Protection:** Kyber KEM derives shared secret, AEAD encrypts all data
+>
+> **Result:** CONFIDENTIALITY PRESERVED
 
 #### 1.2 Traffic Analysis Protection - ✅ PROTECTED
 
-```
-Problem: If EApiBridge.id == EApiEvent.id, attacker can correlate messages
+**Problem:** If EApiBridge.id == EApiEvent.id, attacker can correlate messages
 
-Solution: ID Hash Binding
-┌────────────────────────────────────────────────────────────┐
-│ Sender (to_api_bridge):                                    │
-│   id_hash = BLAKE3(id_from || e_api_event.id || e_api_bridge.id)
-│   Kyber AKE uses id_hash instead of id_from                │
-│                                                            │
-│ Receiver (from_api_bridge):                                │
-│   1. Receive id_hash from Kyber AKE                        │
-│   2. Decrypt payload to get e_api_event                    │
-│   3. Compute expected: BLAKE3(id_from || event.id || bridge.id)
-│   4. Verify: id_hash_received == id_hash_expected          │
-│   5. If mismatch → reject (tampering detected)             │
-└────────────────────────────────────────────────────────────┘
+**Solution: ID Hash Binding**
 
-Security Benefits:
-├─ ✅ EApiBridge.id and EApiEvent.id are different (unlinkable)
-├─ ✅ Metadata (id, time) of inner event hidden from attacker
-├─ ✅ Cryptographic binding proves id_from, event_id, bridge_id valid
-├─ ✅ Any tampering with IDs detected via hash mismatch
-└─ ✅ Attacker cannot correlate bridge messages to events
+| Role | Action |
+|------|--------|
+| **Sender (to_api_bridge)** | `id_hash = BLAKE3(id_from \|\| e_api_event.id \|\| e_api_bridge.id)` - Kyber AKE uses id_hash instead of id_from |
+| **Receiver (from_api_bridge)** | 1. Receive id_hash from Kyber AKE → 2. Decrypt payload → 3. Compute expected hash → 4. Verify match → 5. If mismatch → reject |
 
-What Attacker Sees:
-├─ EApiBridge.id (random, unique per bridge message)
-├─ EApiBridge.time (bridge creation time)
-├─ ❌ Cannot see EApiEvent.id (encrypted inside)
-├─ ❌ Cannot see EApiEvent.time (encrypted inside)
-└─ ❌ Cannot correlate messages across sessions
-```
+**Security Benefits:**
+- ✅ EApiBridge.id and EApiEvent.id are different (unlinkable)
+- ✅ Metadata (id, time) of inner event hidden from attacker
+- ✅ Cryptographic binding proves id_from, event_id, bridge_id valid
+- ✅ Any tampering with IDs detected via hash mismatch
+- ✅ Attacker cannot correlate bridge messages to events
+
+**What Attacker Sees:**
+- EApiBridge.id (random, unique per bridge message)
+- EApiBridge.time (bridge creation time)
+- ❌ Cannot see EApiEvent.id (encrypted inside)
+- ❌ Cannot see EApiEvent.time (encrypted inside)
+- ❌ Cannot correlate messages across sessions
 
 #### 1.3 Pattern Analysis - ⚠️ PARTIAL (By Design)
 
-```
-IMPORTANT: This is NOT about nonce security!
-┌────────────────────────────────────────────────────────────┐
-│ AEAD Nonce Security:                                       │
-│  ✅ Nonce is PUBLIC by design (not a secret)               │
-│  ✅ Nonce transmitted in cleartext is SAFE                 │
-│  ✅ Fresh random nonce per message → SECURE                │
-│  ❌ Only danger: reusing same nonce with same key          │
-│                                                            │
-│ EPQB uses fresh random nonce per message → CRYPTOGRAPHICALLY SECURE
-└────────────────────────────────────────────────────────────┘
+> **IMPORTANT:** This is NOT about nonce security!
 
-What "Pattern Analysis" actually means:
-┌────────────────────────────────────────────────────────────┐
-│ Traffic metadata attacker CAN observe:                     │
-│  • Message timing (when messages are sent)                 │
-│  • Message frequency (how often peers communicate)         │
-│  • Message sizes (approximate payload lengths)             │
-│  • Communication direction (who initiates)                 │
-│  • Session duration (how long peers stay connected)        │
-│                                                            │
-│ Example attack scenarios:                                  │
-│  • 10KB message every hour → likely automated report       │
-│  • Burst of small messages → likely chat conversation      │
-│  • Large message after login → likely file download        │
-└────────────────────────────────────────────────────────────┘
+**AEAD Nonce Security:**
+- ✅ Nonce is PUBLIC by design (not a secret)
+- ✅ Nonce transmitted in cleartext is SAFE
+- ✅ Fresh random nonce per message → SECURE
+- ❌ Only danger: reusing same nonce with same key
 
-Why ⚠️ PARTIAL:
-├─ ✅ Content is fully encrypted (attacker cannot read)
-├─ ✅ IDs are hidden (Traffic Analysis 1.2 protection)
-├─ ⚠️ Timing patterns visible (when messages sent)
-├─ ⚠️ Size patterns visible (message lengths)
-└─ ⚠️ Frequency patterns visible (communication rate)
+> EPQB uses fresh random nonce per message → CRYPTOGRAPHICALLY SECURE
 
-Mitigation (not implemented in EPQB core):
-├─ Padding messages to fixed sizes
-├─ Adding dummy/cover traffic
-├─ Randomizing timing
-└─ Using overlay networks (Tor, mixnets)
+**What "Pattern Analysis" actually means - Traffic metadata attacker CAN observe:**
+- Message timing (when messages are sent)
+- Message frequency (how often peers communicate)
+- Message sizes (approximate payload lengths)
+- Communication direction (who initiates)
+- Session duration (how long peers stay connected)
 
-Note: Pattern analysis resistance is typically handled at
-application layer or by specialized anonymity networks.
-EPQB focuses on cryptographic security guarantees.
-```
+**Example attack scenarios:**
+- 10KB message every hour → likely automated report
+- Burst of small messages → likely chat conversation
+- Large message after login → likely file download
+
+**Why ⚠️ PARTIAL:**
+- ✅ Content is fully encrypted (attacker cannot read)
+- ✅ IDs are hidden (Traffic Analysis 1.2 protection)
+- ⚠️ Timing patterns visible (when messages sent)
+- ⚠️ Size patterns visible (message lengths)
+- ⚠️ Frequency patterns visible (communication rate)
+
+**Mitigation (not implemented in EPQB core):**
+- Padding messages to fixed sizes
+- Adding dummy/cover traffic
+- Randomizing timing
+- Using overlay networks (Tor, mixnets)
+
+> **Note:** Pattern analysis resistance is typically handled at application layer or by specialized anonymity networks. EPQB focuses on cryptographic security guarantees.
 
 #### 1.5-1.6 Quantum Attacks - ✅ PROTECTED
 
-```
-Quantum Computer Threat Analysis:
-┌────────────────────────────────────────────────────────┐
-│ Shor's Algorithm (breaks RSA, ECC):                    │
-│  ✅ Kyber: Lattice-based, NOT vulnerable               │
-│  ✅ Dilithium: Lattice-based, NOT vulnerable           │
-│                                                        │
-│ Grover's Algorithm (speeds up brute force):            │
-│  ✅ ChaCha20-Poly1305: 256-bit → 128-bit post-quantum  │
-│  ✅ AES-256-GCM: 256-bit → 128-bit post-quantum        │
-│  ✅ Still computationally infeasible                   │
-└────────────────────────────────────────────────────────┘
+| Algorithm | Attack | EPQB Status |
+|-----------|--------|-------------|
+| **Shor's Algorithm** (breaks RSA, ECC) | Kyber | ✅ Lattice-based, NOT vulnerable |
+| **Shor's Algorithm** | Dilithium | ✅ Lattice-based, NOT vulnerable |
+| **Grover's Algorithm** (speeds up brute force) | ChaCha20-Poly1305 | ✅ 256-bit → 128-bit post-quantum |
+| **Grover's Algorithm** | AES-256-GCM | ✅ 256-bit → 128-bit post-quantum |
 
-Result: EPQB is POST-QUANTUM SECURE
-```
+> **Result:** EPQB is POST-QUANTUM SECURE
 
 ### 2. Active Attacks
 
 #### 2.1-2.3 Message Tampering - ✅ PROTECTED
 
-```
-Attack: Attacker modifies packets in transit
+**Attack:** Attacker modifies packets in transit
 
-Alice ─> [ATTACKER MODIFIES] ─> Bob
+`Alice ─> [ATTACKER MODIFIES] ─> Bob`
 
-Tampering Attempts:
-┌────────────────────────────────────────────────────────┐
-│ Attempt A: Flip bits in ciphertext                     │
-│  Result: ❌ AEAD auth tag verification FAILS           │
-│                                                        │
-│ Attempt B: Replace entire ciphertext                   │
-│  Result: ❌ AEAD auth tag verification FAILS           │
-│                                                        │
-│ Attempt C: Modify and recalculate auth tag             │
-│  Result: ❌ Impossible without shared_secret           │
-│                                                        │
-│ Attempt D: Truncate message                            │
-│  Result: ❌ Message framing validation FAILS           │
-└────────────────────────────────────────────────────────┘
+| Tampering Attempt | Result |
+|-------------------|--------|
+| Flip bits in ciphertext | ❌ AEAD auth tag verification FAILS |
+| Replace entire ciphertext | ❌ AEAD auth tag verification FAILS |
+| Modify and recalculate auth tag | ❌ Impossible without shared_secret |
+| Truncate message | ❌ Message framing validation FAILS |
 
-Protection: AEAD (ChaCha20-Poly1305) provides authenticated encryption
-Result: INTEGRITY PRESERVED - Any tampering immediately detected
-```
+> **Protection:** AEAD (ChaCha20-Poly1305) provides authenticated encryption
+>
+> **Result:** INTEGRITY PRESERVED - Any tampering immediately detected
 
 #### 2.6-2.8 Replay Attacks - ✅ PROTECTED
 
-```
-Attack: Attacker captures and replays old messages
+**Attack:** Attacker captures and replays old messages
 
-Timeline:
-10:00 AM - Alice sends legitimate message (Entity ID: 0x3a7f2b...)
-         [ATTACKER CAPTURES PACKET]
+**Timeline:**
+- 10:00 AM - Alice sends legitimate message (Entity ID: 0x3a7f2b...) - [ATTACKER CAPTURES PACKET]
+- 10:05 AM - Attacker replays captured message
 
-10:05 AM - Attacker replays captured message
+**Server Validation:**
 
-Server Validation:
-┌────────────────────────────────────────────────────────┐
-│ Step 1: Extract entity ID from message                 │
-│                                                        │
-│ Step 2: Check MapId cache                              │
-│   check_replay_attack(id_event)                        │
-│   ❌ FOUND! (already processed at 10:00 AM)            │
-│                                                        │
-│ Step 3: Reject with ReplayDuplicateEntity error        │
-└────────────────────────────────────────────────────────┘
+| Step | Action | Result |
+|------|--------|--------|
+| 1 | Extract entity ID from message | ID extracted |
+| 2 | Check MapId cache: `check_replay_attack(id_event)` | ❌ FOUND! (already processed at 10:00 AM) |
+| 3 | Reject | ReplayDuplicateEntity error |
 
-Protection: Entity ID tracking via MapId cache
-Result: REPLAY ATTACK BLOCKED
-```
+> **Protection:** Entity ID tracking via MapId cache
+>
+> **Result:** REPLAY ATTACK BLOCKED
 
 #### 2.9 Message Reordering - ✅ PROTECTED
 
-```
-Attack: Attacker reorders messages in transit
+**Attack:** Attacker reorders messages in transit
 
-Normal:    Message 1 → Message 2 → Message 3
-Reordered: Message 3 → Message 1 → Message 2
+- Normal: Message 1 → Message 2 → Message 3
+- Reordered: Message 3 → Message 1 → Message 2
 
-EPQB Protection Mechanisms:
-┌────────────────────────────────────────────────────────────┐
-│ 1. Transport Layer (WebSocket/TCP):                        │
-│    ✅ TCP guarantees in-order delivery                     │
-│    ✅ WebSocket inherits TCP ordering                      │
-│    ✅ Reordering not possible at transport level           │
-│                                                            │
-│ 2. Application Layer (EApiEvent.seek):                     │
-│    ✅ seek field provides cursor/sequence position         │
-│    ✅ Can be used for ordering on unordered transports     │
-│    ✅ Enables chunked data reassembly                      │
-│    ✅ Not needed for WebSocket (already ordered)           │
-└────────────────────────────────────────────────────────────┘
+**EPQB Protection Mechanisms:**
 
-EApiEvent fields for ordering:
-├─ seek: cursor position / sequence number
-├─ progress: progress indicator for multi-part messages
-├─ length: total length for chunked transfers
-└─ time: timestamp for temporal ordering
+| Layer | Mechanism | Benefit |
+|-------|-----------|---------|
+| **Transport (WebSocket/TCP)** | TCP guarantees in-order delivery | ✅ Reordering not possible at transport level |
+| **Application (EApiEvent.seek)** | seek field provides cursor/sequence position | ✅ Can be used for ordering on unordered transports |
 
-When seek is used (unordered transports like UDP):
-├─ Receiver can reorder messages by seek value
-├─ Detect missing chunks
-├─ Reassemble large payloads
+**EApiEvent fields for ordering:**
+- `seek`: cursor position / sequence number
+- `progress`: progress indicator for multi-part messages
+- `length`: total length for chunked transfers
+- `time`: timestamp for temporal ordering
 
-Result: ORDERING PROTECTED via TCP + seek field available
-```
+**When seek is used (unordered transports like UDP):**
+- Receiver can reorder messages by seek value
+- Detect missing chunks
+- Reassemble large payloads
+
+> **Result:** ORDERING PROTECTED via TCP + seek field available
 
 ### 3. MITM Attacks
 
 #### 3.1-3.4 Impersonation & Interception - ✅ PROTECTED
 
-```
-Attack: Attacker tries to impersonate Alice to Bob
+**Attack:** Attacker tries to impersonate Alice to Bob
 
-Attacker's Challenge:
-┌────────────────────────────────────────────────────────┐
-│ To impersonate Alice, attacker needs:                  │
-│                                                        │
-│ Option 1: Create valid Kyber client_init               │
-│  ❌ Requires Alice's identity binding                  │
-│  ❌ Bob will derive wrong temp_key                     │
-│  ❌ Decryption will fail                               │
-│                                                        │
-│ Option 2: Forge Dilithium signature                    │
-│  ❌ Requires Alice's private signing key               │
-│  ❌ Computationally infeasible (post-quantum secure)   │
-│                                                        │
-│ Option 3: Replay Alice's handshake                     │
-│  ❌ Entity ID already processed                        │
-│  ❌ Cannot derive shared_secret anyway                 │
-│                                                        │
-│ Option 4: Full MITM (intercept both directions)        │
-│  ❌ Cannot create valid responses without keys         │
-│  ❌ Mutual authentication prevents this                │
-└────────────────────────────────────────────────────────┘
+| Attacker Option | Why It Fails |
+|-----------------|--------------|
+| Create valid Kyber client_init | ❌ Requires Alice's identity binding, Bob will derive wrong temp_key |
+| Forge Dilithium signature | ❌ Requires Alice's private signing key, computationally infeasible |
+| Replay Alice's handshake | ❌ Entity ID already processed, cannot derive shared_secret |
+| Full MITM (intercept both directions) | ❌ Cannot create valid responses without keys, mutual auth prevents this |
 
-Protection: Kyber AKE + Dilithium signatures + Entity ID tracking
-Result: IMPERSONATION BLOCKED
-```
+> **Protection:** Kyber AKE + Dilithium signatures + Entity ID tracking
+>
+> **Result:** IMPERSONATION BLOCKED
 
 ### 4. Authentication Attacks
 
 #### 4.3 Signature Forgery - ✅ PROTECTED
 
-```
-Attack: Attacker tries to forge Dilithium signature
+**Attack:** Attacker tries to forge Dilithium signature
 
-Dilithium-5 Security:
-┌────────────────────────────────────────────────────────┐
-│ • NIST Level 5 security (256-bit equivalent)           │
-│ • Based on Module-LWE and Module-SIS problems          │
-│ • Post-quantum secure against known attacks            │
-│ • Signature size: ~2420 bytes                          │
-│ • Public key size: ~1952 bytes                         │
-└────────────────────────────────────────────────────────┘
+**Dilithium-5 Security:**
 
-Verification in EPQB:
-┌────────────────────────────────────────────────────────┐
-│ 1. Check signature presence (SignatureMissing error)   │
-│ 2. Verify against sender's public key                  │
-│ 3. Reject if invalid (SignatureInvalid error)          │
-└────────────────────────────────────────────────────────┘
+| Property | Value |
+|----------|-------|
+| Security Level | NIST Level 5 (256-bit equivalent) |
+| Based On | Module-LWE and Module-SIS problems |
+| Quantum Resistance | Post-quantum secure against known attacks |
+| Signature Size | ~2420 bytes |
+| Public Key Size | ~1952 bytes |
 
-Protection: Dilithium-5 post-quantum signatures
-Result: SIGNATURE FORGERY COMPUTATIONALLY INFEASIBLE
-```
+**Verification in EPQB:**
+1. Check signature presence (SignatureMissing error)
+2. Verify against sender's public key
+3. Reject if invalid (SignatureInvalid error)
+
+> **Protection:** Dilithium-5 post-quantum signatures
+>
+> **Result:** SIGNATURE FORGERY COMPUTATIONALLY INFEASIBLE
 
 ### 5. Key Exchange Attacks
 
 #### 5.1-5.2 KEM Attacks - ✅ PROTECTED
 
-```
-Kyber-1024 Security:
-┌────────────────────────────────────────────────────────┐
-│ • NIST Level 5 security (256-bit equivalent)           │
-│ • IND-CCA2 secure (chosen ciphertext attack resistant) │
-│ • Based on Module-LWE problem                          │
-│ • Ciphertext size: ~1568 bytes                         │
-│ • Public key size: ~1568 bytes                         │
-│ • Shared secret: 32 bytes                              │
-└────────────────────────────────────────────────────────┘
+**Kyber-1024 Security:**
 
-Attack Resistance:
-┌────────────────────────────────────────────────────────┐
-│ • Ciphertext manipulation → decapsulation fails        │
-│ • Key mismatch → AEAD decryption fails                 │
-│ • Malformed ciphertext → rejected by Kyber            │
-└────────────────────────────────────────────────────────┘
+| Property | Value |
+|----------|-------|
+| Security Level | NIST Level 5 (256-bit equivalent) |
+| Security Model | IND-CCA2 secure (chosen ciphertext attack resistant) |
+| Based On | Module-LWE problem |
+| Ciphertext Size | ~1568 bytes |
+| Public Key Size | ~1568 bytes |
+| Shared Secret | 32 bytes |
 
-Protection: Kyber IND-CCA2 security + AEAD verification
-Result: KEM ATTACKS BLOCKED
-```
+**Attack Resistance:**
+
+| Attack | Result |
+|--------|--------|
+| Ciphertext manipulation | ❌ Decapsulation fails |
+| Key mismatch | ❌ AEAD decryption fails |
+| Malformed ciphertext | ❌ Rejected by Kyber |
+
+> **Protection:** Kyber IND-CCA2 security + AEAD verification
+>
+> **Result:** KEM ATTACKS BLOCKED
 
 ### 6. Denial of Service
 
 #### 6.1-6.4 Resource Exhaustion - ⚠️ EXTERNAL PROTECTION
 
-```
-DoS Attack Vectors:
-┌────────────────────────────────────────────────────────┐
-│ • Connection flooding                                  │
-│ • Handshake flooding (expensive Kyber operations)      │
-│ • Memory exhaustion (entity ID cache)                  │
-│ • Computational DoS (crypto operations)                │
-└────────────────────────────────────────────────────────┘
+**DoS Attack Vectors:**
+- Connection flooding
+- Handshake flooding (expensive Kyber operations)
+- Memory exhaustion (entity ID cache)
+- Computational DoS (crypto operations)
 
-Protection Location: evo_core_bridge_client crate
-┌────────────────────────────────────────────────────────┐
-│ • Rate limiting per IP/peer                            │
-│ • Connection limits                                    │
-│ • Handshake attempt limits                             │
-│ • Cache size limits                                    │
-└────────────────────────────────────────────────────────┘
+**Protection Location:** `evo_core_bridge_client` crate
 
-Note: DoS protection is handled externally, not in EPQB core
-```
+| Protection | Mechanism |
+|------------|-----------|
+| Rate limiting | Per IP/peer |
+| Connection limits | Max concurrent connections |
+| Handshake limits | Max handshake attempts |
+| Cache limits | MapId size limits |
+
+> **Note:** DoS protection is handled externally, not in EPQB core
 
 ---
 
@@ -959,66 +727,56 @@ Note: DoS protection is handled externally, not in EPQB core
 
 ### Future: ASCON Lightweight Cryptography
 
-```
-ASCON - NIST Lightweight Cryptography Standard (2023):
-┌────────────────────────────────────────────────────────────┐
-│ What ASCON Is:                                             │
-│  • NIST Standard: Chosen in 2023 for Lightweight Crypto    │
-│  • Functionality: AEAD, hashing, and XOFs                  │
-│  • Design: Sponge construction with SPN (no table lookups) │
-│  • Target: Resource-constrained devices (IoT, sensors)     │
-│  • Performance: Fast in both hardware and software         │
-└────────────────────────────────────────────────────────────┘
+**ASCON - NIST Lightweight Cryptography Standard (2023)**
 
-ASCON vs Current EPQB AEAD:
-┌────────────────────────────────────────────────────────────┐
-│ Current EPQB:                                              │
-│  • ChaCha20-Poly1305 (256-bit key, 128-bit PQ security)    │
-│  • AES-256-GCM (256-bit key, 128-bit PQ security)          │
-│  • Good for general-purpose devices                        │
-│                                                            │
-│ ASCON Advantages:                                          │
-│  • Smaller footprint (ideal for IoT/embedded)              │
-│  • No table lookups (side-channel resistant)               │
-│  • 320-bit internal state (quantum resilience)             │
-│  • Lower power consumption                                 │
-│  • NIST standardized (2023)                                │
-└────────────────────────────────────────────────────────────┘
+| Property | Description |
+|----------|-------------|
+| **NIST Standard** | Chosen in 2023 for Lightweight Cryptography |
+| **Functionality** | AEAD, hashing, and XOFs |
+| **Design** | Sponge construction with SPN (no table lookups) |
+| **Target** | Resource-constrained devices (IoT, sensors) |
+| **Performance** | Fast in both hardware and software |
 
-ASCON Quantum Security Analysis:
-┌────────────────────────────────────────────────────────────┐
-│ Important Distinction:                                     │
-│  • ASCON is NOT primary PQC (not lattice-based)            │
-│  • NIST PQC focus: Kyber, Dilithium for asymmetric crypto  │
-│  • ASCON focus: Lightweight symmetric crypto               │
-│                                                            │
-│ Quantum Resistance:                                        │
-│  • 320-bit internal state provides quantum resilience      │
-│  • Grover's algorithm less effective than classical attacks│
-│  • Ascon-80pq variant: ~100-bit effective PQ security      │
-│  • Suitable for less critical data in PQ era               │
-│                                                            │
-│ NOT designed against Shor's algorithm (symmetric crypto)   │
-│ Shor targets asymmetric crypto (RSA, ECC) - not ASCON      │
-└────────────────────────────────────────────────────────────┘
+**ASCON vs Current EPQB AEAD:**
 
-EPQB Future Roadmap:
-┌────────────────────────────────────────────────────────────┐
-│ ASCON Integration Path:                                    │
-│  1. Add EnumApiCrypto::PqKDAscon variant                   │
-│  2. Implement ASCON AEAD wrapper                           │
-│  3. Use for IoT/embedded peer connections                  │
-│  4. Maintain ChaCha20/AES for general-purpose              │
-│                                                            │
-│ Combined Security Stack:                                   │
-│  ✅ Kyber-1024: Post-quantum key exchange                  │
-│  ✅ Dilithium-5: Post-quantum signatures                   │
-│  ✅ ASCON: Lightweight AEAD for constrained devices        │
-│  ✅ ChaCha20/AES: General-purpose AEAD                     │
-│                                                            │
-│ Result: Complete PQ-ready stack for all device classes     │
-└────────────────────────────────────────────────────────────┘
-```
+| Aspect | Current EPQB | ASCON |
+|--------|--------------|-------|
+| Algorithms | ChaCha20-Poly1305, AES-256-GCM | ASCON-128, ASCON-128a |
+| Key Size | 256-bit | 128-bit |
+| PQ Security | 128-bit (Grover) | ~100-bit (Grover) |
+| Target | General-purpose devices | IoT/embedded |
+| Footprint | Standard | ✅ Smaller |
+| Side-channel | Depends on implementation | ✅ No table lookups |
+| Power | Standard | ✅ Lower consumption |
+
+**ASCON Quantum Security Analysis:**
+
+> **Important Distinction:**
+> - ASCON is NOT primary PQC (not lattice-based)
+> - NIST PQC focus: Kyber, Dilithium for asymmetric crypto
+> - ASCON focus: Lightweight symmetric crypto
+
+**Quantum Resistance:**
+- 320-bit internal state provides quantum resilience
+- Grover's algorithm less effective than classical attacks
+- Ascon-80pq variant: ~100-bit effective PQ security
+- Suitable for less critical data in PQ era
+
+> **Note:** NOT designed against Shor's algorithm (symmetric crypto). Shor targets asymmetric crypto (RSA, ECC) - not ASCON.
+
+**EPQB Future Roadmap - ASCON Integration Path:**
+1. Add `EnumApiCrypto::PqKDAscon` variant
+2. Implement ASCON AEAD wrapper
+3. Use for IoT/embedded peer connections
+4. Maintain ChaCha20/AES for general-purpose
+
+**Combined Security Stack:**
+- ✅ Kyber-1024: Post-quantum key exchange
+- ✅ Dilithium-5: Post-quantum signatures
+- ✅ ASCON: Lightweight AEAD for constrained devices
+- ✅ ChaCha20/AES: General-purpose AEAD
+
+> **Result:** Complete PQ-ready stack for all device classes
 
 | Algorithm | Type | Use Case | Quantum Security | NIST Status |
 |-----------|------|----------|------------------|-------------|
@@ -1072,4 +830,3 @@ The protocol achieves strong security guarantees through:
 - **Replay protection** (Entity ID tracking)
 - **Mutual authentication** (Kyber AKE + Dilithium signatures)
 
-\pagebreak
