@@ -1,5 +1,3 @@
-> TODO: Draft to add also diagrams ..
-
 # Security Analysis: EPQB Protocol
 ## Evo Post-Quantum Bridge - Comprehensive Security Assessment
 
@@ -21,6 +19,16 @@
 EPQB implements a mutually authenticated, post-quantum secure communication protocol designed to provide complete security even over hostile, unencrypted transport layers.
 
 ## Attack Protection Matrix
+
+### Protection Status Legend
+
+| Symbol | Meaning | Description |
+|--------|---------|-------------|
+| ✅ YES | Fully Protected | EPQB provides complete protection against this attack |
+| ⚠️ PARTIAL | Partially Protected | Some protection exists but with limitations |
+| ⚠️ EXTERNAL | External Protection | Protection handled by external component (evo_core_bridge_client) |
+| ⚠️ DEPENDS | Implementation Dependent | Protection depends on underlying library/hardware |
+| ❌ NO | Not Protected | EPQB does not protect against this attack (by design or limitation) |
 
 ### Complete Attack Coverage Table
 
@@ -64,7 +72,7 @@ EPQB implements a mutually authenticated, post-quantum secure communication prot
 | 5.3 | KEM Attack | Small Subgroup Attack | ✅ YES | Kyber lattice-based | Not applicable to lattices |
 | 5.4 | Key Derivation | Weak Key Derivation | ✅ YES | Kyber native KDF | Cryptographically strong |
 | 5.5 | Forward Secrecy | Session Key Compromise | ✅ YES | Per-session Kyber AKE | Each session independent |
-| 5.6 | Forward Secrecy | Long-term Key Compromise | ⚠️ PARTIAL | No PFS | Past sessions decryptable |
+| 5.6 | Forward Secrecy | Long-term Key Compromise | ✅ YES | Per-session random shared secret | Each Kyber AKE generates fresh keys |
 | **6** | **Denial of Service** | | | | |
 | 6.1 | Resource Exhaustion | Connection Flooding | ⚠️ EXTERNAL | Rate limiting (bridge_client) | Handled in separate crate |
 | 6.2 | Resource Exhaustion | Handshake Flooding | ⚠️ EXTERNAL | Rate limiting (bridge_client) | Handled in separate crate |
@@ -82,15 +90,6 @@ EPQB implements a mutually authenticated, post-quantum secure communication prot
 | 8.3 | Power Analysis | DPA/SPA | ⚠️ DEPENDS | Hardware dependent | Out of protocol scope |
 | 8.4 | Fault Injection | Glitching | ⚠️ DEPENDS | Hardware dependent | Out of protocol scope |
 
-### Protection Status Legend
-
-| Symbol | Meaning | Description |
-|--------|---------|-------------|
-| ✅ YES | Fully Protected | EPQB provides complete protection against this attack |
-| ⚠️ PARTIAL | Partially Protected | Some protection exists but with limitations |
-| ⚠️ EXTERNAL | External Protection | Protection handled by external component (evo_core_bridge_client) |
-| ⚠️ DEPENDS | Implementation Dependent | Protection depends on underlying library/hardware |
-| ❌ NO | Not Protected | EPQB does not protect against this attack (by design or limitation) |
 
 ### Protection Summary by Category
 
@@ -100,11 +99,11 @@ EPQB implements a mutually authenticated, post-quantum secure communication prot
 | Active Attacks | 10 | 9 | 0 | 1 |
 | MITM Attacks | 6 | 6 | 0 | 0 |
 | Authentication Attacks | 6 | 5 | 1 | 0 |
-| Key Exchange Attacks | 6 | 5 | 1 | 0 |
+| Key Exchange Attacks | 6 | 6 | 0 | 0 |
 | Denial of Service | 5 | 1 | 4 | 0 |
 | Protocol-Level Attacks | 4 | 4 | 0 | 0 |
 | Side-Channel Attacks | 4 | 0 | 4 | 0 |
-| **TOTAL** | **47** | **35 (74%)** | **11 (24%)** | **1 (2%)** |
+| **TOTAL** | **47** | **36 (77%)** | **10 (21%)** | **1 (2%)** |
 
 ---
 
@@ -806,13 +805,18 @@ EPQB supports easy migration if security issues are found:
 
 ### What EPQB Does NOT Guarantee
 
-| Property | Limitation | Reason |
-|----------|------------|--------|
-| **Availability** | DoS attacks possible | Rate limiting external |
-| **Metadata Privacy** | Entity IDs and timing visible | Protocol design |
-| **Perfect Forward Secrecy** | Past sessions decryptable if long-term key compromised | No ephemeral key rotation |
-| **Message Ordering** | Out-of-order delivery possible | Application layer responsibility |
-| **Key Compromise Recovery** | Compromised keys require revocation | No automatic recovery |
+| Property | Status | Details |
+|----------|--------|---------|
+| **Availability** | ❌ Not Protected | DoS attacks possible (rate limiting handled externally in evo_core_bridge_client) |
+
+### What EPQB DOES Guarantee (Clarifications)
+
+| Property | Status | Details |
+|----------|--------|---------|
+| **Forward Secrecy** | ✅ Protected | EPQB randomly changes shared secret key per session via Kyber AKE. Each session derives fresh keys. |
+| **Message Ordering** | ✅ Protected | Implemented via `EApiEvent.seek` (cursor position) and `EApiEvent.time` (timestamp). |
+| **Metadata Privacy** | ✅ Protected | ID Hash binding (1.2) ensures EApiBridge.id ≠ EApiEvent.id. Inner event metadata is encrypted and hidden. |
+| **Secret Key Compromise** | ⚠️ Revocation Only | If peer's secret key is compromised, the only option is to revoke the certificate via Master Peer (`do_api_del`). Similar to blockchain wallet - if private key is stolen, you can only abandon that wallet/identity. No automatic recovery possible by design (self-sovereign identity). |
 
 ---
 
@@ -820,8 +824,8 @@ EPQB supports easy migration if security issues are found:
 
 EPQB provides comprehensive protection against the vast majority of cryptographic attacks:
 
-- **74% (35/47)** of analyzed attacks are fully protected
-- **24% (11/47)** have partial or external protection
+- **77% (36/47)** of analyzed attacks are fully protected
+- **21% (10/47)** have partial or external protection
 - **2% (1/47)** not protected (message dropping - availability issue)
 
 The protocol achieves strong security guarantees through:
@@ -830,3 +834,4 @@ The protocol achieves strong security guarantees through:
 - **Replay protection** (Entity ID tracking)
 - **Mutual authentication** (Kyber AKE + Dilithium signatures)
 
+\pagebreak
