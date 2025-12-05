@@ -116,12 +116,14 @@ EPQB operates on a **zero-trust transport model**:
 > **Security Principle: Never Trust The Network**
 
 **Assumptions:**
+
 - Transport provides NO encryption
 - Transport provides NO authentication
 - Transport provides NO integrity protection
 - Attacker can read, modify, drop, replay any packet
 
 **Result:**
+
 - All security MUST come from application layer
 - Protocol must be secure over ws:// (plain WebSocket)
 - Perfect for testing cryptographic soundness
@@ -137,6 +139,7 @@ EPQB operates on a **zero-trust transport model**:
 | **1** | Transport (HOSTILE) | WebSocket (ws://) - NO SECURITY |
 
 **Layer 1 Attacker Capabilities:**
+
 - Read all packets (plaintext visibility)
 - Modify any packet (arbitrary changes)
 - Drop packets (selective denial)
@@ -153,6 +156,7 @@ EPQB operates on a **zero-trust transport model**:
 **Kyber Mutual AKE:** Authenticated Key Exchange using post-quantum Kyber algorithm. Both parties derive a shared secret that proves mutual authentication.
 
 **Message Structure:**
+
 - `EApiBridge`: Container with Kyber ciphertext, encrypted payload, and optional signature
 - `EApiEvent`: Application payload with sender ID and unique entity ID
 - `data_cipher`: Kyber ciphertext (client_init or server_send)
@@ -168,6 +172,7 @@ EPQB operates on a **zero-trust transport model**:
 EPQB supports easy migration if security issues are found:
 
 **Algorithm Agility:**
+
 - ✅ Algorithms are modular and replaceable
 - ✅ EnumApiCrypto allows switching crypto suites
 - ✅ No protocol redesign needed for algorithm updates
@@ -175,6 +180,7 @@ EPQB supports easy migration if security issues are found:
 - ✅ Can migrate Dilithium → future PQ signature if needed
 
 **Migration Process:**
+
 1. Add new algorithm to EnumApiCrypto enum
 2. Update crypto library implementation
 3. Peers negotiate supported algorithms
@@ -198,6 +204,7 @@ EPQB supports easy migration if security issues are found:
 | 3 | Connect using fresh EPeerPublic | Connection established with latest keys |
 
 **Security Benefits:**
+
 - ✅ No expired certificate attacks (no expiry to exploit)
 - ✅ Always get latest keys from Master Peer
 - ✅ Revocation is instant (Master Peer removes peer)
@@ -213,6 +220,7 @@ EPQB supports easy migration if security issues are found:
 | **EPQB** | Master Peer → EPeerPublic | ✅ Single trust anchor, ✅ No intermediate certificates, ✅ Simpler validation |
 
 **EPeerPublic contains:**
+
 - `id`: Peer identifier (derived from public keys)
 - `pk`: Kyber public key (for key exchange)
 - `pk_sign`: Dilithium public key (for signature verification)
@@ -249,6 +257,7 @@ EPQB supports easy migration if security issues are found:
 | 3 | Revocation takes effect immediately | Future queries return "peer not found", cached certs invalid on next MP query |
 
 **Security Properties:**
+
 - ✅ Only certificate owner can revoke (signature required)
 - ✅ Instant revocation (no CRL distribution delay)
 - ✅ No revocation list to download/check
@@ -301,6 +310,7 @@ EPQB supports easy migration if security issues are found:
 | 4 | End Entity Certificate (expires in 1 year) | ❌ Requires renewal automation |
 
 **TLS 1.3 Problems:**
+
 - ❌ Multiple points of failure
 - ❌ Complex chain validation logic
 - ❌ Revocation (CRL/OCSP) adds latency and complexity
@@ -313,6 +323,7 @@ EPQB supports easy migration if security issues are found:
 | 2 | EPeerPublic (peer certificate, no expiry) | ✅ No chain traversal needed |
 
 **EPQB Advantages:**
+
 - ✅ No expiry dates to manage
 - ✅ Instant revocation via Master Peer
 - ✅ Simpler validation logic
@@ -349,6 +360,7 @@ EPQB supports easy migration if security issues are found:
 | chacha20poly1305 | AEAD | ✅ Minimal, well-audited |
 
 **EPQB Benefits:**
+
 - ✅ Minimal code footprint
 - ✅ Each library does one thing well
 - ✅ Easier to audit and verify
@@ -366,11 +378,13 @@ EPQB supports easy migration if security issues are found:
 | **Step 5** | Backward compatibility concerns | Gradual rollout, old peers still work |
 
 **Example - Adding PQ to TLS:**
+
 - ❌ Hybrid key exchange proposals still in draft
 - ❌ No clear migration path
 - ❌ Compatibility issues with existing infrastructure
 
 **Example - EPQB Algorithm Switch:**
+
 - ✅ Add new enum variant
 - ✅ Implement wrapper functions
 - ✅ No protocol redesign needed
@@ -388,6 +402,7 @@ EPQB supports easy migration if security issues are found:
 | Risk | Single CA compromise affects millions of sites |
 
 **Historical Incidents:**
+
 - DigiNotar (2011) - Complete CA compromise
 - Symantec (2017) - Mass mis-issuance
 - Let's Encrypt (2022) - Revocation of 3M certs
@@ -403,6 +418,7 @@ EPQB supports easy migration if security issues are found:
 | Binding | ID cryptographically bound to keys |
 
 **Comparison to Blockchain:**
+
 - ✅ Similar decentralization philosophy
 - ✅ Self-sovereign identity (keys = identity)
 - ✅ No central authority can forge identity
@@ -421,11 +437,13 @@ EPQB supports easy migration if security issues are found:
 | Internal/private networks | Still need CA infrastructure |
 
 **TLS 1.3 Workarounds:**
+
 - Private CA (complex to manage)
 - Let's Encrypt (requires public DNS)
 - Ignore warnings (security risk)
 
 **EPQB Solution - No Self-Signed Problem:**
+
 - All peers register with Master Peer
 - Master Peer signs EPeerPublic
 - Any peer can verify any other peer
@@ -433,6 +451,7 @@ EPQB supports easy migration if security issues are found:
 - No browser/OS trust store dependency
 
 **Private Network Deployment:**
+
 1. Deploy your own Master Peer
 2. Embed Master Peer public key in clients
 3. All internal peers register with your Master Peer
@@ -465,11 +484,13 @@ EPQB supports easy migration if security issues are found:
 `Alice ────ws://───> [ATTACKER READS] ────ws://───> Bob`
 
 **What Attacker Sees:**
+
 - client_init: Kyber ciphertext (~1568 bytes)
 - signature: Dilithium signature (~2420 bytes)
 - encrypted_payload: AEAD ciphertext
 
 **What Attacker CANNOT See:**
+
 - ❌ Message contents (encrypted with shared_secret)
 - ❌ Shared secrets (Kyber-protected)
 - ❌ Private keys (never transmitted)
@@ -490,6 +511,7 @@ EPQB supports easy migration if security issues are found:
 | **Receiver (from_api_bridge)** | 1. Receive id_hash from Kyber AKE → 2. Decrypt payload → 3. Compute expected hash → 4. Verify match → 5. If mismatch → reject |
 
 **Security Benefits:**
+
 - ✅ EApiBridge.id and EApiEvent.id are different (unlinkable)
 - ✅ Metadata (id, time) of inner event hidden from attacker
 - ✅ Cryptographic binding proves id_from, event_id, bridge_id valid
@@ -497,6 +519,7 @@ EPQB supports easy migration if security issues are found:
 - ✅ Attacker cannot correlate bridge messages to events
 
 **What Attacker Sees:**
+
 - EApiBridge.id (random, unique per bridge message)
 - EApiBridge.time (bridge creation time)
 - ❌ Cannot see EApiEvent.id (encrypted inside)
@@ -508,6 +531,7 @@ EPQB supports easy migration if security issues are found:
 > **IMPORTANT:** This is NOT about nonce security!
 
 **AEAD Nonce Security:**
+
 - ✅ Nonce is PUBLIC by design (not a secret)
 - ✅ Nonce transmitted in cleartext is SAFE
 - ✅ Fresh random nonce per message → SECURE
@@ -516,6 +540,7 @@ EPQB supports easy migration if security issues are found:
 > EPQB uses fresh random nonce per message → CRYPTOGRAPHICALLY SECURE
 
 **What "Pattern Analysis" actually means - Traffic metadata attacker CAN observe:**
+
 - Message timing (when messages are sent)
 - Message frequency (how often peers communicate)
 - Message sizes (approximate payload lengths)
@@ -523,11 +548,13 @@ EPQB supports easy migration if security issues are found:
 - Session duration (how long peers stay connected)
 
 **Example attack scenarios:**
+
 - 10KB message every hour → likely automated report
 - Burst of small messages → likely chat conversation
 - Large message after login → likely file download
 
 **Why ⚠️ PARTIAL:**
+
 - ✅ Content is fully encrypted (attacker cannot read)
 - ✅ IDs are hidden (Traffic Analysis 1.2 protection)
 - ⚠️ Timing patterns visible (when messages sent)
@@ -535,6 +562,7 @@ EPQB supports easy migration if security issues are found:
 - ⚠️ Frequency patterns visible (communication rate)
 
 **Mitigation (not implemented in EPQB core):**
+
 - Padding messages to fixed sizes
 - Adding dummy/cover traffic
 - Randomizing timing
@@ -577,6 +605,7 @@ EPQB supports easy migration if security issues are found:
 **Attack:** Attacker captures and replays old messages
 
 **Timeline:**
+
 - 10:00 AM - Alice sends legitimate message (Entity ID: 0x3a7f2b...) - [ATTACKER CAPTURES PACKET]
 - 10:05 AM - Attacker replays captured message
 
@@ -607,12 +636,14 @@ EPQB supports easy migration if security issues are found:
 | **Application (EApiEvent.seek)** | seek field provides cursor/sequence position | ✅ Can be used for ordering on unordered transports |
 
 **EApiEvent fields for ordering:**
+
 - `seek`: cursor position / sequence number
 - `progress`: progress indicator for multi-part messages
 - `length`: total length for chunked transfers
 - `time`: timestamp for temporal ordering
 
 **When seek is used (unordered transports like UDP):**
+
 - Receiver can reorder messages by seek value
 - Detect missing chunks
 - Reassemble large payloads
@@ -693,6 +724,7 @@ EPQB supports easy migration if security issues are found:
 #### 6.1-6.4 Resource Exhaustion - ⚠️ EXTERNAL PROTECTION
 
 **DoS Attack Vectors:**
+
 - Connection flooding
 - Handshake flooding (expensive Kyber operations)
 - Memory exhaustion (entity ID cache)
@@ -751,11 +783,13 @@ EPQB supports easy migration if security issues are found:
 **ASCON Quantum Security Analysis:**
 
 > **Important Distinction:**
+> 
 > - ASCON is NOT primary PQC (not lattice-based)
 > - NIST PQC focus: Kyber, Dilithium for asymmetric crypto
 > - ASCON focus: Lightweight symmetric crypto
 
 **Quantum Resistance:**
+
 - 320-bit internal state provides quantum resilience
 - Grover's algorithm less effective than classical attacks
 - Ascon-80pq variant: ~100-bit effective PQ security
@@ -764,12 +798,14 @@ EPQB supports easy migration if security issues are found:
 > **Note:** NOT designed against Shor's algorithm (symmetric crypto). Shor targets asymmetric crypto (RSA, ECC) - not ASCON.
 
 **EPQB Future Roadmap - ASCON Integration Path:**
+
 1. Add `EnumApiCrypto::PqKDAscon` variant
 2. Implement ASCON AEAD wrapper
 3. Use for IoT/embedded peer connections
 4. Maintain ChaCha20/AES for general-purpose
 
 **Combined Security Stack:**
+
 - ✅ Kyber-1024: Post-quantum key exchange
 - ✅ Dilithium-5: Post-quantum signatures
 - ✅ ASCON: Lightweight AEAD for constrained devices
@@ -829,6 +865,7 @@ EPQB provides comprehensive protection against the vast majority of cryptographi
 - **2% (1/47)** not protected (message dropping - availability issue)
 
 The protocol achieves strong security guarantees through:
+
 - **Post-quantum cryptography** (Kyber + Dilithium)
 - **Authenticated encryption** (ChaCha20-Poly1305 / AES-256-GCM)
 - **Replay protection** (Entity ID tracking)

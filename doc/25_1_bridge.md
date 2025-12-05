@@ -495,6 +495,7 @@ If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the 
 ### Verification Scenarios
 
 **Direct Certificate Validation**
+
 - Signature verification success/failure cases
 - Certificate expiration tests
 - Revocation list checks
@@ -502,6 +503,7 @@ If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the 
 
 
 **KEM Session Establishment**
+
 - Successful key exchange
 - Invalid ciphertext rejection
 - Forward secrecy validation
