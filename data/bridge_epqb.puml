@@ -1,0 +1,107 @@
+@startuml
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Actor specific settings
+skinparam actorStyle awesome
+skinparam actor {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Colors definition
+!$PEER_A_COLOR = "#FFB6C1"
+!$PEER_B_COLOR = "#87CEEB"
+!$PEER_C_COLOR = "#DDA0DD"
+!$PEER_D_COLOR = "#98FB98"
+!$PEER_E_COLOR = "#989E98"
+!$PEER_F_COLOR = "#EEEEEE"
+!$RELAY_PEER_COLOR = "#FFFFDD"
+!$PEER_CLIENT_COLOR = "#FFA07A"
+
+title EPQB Network Topology
+
+' Actors
+actor "PeerA" as PA $PEER_A_COLOR
+actor "PeerB" as PB $PEER_B_COLOR
+actor "PeerC" as PC $PEER_C_COLOR
+actor "PeerD" as PD $PEER_D_COLOR
+actor "PeerE" as PE $PEER_E_COLOR
+actor "PeerF" as PF $PEER_F_COLOR
+actor "PeerClient" as PCL $PEER_CLIENT_COLOR
+
+actor "RelayPeer1" as RP1 $RELAY_PEER_COLOR
+actor "RelayPeer2" as RP2 $RELAY_PEER_COLOR
+actor "RelayPeer3" as RP3 $RELAY_PEER_COLOR
+
+' PeerA connections to multiple RelayPeers
+PA -[$PEER_A_COLOR]-> RP1
+PA -[$PEER_A_COLOR]-> PE
+PA -[$PEER_A_COLOR]-> RP2
+PA -[$PEER_A_COLOR]-> RP3
+
+' RelayPeers connections to PeerB
+RP1 -[$RELAY_PEER_COLOR]-> PB
+RP2 -[$RELAY_PEER_COLOR]-> PB
+
+' RelayPeers connections to PeerC
+RP1 -[$RELAY_PEER_COLOR]-> PC
+
+
+' RelayPeers connections to PeerD
+RP2 -[$RELAY_PEER_COLOR]-> PD
+RP3 -[$RELAY_PEER_COLOR]-> PD
+
+' Direct connection PeerB to PeerD
+PB -[$PEER_B_COLOR]-> PD
+
+' PeerClient to RelayPeer
+PCL -[$PEER_CLIENT_COLOR]-> RP1
+PCL -[$PEER_CLIENT_COLOR]-> PF
+
+note right of PA
+  PeerA connects to multiple Peer
+  by RelayPeers or direct bridge to PeerE
+  To connect to PeerD is selected
+  the fastest RelayPeer3
+end note
+
+note bottom of RP1
+  RelayPeers provide
+  signaling and routing
+  services for peers
+end note
+
+note left of PB
+  PeerB can connect
+  directly to PeerD
+  bypassing RelayPeer
+end note
+
+note left of PCL
+  PeerClient connects
+  via RelayPeer1
+  direct to PeerF
+end note
+
+note bottom of PF
+  PeerF is private local Peer
+end note
+
+note left of PD
+  To connect to PeerB
+  directly to PeerD
+  bypassing RelayPeer
+end note
+
+@enduml

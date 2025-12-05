@@ -20,10 +20,12 @@ The design emphasizes maintainability through modular cryptographic primitives a
 By implementing this system in accordance with NIST guidelines and recommendations, organizations can establish a cryptographic foundation that meets current security standards while remaining resistant to future quantum computing attacks.
 \pagebreak
 
-
 ## Technical Overview
 This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.
 
+![bridge_epqb](data/bridge_epqb.svg)
+
+\pagebreak
 ## Bridge Entities
 
 The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
