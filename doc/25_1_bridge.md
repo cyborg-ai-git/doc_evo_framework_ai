@@ -20,10 +20,12 @@ The design emphasizes maintainability through modular cryptographic primitives a
 By implementing this system in accordance with NIST guidelines and recommendations, organizations can establish a cryptographic foundation that meets current security standards while remaining resistant to future quantum computing attacks.
 \pagebreak
 
-
 ## Technical Overview
 This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.
 
+![bridge_epqb](data/bridge_epqb.svg)
+
+\pagebreak
 ## Bridge Entities
 
 The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
@@ -379,7 +381,7 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 - **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
 - **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
 
-![bridge_vip6_portability](../data/bridge_vip6_portability.svg)
+![bridge_vip6_portability](data/bridge_vip6_portability.svg)
 
 **Key Concepts:**
 1.  **Static Client Configuration**: **PeerAClient** connects to a stable `PeerID` of **PeerB>> . PeerAClient is unaware of PeerB's physical location or IP address.
@@ -422,13 +424,13 @@ The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end
 
 ```
 [PeerA]                                     [Master Peer]
-|--------- AKE Request + EPeerPublic + sign ----------->| 
-|<-------- PeerA Certificate (Master Peer signed) ------|
+|********* AKE Request + EPeerPublic + sign *********-->| 
+|<******-- PeerA Certificate (Master Peer signed) ******|
 ```
 
 ![bridge set_peer](data/bridge_set_peer_mp.svg)
 
----
+***
 \pagebreak
 
 ### Secure Messaging Sequence (api:get peer)
@@ -438,22 +440,22 @@ First, PeerB requests PeerA's certificate from the Master Peer because don't hav
 
 ```
 [PeerB]                                     [Master Peer]
-|--------- AKE Request + PeerA ID --------------------->|
-|<-------- PeerA Certificate (Master Peer signed) ------|
+|********* AKE Request + PeerA ID *********************>|
+|<******-- PeerA Certificate (Master Peer signed) ******|
 
 ```
 
 ![bridge get_peer](data/bridge_get_peer_mp.svg)
 
----
+***
 
 \pagebreak
 
 Then, direct communication between PeerB and PeerA occurs:
 ```
 [PeerB]                                           [PeerA]
-|--------- AKE Request + PeerB ID + Api Request ------->| (PeerA get certificate of PeerB (case 1/2) )
-|<-- Encrypted Response with new Secret Key ------------|
+|********* AKE Request + PeerB ID + Api Request ******->| (PeerA get certificate of PeerB (case 1/2) )
+|<-- Encrypted Response with new Secret Key ************|
 ```
 ![bridge direct case 1](data/bridge_direct_1.svg)
 
@@ -464,13 +466,13 @@ Direct communication between PeerB and PeerA when certificate is already availab
 
 ```
 [PeerB]                                           [PeerA]
-|--------- AKE Request + PeerB ID + Api Request ------->|
-|<-- Encrypted Response with new Secret Key ------------|
+|********* AKE Request + PeerB ID + Api Request ******->|
+|<-- Encrypted Response with new Secret Key ************|
 ```
 
 ![bridge direct case 2](data/bridge_direct_2.svg)
 
----
+***
 \pagebreak
 
 #### Case Revoke: Revoke Certificate (api: del_peer)
@@ -478,13 +480,13 @@ If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the 
 
 ```
 [PeerA]                                                      [Master Peer]
-|--------- AKE Request + PeerA ID + Sign with compromized secret ------->|
-|<-- Encrypted EApiResult Response --------------------------------------|
+|********* AKE Request + PeerA ID + Sign with compromized secret ******->|
+|<-- Encrypted EApiResult Response ************************************--|
 ```
 
 ![bridge revoke](data/bridge_del_peer_mp.svg)
 
----
+***
 
 \pagebreak
 

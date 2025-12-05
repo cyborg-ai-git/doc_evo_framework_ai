@@ -4,13 +4,13 @@
 
 ### Quick Reference Table
 
-| Unit        | Symbol  | Full Name   | Seconds        | Scientific Notation |
-|-------------|---------|-------------|----------------|---------------------|
-| Secon d     | s       | Second      | 1              | 10⁰ s               |
-| Millisecond | ms      | Millisecond | 0.001          | 10⁻³ s              |
-| Microsecond | μs (us) | Microsecond | 0.000001       | 10⁻⁶ s              |
-| Nanosecond  | ns      | Nanosecond  | 0.000000001    | 10⁻⁹ s              |
-| Picosecond  | ps      | Picosecond  | 0.000000000001 | 10⁻¹² s             |
+| Unit        | Symbol  | Seconds        | Scientific Notation |
+|-------------|---------|----------------|---------------------|
+| Second      | s       | 1              | 10⁰ s               |
+| Millisecond | ms      | 0.001          | 10⁻³ s              |
+| Microsecond | μs (us) | 0.000001       | 10⁻⁶ s              |
+| Nanosecond  | ns      | 0.000000001    | 10⁻⁹ s              |
+| Picosecond  | ps      | 0.000000000001 | 10⁻¹² s             |
 
 ### Conversion Table
 
@@ -19,9 +19,49 @@
 | From  | To Milliseconds | To Microseconds | To Nanoseconds   | To Picoseconds       |
 |-------|-----------------|-----------------|------------------|----------------------|
 | 1 s   | 1,000 ms        | 1,000,000 μs    | 1,000,000,000 ns | 1,000,000,000,000 ps |
-> (x86_64) linux ubuntu
 
+> Benchmark
+> 
+> (x86_64) linux ubuntu
+> 
+> rust cargo 1.93.0-nightly (9fa462fe3 2025-11-21)
+> 
+> **Note:** Measurements below ~1ns are subject to noise (CPU cache, branch prediction, 
+> frequency scaling). Ratios < 1.0x or differences < 5% at sub-nanosecond scale are not 
+> statistically significant and should be considered equivalent performance.
+
+
+## evo_bench/bench_error
+
+| #   | Test                       | Time (ns)  | vs sync_empty  |
+|-----|----------------------------|------------|----------------|
+| 1   | sync_empty                 | 0.3586     | 1.0000x        |
+| 2   | UStruct::sync_empty        | 0.3586     | ~1.0000x       |
+| 3   | sync_enum_error_code       | 0.3586     | ~1.0000x       |
+| 4   | sync_enum_error_str_short  | 0.6053     | 1.6881x        |
+| 5   | sync_enum_error_byte_short | 10.8178    | 30.1684x       |
+| 6   | sync_enum_error_short      | 9.6042     | 26.7841x       |
+| 7   | sync_enum_error_long       | 17.5196    | 48.8584x       |
+| 8   | sync_e_error               | 92.3265    | 257.4780x      |
+| 9   | sync_e_error_backtrace     | 139.1996   | 388.1967x      |
+| 10  | anyhow_error               | 93.2758    | 260.1256x      |
+| 11  | downcast_sync_error        | 2.5068     | 6.9908x        |
+| 12  | backtrace_to_string        | 45.2856    | 126.2915x      |
+| 13  | do_backtrace               | 103.9981   | 290.0277x      |
+| 14  | async_empty                | 85.8516    | 239.4210x      |
+| 15  | UStruct::async_empty       | 68.8505    | 192.0088x      |
+| 16  | async_enum_error_code      | 61.7288    | 172.1479x      |
+| 17  | async_enum_error_short     | 73.9644    | 206.2702x      |
+| 18  | async_enum_error_long      | 87.0316    | 242.7119x      |
+| 19  | async_e_error              | 139.5208   | 389.0926x      |
+| 20  | async_e_error_backtrace    | 161.2403   | 449.6633x      |
+| 21  | downcast_async_error       | 1.8797     | 5.2420x        |
+
+
+> TODO: to migrate all tests in new standard
 ## evo_core_id
+
+
 
 | Bench | Time |
 |-------|------|

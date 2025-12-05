@@ -1,14 +1,13 @@
-#!/bin/bash
 #===================================================================================================
 # CyborgAI
 # CC BY-NC-ND 4.0 Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
 # github: https://github.com/cyborg-ai-git
 #===================================================================================================
 # Document Configuration
-version = "v2025.11.302108"
+version = "v2025.12.51814"
 title = "Evo Framework AI"
 subtitle = "The fastest and secure framework for AI"
-author = " "
+author = "CyborgAI"
 #---------------------------------------------------------------------------------------------------
 # Paths and Resources
 logo = "./data/evo_framework.png"
