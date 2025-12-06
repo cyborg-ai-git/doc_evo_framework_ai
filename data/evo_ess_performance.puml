@@ -3,10 +3,47 @@
 !define IEntityColor #09b620
 title ESS Performance Characteristics *(TODO: to update benches times)
 
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #333333
+
+skinparam title {
+    FontColor #FFFFF
+}
+' Sequence styling
+skinparam sequence {
+    ArrowColor #FFFFFF
+    ActorBorderColor #2C5FFFF77
+    LifeLineBorderColor #FFFFF
+    ParticipantBackgroundColor #FFFFF
+    ParticipantBorderColor #FFFFFF
+}
+
+
+skinparam legend {
+
+    FontColor #FFFFF
+}
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam class {
+    BackgroundColor #555555
+    BorderColor #2C5F77
+    ArrowColor #FFFFFF
+    FontColor #FFFFFF
+}
+
 skinparam activity {
     BackgroundColor #E8F4F8
     BorderColor #2C5F77
     BarColor #09b620
+    FontColor #000000
+
 }
 
 |Serialization|

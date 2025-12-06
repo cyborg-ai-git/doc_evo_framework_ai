@@ -1,0 +1,33 @@
+
+@startyaml
+ETest0:
+	_DOC_: ETest _DOC_
+	attributeBool: BOOL true
+	attributeByte: BYTE
+	attributeBytes: BYTES
+	attributeDouble: DOUBLE 22.22
+	attributeEntity1: ENTITY ETest1
+	attributeEntity2: ENTITY ETest2
+	attributeEnum0: ENUM EnumTest0
+	attributeEnum1: ENUM EnumTest1 .VAL10
+	attributeFloat: FLOAT 12.12
+	attributeInt: INT -10
+	attributeLanguage: 'STRING it_IT'
+	attributeLong: LONG -11
+	attributeMap0: MAP ETest1
+	attributeMap1: MAP ETest2
+	attributeMapId: MAPID
+	attributeNotSerializeBytes: BYTES*
+	attributeNotSerializeEntity1: ENTITY* ETest1
+	attributeNotSerializeEntity2: ENTITY* ETest2
+	attributeNotSerializeMap0: MAP* ETest1
+	attributeNotSerializeMap1: MAP* ETest2
+	attributeNotSerializeMapId: MAPID*
+	attributeNotSerializeString: STRING*
+	attributeSha256: SHA256
+	attributeString: 'STRING init str'
+	attributeUint: UINT 10
+	attributeUlong: ULONG 11
+	
+	
+@endyaml

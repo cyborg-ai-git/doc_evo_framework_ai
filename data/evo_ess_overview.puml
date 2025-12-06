@@ -1,7 +1,26 @@
 @startuml evo_ess_overview
 !theme plain
 !define IEntityColor #09b620
-title Evo Entity Serialization System (ESS) - Overview
+
+skinparam backgroundColor #000000
+'skinparam defaultFontColor #000000
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam header {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam title {
+    FontColor #000000
+}
 
 skinparam componentStyle rectangle
 skinparam backgroundColor #FEFEFE
@@ -12,6 +31,7 @@ skinparam component {
     BackgroundColor<<entity>> #09b620
     BorderColor #333333
 }
+title Evo Entity Serialization System (ESS) - Overview
 
 package "Evo ESS Architecture" {
     

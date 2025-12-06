@@ -45,22 +45,22 @@ title PeerA set_peer to MasterPeer
 autonumber
 
 == PK Registration ==
-PA -[$PEER_A_COLOR]> MP: EApiEvent(EPeerPublic,Dilitium Sign)\n\nAke Kyber\nDilithium sign\nAes256_Gcm crypt
+PA -[$PEER_A_COLOR]> MP: EApiEvent(EPeerPublic, Sign)\n\nAke Kyber\nDilithium sign\nAes256_Gcm crypt
 activate MP $MASTER_PEER_COLOR
-note right MP: 1. Use Kyber\n2. Verify sign Dilithium\n3.Verify EPeerPublic
+note right MP: 1. Use Kyber\n2. Verify Dilithium sign\n3.Verify EPeerPublic
 
 MP -[$MASTER_PEER_COLOR]> MP: Generate Certificate
-note left MP: Master Dilithium Signature of ECertificate
+note left MP: Master Dilithium Signature of EPeerCertificate
 
-MP -[$MASTER_PEER_COLOR]> DB: Store(ID_A, Cert)
+MP -[$MASTER_PEER_COLOR]> DB: Store(ID_A, EPeerCertificate)
 activate DB $SYSTEM_COLOR
-note right DB: Structure:\n- Public Key\n- Metadata\n- Signatures
+note right DB: Structure:\n- EPeerPublic\n- Metadata\n- Signatures
 DB --[$SYSTEM_COLOR]> MP: Storage ACK
 deactivate DB
 
 == Certificate Delivery ==
 MP -[$MASTER_PEER_COLOR]> PA: Cert Package
-note left PA: 1. Verify Master Response
+note left PA: 1. Verify MasterPeer Response
 deactivate MP
 
 @enduml

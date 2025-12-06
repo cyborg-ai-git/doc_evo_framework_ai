@@ -1,0 +1,141 @@
+@startuml
+
+' Set background color
+skinparam BackgroundColor transparent
+
+' Define colors for each interface
+!define IEvoColor #FFFFFF
+!define IDColor #FFFFFF
+!define ITimeColor #FFFFFF
+!define IEntityColor #09b620
+
+!define IAiColor #ffa600
+
+interface IEvo <<(I, IEvoColor)>> {
+    +{static} evo_version() -> TypeEvoVersion
+    +get_evo_version() -> TypeEvoVersion
+}
+
+interface ID<TypeID> <<(I, IDColor)>> {
+    +get_id() -> TypeID
+    +set_id(id: TypeID)
+}
+
+interface ITime <<(I, ITimeColor)>> {
+    +get_time() -> TypeTime
+    +set_time(time: TypeTime)
+}
+interface IEntity<TypeID> <<(I, IEntityColor)>> IEntityColor{
+    +to_bytes() -> Vec<u8>
+    +from_bytes(data: BYTES) -> Self
+    +to_string() -> String
+}
+
+interface IAiEntity <<(I, IAiColor)>> IAiColor{
+    +{static} get_ai_id() -> String
+    +{static} get_ai_schema() -> String
+    +to_ai() -> String
+    +{static} from_ai(str_ai: String) -> Self
+}
+
+struct ETest0 IEntityColor{
+    - id: TypeID
+    - time: u64
+    - attribute_bool: u8
+    - attribute_byte: u8
+    - attribute_bytes: Vec<u8>
+    - attribute_double: f64
+    - attribute_entity1: Option<ETest1>
+    - attribute_entity2: Option<ETest2>
+    - attribute_enum0: u8
+    - attribute_enum1: u8
+    - attribute_float: f32
+    - attribute_int: i32
+    - attribute_language: String
+    - attribute_long: i64
+    - attribute_map0: MapEntity<ETest1>
+    - attribute_map1: MapEntity<ETest2>
+    - attribute_map_id: MapId
+    - attribute_not_serialize_bytes: Vec<u8>
+    - attribute_not_serialize_entity1: Option<ETest1>
+    - attribute_not_serialize_entity2: Option<ETest2>
+    - attribute_not_serialize_map0: MapEntity<ETest1>
+    - attribute_not_serialize_map1: MapEntity<ETest2>
+    - attribute_not_serialize_map_id: MapId
+    - attribute_not_serialize_string: String
+    - attribute_sha256: [u8; 32]
+    - attribute_string: String
+    - attribute_uint: u32
+    - attribute_ulong: u64
+
+ + get_id(&self) -> TypeID
+    + set_id(&mut self, _id: TypeID)
+ + get_time(&self) -> u64
+    + set_time(&mut self, _time: u64)
+ + get_attribute_bool(&self) -> u8
+    + set_attribute_bool(&mut self, _attribute_bool: u8)
+ + get_attribute_byte(&self) -> u8
+    + set_attribute_byte(&mut self, _attribute_byte: u8)
+ + get_attribute_bytes(&self) -> Vec<u8>
+    + set_attribute_bytes(&mut self, _attribute_bytes: Vec<u8>)
+ + get_attribute_double(&self) -> f64
+    + set_attribute_double(&mut self, _attribute_double: f64)
+ + get_attribute_entity1(&self) -> Option<ETest1>
+    + set_attribute_entity1(&mut self, _attribute_entity1: Option<ETest1>)
+ + get_attribute_entity2(&self) -> Option<ETest2>
+    + set_attribute_entity2(&mut self, _attribute_entity2: Option<ETest2>)
+ + get_attribute_enum0(&self) -> u8
+    + set_attribute_enum0(&mut self, _attribute_enum0: u8)
+ + get_attribute_enum1(&self) -> u8
+    + set_attribute_enum1(&mut self, _attribute_enum1: u8)
+ + get_attribute_float(&self) -> f32
+    + set_attribute_float(&mut self, _attribute_float: f32)
+ + get_attribute_int(&self) -> i32
+    + set_attribute_int(&mut self, _attribute_int: i32)
+ + get_attribute_language(&self) -> String
+    + set_attribute_language(&mut self, _attribute_language: String)
+ + get_attribute_long(&self) -> i64
+    + set_attribute_long(&mut self, _attribute_long: i64)
+ + get_attribute_map0(&self) -> MapEntity<ETest1>
+    + set_attribute_map0(&mut self, _attribute_map0: MapEntity<ETest1>)
+ + get_attribute_map1(&self) -> MapEntity<ETest2>
+    + set_attribute_map1(&mut self, _attribute_map1: MapEntity<ETest2>)
+ + get_attribute_map_id(&self) -> MapId
+    + set_attribute_map_id(&mut self, _attribute_map_id: MapId)
+ + get_attribute_not_serialize_bytes(&self) -> Vec<u8>
+    + set_attribute_not_serialize_bytes(&mut self, _attribute_not_serialize_bytes: Vec<u8>)
+ + get_attribute_not_serialize_entity1(&self) -> Option<ETest1>
+    + set_attribute_not_serialize_entity1(&mut self, _attribute_not_serialize_entity1: Option<ETest1>)
+ + get_attribute_not_serialize_entity2(&self) -> Option<ETest2>
+    + set_attribute_not_serialize_entity2(&mut self, _attribute_not_serialize_entity2: Option<ETest2>)
+ + get_attribute_not_serialize_map0(&self) -> MapEntity<ETest1>
+    + set_attribute_not_serialize_map0(&mut self, _attribute_not_serialize_map0: MapEntity<ETest1>)
+ + get_attribute_not_serialize_map1(&self) -> MapEntity<ETest2>
+    + set_attribute_not_serialize_map1(&mut self, _attribute_not_serialize_map1: MapEntity<ETest2>)
+ + get_attribute_not_serialize_map_id(&self) -> MapId
+    + set_attribute_not_serialize_map_id(&mut self, _attribute_not_serialize_map_id: MapId)
+ + get_attribute_not_serialize_string(&self) -> String
+    + set_attribute_not_serialize_string(&mut self, _attribute_not_serialize_string: String)
+ + get_attribute_sha256(&self) -> [u8; 32]
+    + set_attribute_sha256(&mut self, _attribute_sha256: [u8; 32])
+ + get_attribute_string(&self) -> String
+    + set_attribute_string(&mut self, _attribute_string: String)
+ + get_attribute_uint(&self) -> u32
+    + set_attribute_uint(&mut self, _attribute_uint: u32)
+ + get_attribute_ulong(&self) -> u64
+    + set_attribute_ulong(&mut self, _attribute_ulong: u64)
+
+}
+
+' Define the relationships between interfaces
+
+IEvo <|-- IEntity IEntityColor
+ID <|-- IEntity IEntityColor
+ITime <|-- IEntity IEntityColor
+
+IEntity <|-- ETest0  IEntityColor
+IAiEntity <|-- ETest0  IAiColor
+IEvo -down-> ID #transparent
+'ID -left-> ITime #transparent
+
+@enduml

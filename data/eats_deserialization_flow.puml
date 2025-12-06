@@ -1,7 +1,7 @@
 @startuml deserialization_flow
 !theme plain
 skinparam backgroundColor #FFFFFF
-
+skinparam actorStyle awesome
 title Deserialization Flow (from_ai)
 
 actor "Application" as App

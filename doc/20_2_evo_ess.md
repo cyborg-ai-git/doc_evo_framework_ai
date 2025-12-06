@@ -16,11 +16,13 @@ The **Evo Entity Serialization System (ESS)** is a high-performance, type-safe s
 ### Why ESS?
 
 Traditional serialization approaches face trade-offs:
+
 - **Manual unsafe code**: Fast but dangerous (undefined behavior risk)
 - **Safe libraries**: Slow due to validation overhead
 - **Text formats (JSON)**: Human-readable but 3-4x larger and 100x slower
 
 **ESS provides the best of all worlds:**
+
 - ✅ Performance equal to unsafe code 
 - ✅ 100% memory safe (compile-time verified)
 - ✅ Zero overhead (0 bytes extra)
@@ -38,6 +40,7 @@ ESS is organized into four distinct layers:
 The core data structures that represent your application's domain objects.
 
 **Components:**
+
 - **Entity** (e.g., ETest0): Complete business object with all fields
 - **Entity Header** (e.g., ETest0Header): Fixed-size metadata and lengths
 
@@ -47,6 +50,7 @@ The core data structures that represent your application's domain objects.
 Handles conversion between in-memory structures and byte arrays.
 
 **Components:**
+
 - **to_bytes()**: Converts entity to byte array
 - **from_bytes()**: Reconstructs entity from bytes
 
@@ -56,6 +60,7 @@ Handles conversion between in-memory structures and byte arrays.
 Generic storage for collections of entities.
 
 **Components:**
+
 - **MapEntity<T>**: Stores entities with full data
 - **MapId**: Stores only entity IDs
 
@@ -65,13 +70,33 @@ Generic storage for collections of entities.
 Integration with communication mechanisms.
 
 **Components:**
-- **Network**: TCP/UDP sockets, HTTP, etc.
+
+- **Network**: EPQB, TCP/UDP sockets, HTTP, etc.
 - **Disk**: File I/O, databases
 - **IPC**: Shared memory, pipes
 
 **Purpose:** Physical data transfer (the actual bottleneck).
 
-## Entity Structure
+\pagebreak
+
+## Entity Test schemas
+
+### evo_entity_test for all ESS attributes type 
+
+![evo_entity_test.svg](data/evo_entity_test.svg)
+\pagebreak
+
+![e_test0_schema](data/e_test0_schema.svg)
+\pagebreak
+
+![e_test1_schema](data/e_test1_schema.svg)
+![e_test2_schema](data/e_test2_schema.svg)
+![e_test3_schema](data/e_test3_schema.svg)
+
+> TODO: to add enum schemas
+\pagebreak
+
+## Entity Structure class diagram (rust)
 
 ![Entity Structure](data/evo_ess_entity_structure.svg)
 
@@ -82,11 +107,13 @@ Every ESS entity consists of two parts:
 #### Part 1: Entity Header (Fixed Size)
 
 The header is a **zero-copy** structure with fixed size that contains:
+
 1. **Identity fields**: id, time, version
 2. **Primitive values**: integers, floats, booleans, enums
 3. **Length fields**: sizes of variable-length data
 
 **Why separate the header?**
+
 - ✅ **Fast access**: Read metadata without deserializing everything
 - ✅ **Zero-copy**: Direct memory mapping (no copying)
 - ✅ **Predictable**: Fixed size enables offset calculation
@@ -95,6 +122,7 @@ The header is a **zero-copy** structure with fixed size that contains:
 #### Part 2: Entity Body (Variable Size)
 
 The body contains variable-length data:
+
 1. **Byte arrays**: Vec<u8>
 2. **Strings**: UTF-8 encoded text
 3. **Nested entities**: Complete serialized entities
@@ -102,6 +130,7 @@ The body contains variable-length data:
 5. **Complex structures**: Any combination of above
 
 **Why variable size?**
+
 - ✅ **Flexible**: Support any data size
 - ✅ **Efficient**: No wasted space
 - ✅ **Composable**: Nest entities recursively
@@ -190,6 +219,7 @@ The `id` field is a **universal entity instance identifier** that uniquely ident
 
 
 **Why Universal IDs Matter:**
+
 - ✅ **No Collisions**: Entities can be safely merged from different sources
 - ✅ **Bridge Compatibility**: Same entity recognized across all bridge layers
 - ✅ **Distributed Systems**: Works like blockchain addresses
@@ -204,6 +234,7 @@ Since random ID creation time is similar to sequential or string-based IDs, **us
 The `time` field tracks when the entity was **created or last updated**, crucial for distributed bridge systems to determine the most recent version.
 
 **Time Format:**
+
 - **Type:** u64
 - **Unit:** Nanoseconds since Unix epoch
 - **Precision:** Nanosecond accuracy
@@ -216,8 +247,6 @@ The `time` field tracks when the entity was **created or last updated**, crucial
 | **Creation Time** | Set once when entity is created     | Audit trails        |
 | **Update Time**   | Updated on every modification       | Conflict resolution |
 | **Hybrid**        | Custom logic for creation vs update | Complex workflows   |
-
-
 
 **Custom Time Fields:**
 
@@ -282,6 +311,7 @@ PeerA (Sender)                Bridge Channel            PeerB (Receiver)
 
 #### Step 1: Serialize Dependencies First
 Before serializing the main entity, serialize all nested components:
+
 - Nested entities (ETest1, ETest2)
 - Map containers (MapEntity<ETest1>, MapEntity<ETest2>)
 - ID maps (MapId)
@@ -435,11 +465,13 @@ ETest0 bytes = [
 ```
 
 #### During Deserialization:
+
 1. **Sequential parsing**: Read parent first
 2. **Recursive calls**: Deserialize nested entities
 3. **Shared references**: Use shared references for efficient ownership
 
 **Why Shared References?**
+
 - ✅ Shared ownership (multiple references)
 - ✅ Thread-safe reference counting
 - ✅ Prevents deep copying
@@ -476,11 +508,13 @@ MapEntity<ETest1>
 ```
 
 **Use Cases:**
+
 - Store multiple related entities
 - Lookup entities by ID
 - Iterate over entity collections
 
 **Performance:**
+
 - Lookup: O(1) via hash map
 - Efficient serialization and deserialization
 
@@ -505,11 +539,13 @@ MapId
 ```
 
 **Use Cases:**
+
 - Track entity references without full data
 - Membership testing
 - Lightweight relationship tracking
 
 **Performance:**
+
 - Much faster than MapEntity (no entity serialization)
 - Minimal memory footprint
 
@@ -542,6 +578,7 @@ MapId
 | MapEntity<ETest1> | 134ns / 323ns | Serialize / Deserialize |
 | MapEntity<ETest2> | 153ns / 377ns | Serialize / Deserialize |
 
+> TODO: to update benches time
 
 ### Format Comparison
 
@@ -560,6 +597,7 @@ MapId
 ESS uses compile-time verification for safety:
 
 **Verified Properties:**
+
 - ✅ No uninitialized padding
 - ✅ All fields safe to serialize
 - ✅ Proper alignment
@@ -569,6 +607,7 @@ ESS uses compile-time verification for safety:
 ### Runtime Validation
 
 **Checks Performed:**
+
 - ✅ Size validation (minimum size check)
 - ✅ Version verification (format compatibility)
 - ✅ Bounds checking (prevent buffer overruns)
@@ -587,12 +626,14 @@ ESS uses compile-time verification for safety:
 ### Why Safety Matters
 
 **Unsafe code risks:**
+
 - Buffer overruns → crashes
 - Alignment errors → undefined behavior
 - Type confusion → data corruption
 - No validation → silent failures
 
 **ESS guarantees:**
+
 - ✅ No undefined behavior (impossible by design)
 - ✅ Graceful error handling (proper error types)
 - ✅ Type safety (compile-time verification)
@@ -627,39 +668,32 @@ Bridge Layer A          Bridge Layer B          Bridge Layer C
 | **Zero-Copy**      | Minimal serialization overhead            | High throughput     |
 | **Type Safety**    | Compile-time verification                 | Runtime reliability |
 
-### Local vs Distributed Usage
 
-#### Local Memory Usage
+### Entity Lifecycle in Memento Systems (local memory/persistent)
+
 ```
-// High-performance local operations
-entity = ETest0.create()
-entity.set_attribute_string("Local data")
+1. Creation
+   ├─ Generate universal ID (SHA-256)
+   ├─ Set creation timestamp
+   └─ Initialize with evo_version
 
-// Direct memory access (no serialization)
-value = entity.get_attribute_int()
-```
+2. Local Processing
+   ├─ Direct memory operations
+   ├─ Update timestamp on changes
+   └─ Maintain version consistency
 
-**Performance:** Direct memory access, no serialization overhead
+3. Memento (memory/persistent/both)
+   ├─ Serialize to bytes
+   ├─ Serialize to (memory/persistent/both)
+   ├─ Deserialize from to (memory/persistent/both)
+   └─ Verify version compatibility
 
-#### Bridge Layer Sharing
-```
-// Serialize for bridge transfer
-bytes = entity.to_bytes()
-
-// Send to bridge layer
-bridge.send_entity(bytes)
-
-// Receive from bridge layer
-received_bytes = bridge.receive_entity()
-remote_entity = ETest0.from_bytes(received_bytes)
-
-// Verify compatibility
-if remote_entity.evo_version != LOCAL_EVO_VERSION {
-    return Error(VersionMismatch)
-}
+4. Conflict Resolution
+   ├─ Compare timestamps
+   ├─ Merge or replace data
+   └─ Update all bridge layers
 ```
 
-**Performance:** Fast serialization + network I/O
 
 ### Entity Lifecycle in Bridge Systems
 
@@ -686,43 +720,6 @@ if remote_entity.evo_version != LOCAL_EVO_VERSION {
    └─ Update all bridge layers
 ```
 
-### Production Deployment Patterns
-
-#### Pattern 1: Microservices Communication
-```
-// Service A creates entity
-entity = ETest0.create(user_data)
-bytes = entity.to_bytes()
-
-// Send to Service B via HTTP/gRPC
-http_client.post("/entities", bytes)
-
-// Service B receives and processes
-entity = ETest0.from_bytes(received_bytes)
-process_entity(entity)
-```
-
-#### Pattern 2: Database Storage
-```
-// Store entity in database
-bytes = entity.to_bytes()
-database.store(entity.id, bytes)
-
-// Retrieve from database
-stored_bytes = database.get(id)
-entity = ETest0.from_bytes(stored_bytes)
-```
-
-#### Pattern 3: Message Queue Integration
-```
-// Publish to message queue
-bytes = entity.to_bytes()
-message_queue.publish("entity_updates", bytes)
-
-// Subscribe and process
-message = message_queue.subscribe("entity_updates")
-entity = ETest0.from_bytes(message.payload)
-```
 
 ## Summary
 
