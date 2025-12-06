@@ -1,0 +1,9 @@
+
+@startyaml
+ETest2:
+	_DOC_: ETest2 _DOC_
+	attributeEntity1: ENTITY ETest1
+	attributeString: STRING
+	
+	
+@endyaml

@@ -1,0 +1,8 @@
+
+@startyaml
+ETest3:
+	_DOC_: ETest3 _DOC_
+	attributeString: STRING
+	
+	
+@endyaml

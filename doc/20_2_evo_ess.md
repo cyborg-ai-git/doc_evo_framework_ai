@@ -77,7 +77,29 @@ Integration with communication mechanisms.
 
 **Purpose:** Physical data transfer (the actual bottleneck).
 
-## Entity Structure
+## Entity Test schemas
+
+### evo_entity_test for all ESS attributes type 
+
+#### ETest0 schema
+
+![e_test0_schema](data/e_test0_schema.svg)
+
+#### ETest1 schema
+
+![e_test1_schema](data/e_test1_schema.svg)
+
+#### ETest2 schema
+
+![e_test2_schema](data/e_test2_schema.svg)
+
+#### ETest3 schema
+
+![e_test3_schema](data/e_test3_schema.svg)
+
+\pagebreak
+
+## Entity Structure class diagram (rust)
 
 ![Entity Structure](data/evo_ess_entity_structure.svg)
 

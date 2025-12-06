@@ -6,12 +6,6 @@ The first principle focuses on thorough requirement analysis before beginning de
 
 This analytical approach ensures that development efforts are focused on truly necessary components while leveraging proven solutions where available. By subdividing requirements into modular parts, developers can better understand the scope of work and identify opportunities for code reuse and optimization.
 
-## Development
-
-The development phase emphasizes implementing requirements using the simplest possible approach, as simplicity is consistently the best solution. Following Evo framework standards and rules ensures that code remains readable and maintainable for both the original developer and future team members who will work with the codebase.
-
-Clean, simple code reduces complexity, minimizes bugs, and facilitates easier debugging and enhancement. The Evo framework provides guidelines and conventions that promote consistent coding practices across the development team, resulting in more predictable and maintainable software.
-
 ## Documentation
 
 Documentation is fundamental to understanding what the code does and how it functions. While the Evo framework generates documentation automatically, it is crucial to create comprehensive documentation that explains the purpose, functionality, and usage of each component.
@@ -19,6 +13,13 @@ Documentation is fundamental to understanding what the code does and how it func
 Proper documentation should include code comments, API documentation, architectural decisions, and usage examples. This documentation serves multiple purposes: it helps new team members understand the codebase quickly, assists in debugging and troubleshooting, facilitates code reviews, and ensures knowledge transfer when team members change roles or leave the project.
 
 Good documentation also includes explanations of business logic, integration points, and any assumptions made during development. This comprehensive approach to documentation ensures that the software remains maintainable and extensible over time.
+
+## Development
+
+The development phase emphasizes implementing requirements using the simplest possible approach, as simplicity is consistently the best solution. Following Evo framework standards and rules ensures that code remains readable and maintainable for both the original developer and future team members who will work with the codebase.
+
+Clean, simple code reduces complexity, minimizes bugs, and facilitates easier debugging and enhancement. The Evo framework provides guidelines and conventions that promote consistent coding practices across the development team, resulting in more predictable and maintainable software.
+
 
 ## Automation
 
@@ -145,8 +146,7 @@ The framework includes an advanced documentation generation system:
 - Constant folding
 - Dead code elimination
 
-### Runtime Optimization
-- Just-In-Time (JIT) compilation
+### Runtime Optimization 
 - Adaptive optimization
 - Hardware-specific instruction selection
 - Profile-guided optimization
