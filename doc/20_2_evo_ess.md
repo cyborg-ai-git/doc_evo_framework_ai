@@ -71,32 +71,29 @@ Integration with communication mechanisms.
 
 **Components:**
 
-- **Network**: TCP/UDP sockets, HTTP, etc.
+- **Network**: EPQB, TCP/UDP sockets, HTTP, etc.
 - **Disk**: File I/O, databases
 - **IPC**: Shared memory, pipes
 
 **Purpose:** Physical data transfer (the actual bottleneck).
 
+\pagebreak
+
 ## Entity Test schemas
 
 ### evo_entity_test for all ESS attributes type 
 
-#### ETest0 schema
+![evo_entity_test.svg](data/evo_entity_test.svg)
+\pagebreak
 
 ![e_test0_schema](data/e_test0_schema.svg)
-
-#### ETest1 schema
+\pagebreak
 
 ![e_test1_schema](data/e_test1_schema.svg)
-
-#### ETest2 schema
-
 ![e_test2_schema](data/e_test2_schema.svg)
-
-#### ETest3 schema
-
 ![e_test3_schema](data/e_test3_schema.svg)
 
+> TODO: to add enum schemas
 \pagebreak
 
 ## Entity Structure class diagram (rust)
