@@ -581,6 +581,7 @@ MapId
 | MapEntity<ETest1> | 134ns / 323ns | Serialize / Deserialize |
 | MapEntity<ETest2> | 153ns / 377ns | Serialize / Deserialize |
 
+> TODO: to update benches time
 
 ### Format Comparison
 
@@ -670,39 +671,32 @@ Bridge Layer A          Bridge Layer B          Bridge Layer C
 | **Zero-Copy**      | Minimal serialization overhead            | High throughput     |
 | **Type Safety**    | Compile-time verification                 | Runtime reliability |
 
-### Local vs Distributed Usage
 
-#### Local Memory Usage
+### Entity Lifecycle in Memento Systems (local memory/persistent)
+
 ```
-// High-performance local operations
-entity = ETest0.create()
-entity.set_attribute_string("Local data")
+1. Creation
+   ├─ Generate universal ID (SHA-256)
+   ├─ Set creation timestamp
+   └─ Initialize with evo_version
 
-// Direct memory access (no serialization)
-value = entity.get_attribute_int()
-```
+2. Local Processing
+   ├─ Direct memory operations
+   ├─ Update timestamp on changes
+   └─ Maintain version consistency
 
-**Performance:** Direct memory access, no serialization overhead
+3. Memento (memory/persistent/both)
+   ├─ Serialize to bytes
+   ├─ Serialize to (memory/persistent/both)
+   ├─ Deserialize from to (memory/persistent/both)
+   └─ Verify version compatibility
 
-#### Bridge Layer Sharing
-```
-// Serialize for bridge transfer
-bytes = entity.to_bytes()
-
-// Send to bridge layer
-bridge.send_entity(bytes)
-
-// Receive from bridge layer
-received_bytes = bridge.receive_entity()
-remote_entity = ETest0.from_bytes(received_bytes)
-
-// Verify compatibility
-if remote_entity.evo_version != LOCAL_EVO_VERSION {
-    return Error(VersionMismatch)
-}
+4. Conflict Resolution
+   ├─ Compare timestamps
+   ├─ Merge or replace data
+   └─ Update all bridge layers
 ```
 
-**Performance:** Fast serialization + network I/O
 
 ### Entity Lifecycle in Bridge Systems
 
@@ -729,43 +723,6 @@ if remote_entity.evo_version != LOCAL_EVO_VERSION {
    └─ Update all bridge layers
 ```
 
-### Production Deployment Patterns
-
-#### Pattern 1: Microservices Communication
-```
-// Service A creates entity
-entity = ETest0.create(user_data)
-bytes = entity.to_bytes()
-
-// Send to Service B via HTTP/gRPC
-http_client.post("/entities", bytes)
-
-// Service B receives and processes
-entity = ETest0.from_bytes(received_bytes)
-process_entity(entity)
-```
-
-#### Pattern 2: Database Storage
-```
-// Store entity in database
-bytes = entity.to_bytes()
-database.store(entity.id, bytes)
-
-// Retrieve from database
-stored_bytes = database.get(id)
-entity = ETest0.from_bytes(stored_bytes)
-```
-
-#### Pattern 3: Message Queue Integration
-```
-// Publish to message queue
-bytes = entity.to_bytes()
-message_queue.publish("entity_updates", bytes)
-
-// Subscribe and process
-message = message_queue.subscribe("entity_updates")
-entity = ETest0.from_bytes(message.payload)
-```
 
 ## Summary
 
