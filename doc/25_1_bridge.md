@@ -30,7 +30,6 @@ This document describes a post-quantum cryptographic system designed for secure 
 
 The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographic entities that work together to provide secure, quantum-resistant peer-to-peer communication. Each entity serves a specific role in the distributed trust model and cryptographic protocol stack.
 
-> NB: Beta Version Only PkKyberDilitium is supported
 
 ### Enum Entity Types
 
@@ -50,7 +49,8 @@ The foundational private entity containing all secret cryptographic material for
 The cryptography algorithm is dynamic so is possible to migrate to other more secure PQ algorithm if is founded security issue
 
 **Cryptographic Components:**
-- **Enum Peer Crypto (enu_peer_crypto)**: The cryptography algorithm for example 0->PqKyberDilitium (Kyber-1024, Dilithium-5)
+
+- **Enum Peer Crypto (enum_peer_crypto)**: The cryptography algorithm for example PqKyberDilitium -> (Kyber-1024, Dilithium-5)
 - **Secret Key (sk)**: The Secret key for KEM
 - **Secret Key Sign (sk_sign)**:  he Secret key for sign
 - **Private Bridge Configuration**: Local network settings, security policies, and operational parameters
@@ -68,6 +68,14 @@ The cryptography algorithm is dynamic so is possible to migrate to other more se
 ![e_peer_public_schema](data/e_peer_public_schema.svg)
 
 The public counterpart containing verifiable cryptographic material and network configuration.
+
+> **Default:**
+> 
+> enum_peer_crypto: PqKyberDilitium -> (Kyber-1024, Dilithium-5)
+
+> hash: Blake3 256 (32 bytes)
+> 
+> aead: Aes256-gcm
 
 **Cryptographic Components:**
 
@@ -93,8 +101,10 @@ A digitally signed certificate that establishes trust and authenticity for peer 
 **Certificate Structure:**
 
 - **EPeerPublic Data**: Complete public identity information
-- **Master Peer Signature**: Dilithium-5 signature providing authenticity guarantee
-- **Certificate Metadata**: Contains issuance and expiration timestamps, certificate serial number and version, alternative distribution channels (IPFS hashes, backup repositories), revocation check endpoints, and certificate chain information
+- **Master Peer Signature**:  Signature providing authenticity guarantee (enunPeerCrypto: (Dilithium-5 ...) ) 
+- **Certificate Metadata**: Contains issuance  certificate serial number and version, alternative distribution channels (IPFS hashes, backup repositories), revocation check endpoints, and certificate chain information
+
+> **Note** IPFS use ecc -> EPQM (Evo Post Quantum Memento)
 
 **Trust Model:**
 
@@ -114,7 +124,6 @@ The standardized message format for all peer-to-peer communications.
 - **Event Type**: Categorizes the communication (request, response, notification)
 - **Source/Destination IDs**: 32-byte peer identifiers for routing
 - **Cryptographic Payload**: Encrypted data using Aes256_Gcm
-- **Authentication Data**: Poly1305 MAC for message integrity
 - **Protocol Metadata**: Version, flags, and extension headers
 
 **Security Features:**
@@ -129,10 +138,11 @@ The standardized message format for all peer-to-peer communications.
 The identity system leverages blockchain technology to achieve true decentralization.
 
 **Decentralization Benefits:**
+
 - **Infrastructure Independence**: No reliance on centralized DNS or certificate authorities
-- **Global Accessibility**: Peer identities remain valid across different network infrastructures
+- **Global Accessibility**: Peer identities (ID) remain valid across different network infrastructures
 - **Censorship Resistance**: Distributed identity resolution prevents single points of control
-- **Migration Flexibility**: Seamless movement between hosting providers including local development environments, cloud platforms (AWS, Google Cloud, Azure), edge computing providers (Fly.io, Cloudflare Workers), AI/ML platforms (HuggingFace, Google Colab), and decentralized hosting (IPFS, Arweave)
+- **Migration Flexibility**: Seamless movement between hosting providers including local development environments, cloud platforms (AWS, Google Cloud, Azure), edge computing providers (Fly.io, Cloudflare Workers), AI/ML platforms (HuggingFace, Google Colab), and decentralized hosting (IPFS, ...)
 
 **Identity Resolution Process:**
 
@@ -160,6 +170,7 @@ Confidentiality ensures that information is accessible only to authorized entiti
 - **Layered Encryption Model:** Session keys derived from KEM exchanges provide an additional layer of confidentiality protection.
 
 - **Private Key Protection:**
+  
   - Master Peer private keys stored in Hardware Security Modules (HSMs)
   - Peer private keys never transmitted across the network
   - Key material access strictly controlled
@@ -175,18 +186,14 @@ Integrity ensures that information is accurate, complete, and has not been modif
 **Implementation Mechanisms:**
 
 - **Digital Signatures:** Dilithium-5 signatures provide quantum-resistant integrity protection for certificates and critical communications.
-
 - **Message Authentication:** Poly1305 message authentication code (MAC) validates the integrity of each encrypted packet.
-
 - **Certificate Chain Validation:** Comprehensive validation of certificate chains ensures the integrity of peer identities.
-
 - **Hash Algorithm Options:** Multiple hash algorithm options (BLAKE3) for identity derivation and integrity validation.
-
 - **Integrity Proofs:** SHA-256/512 integrity proofs included in certificate packages and critical communications.
-
 - **Monotonic Counters:** EAction headers include monotonic counters to prevent message replay or reordering attacks.
 
 **Integrity Verification Process:**
+
 1. Signature verification using Master Peer's public key
 2. Certificate chain validation
 3. Message authentication code verification
@@ -199,22 +206,19 @@ Availability ensures that authorized users have reliable and timely access to in
 
 **Implementation Mechanisms:**
 
-- **Distributed Certificate Registry:** Certificate information are now distributed across GitHub repositories and IPFS (soon will migrate to EvoDPQ) ensures high availability even if individual nodes fail.
-
+- **Distributed Certificate Registry:** Certificate information are now distributed across GitHub repositories and IPFS (soon will migrate to **EPQM**) ensures high availability even if individual nodes fail.
 - **Decentralized Trust Model:** Master Peer architecture can be extended to multiple Master Peers for redundancy.
-
 - **Robust Protocol Design:** Communication protocols designed to handle network interruptions and reconnections gracefully.
-
-- **Certificate Caching:** Peers can cache validated certificates to continue operations during temporary Master Peer unavailability or direct coneection Peer to Peer.
-
+- **Certificate Caching:** Peers can cache validated certificates to continue operations during temporary Master Peer unavailability or direct connection Peer to Peer.
 - **Protocol Resilience:** Automatic session rekeying and reconnection capabilities maintain availability during network disruptions.
-
 - **Denial of Service Protection:**
+
   - Computational puzzles can be integrated to prevent resource exhaustion attacks
   - Rate limiting mechanisms prevent flooding attacks
   - Authentication required before resource-intensive operations
 
 **Availability Enhancement Features:**
+
 - Emergency certificate revocation via Online Certificate Status Protocol Plus Plus (OCSPP)
 - Historical key maintenance for continued validation of legacy communications
 - Peer recovery mechanisms after temporary disconnection
@@ -224,9 +228,7 @@ Availability ensures that authorized users have reliable and timely access to in
 The system maintains a careful balance between the three elements of the CIA triad:
 
 - **Confidentiality vs Availability Trade-offs:** Strong authentication requirements enhance confidentiality but are designed with fallback mechanisms to maintain availability during disruptions.
-
 - **Integrity vs Performance Balance:** Comprehensive integrity verification is optimized for minimal latency impact.
-
 - **Security Level Customization:** The system allows selection of cryptographic parameters based on specific confidentiality, integrity, and availability requirements.
 
 ## Bridge System Architecture
@@ -245,7 +247,7 @@ The Master Peer serves as the trust anchor and certificate authority within the 
 
 **Maintains:**
 - Peer certificate registry
-- Fully distributed IPFS (InterPlanetary File System)
+- Fully distributed IPFS (InterPlanetary File System) -> EPQM
 - Public key directory
 - Cryptographic material storage
 
@@ -269,7 +271,7 @@ Regular Peers are standard network participants with established identities.
 
 ### Relay Peer
 Relay peer is important to Nat peer that can not tunnelling connection, the relay peer , check if peer is an enemy banned so block the connection otherwise, send the EApiEvent to the correct peer, only the destination peer can decrypt correctly the data
-Relay peer also not expose your address so the peer can be totally anonymus for safe privacy
+Relay peer also not expose your address so the peer can be totally anonymous for safe privacy
 
 > Every Peer can be also a Relay Peer to create  decentralized sun mesh network (...)
 
@@ -358,12 +360,15 @@ Network Actions represent standardized communication protocol units.
 ### Cryptographic Foundations
 
 * **Post-Quantum Security:** All primitives resist quantum computing attacks
+
   - Implements NIST-selected post-quantum cryptographic algorithms
   - Kyber: [NIST FIPS 203](https://csrc.nist.gov/pubs/fips/203/ipd)
   - Dilithium: [NIST FIPS 204](https://csrc.nist.gov/pubs/fips/204/ipd)
+  
 - **Mutual Authentication:** Dual verification via certificates and session keys
 - **Forward Secrecy:** Ephemeral session keys derived from KEM exchanges
 - **Cryptographic Agility:** Modular design supports algorithm updates
+
   - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
 
 
@@ -376,6 +381,7 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 > No more login username or weak password, your password is your e_peer_secret , so is important to not share or expose the EPeerSecret
 
 **Key Characteristics:**
+
 - **Privacy-Preserving**: Unlike IPv6, the ID doesn't expose physical network location or infrastructure details
 - **Cryptographically Secure**: Derived from public key material, making spoofing computationally infeasible
 - **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
@@ -384,9 +390,11 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 ![bridge_vip6_portability](data/bridge_vip6_portability.svg)
 
 **Key Concepts:**
+
 1.  **Static Client Configuration**: **PeerAClient** connects to a stable `PeerID` of **PeerB>> . PeerAClient is unaware of PeerB's physical location or IP address.
 2.  **VIP6 Resolution Address**: This layer acts as a dynamic address translator. It resolves the stable `PeerID` to the current physical IP address (IPv4 or IPv6) of PeerB.
 3.  **Seamless Migration Scenario**:
+
 - **Azure**: PeerB starts on Azure (IP: `20.x.x.x`). VIP6 resolves the ID to this Azure IP. PeerAClient connects seamlessly.
 - **AWS**: PeerB migrates to AWS (IP: `54.x.x.x`). It keeps the same Identity (Keys). VIP6 updates the resolution. PeerAClient connects to the same ID without configuration changes.
 - **Google Cloud**: PeerB migrates to Google Cloud (IP: `34.x.x.x`). Again, PeerAClient continues to connect to the same `PeerID`.
@@ -394,16 +402,19 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 VIP6 ensures that **PeerB** is truly portable across different environments (Azure, AWS, GCP, Local) without disrupting connectivity or requiring **PeerAClient** to be reconfigured.
 
 **Supported Transport Protocols:**
+
 - **WebSocket**: Real-time bidirectional communication for web applications (Migration)
 - **WebRTC**: Direct peer-to-peer communication with NAT traversal (Migration)
 - **Raw TCP/UDP**: Low-level protocols for maximum performance (Migration)
 - **HTTP/2 & HTTP/3**: Modern web protocols with multiplexing capabilities (Migration)
 - **Mcp**: Ai Model Context Protocol (Migration)
-- **EvoPqBridge** *(Coming Soon)*: Custom quantum-resistant protocol optimized for EPQB (Default)
+- **EvoPqBridge** **(Coming Soon)**: Custom quantum-resistant protocol optimized for EPQB (Default)
 
 
 > TODO: to insert diagrams
+
 ### Virtual PQVpn
+
 VIP6 automatically translates between IPv4 and IPv6 addresses and creates bridge connections. Nothing to configure.
 **EPQB** automatically finds compatible servers and encrypts connections to them
 **PQVpn** protects your entire connection with post-quantum encryption from your device all the way to the destination server. Regular VPNs only encrypt the connection between you and the VPN server.
@@ -418,45 +429,33 @@ The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end
 - api: get_peer
 - api: del_peer
 
+> TODO: add diagrams
+
+***
+
 \pagebreak
 
 ### Certificate Issuance Sequence (api: set_peer)
 
-```
-[PeerA]                                     [Master Peer]
-|********* AKE Request + EPeerPublic + sign *********-->| 
-|<******-- PeerA Certificate (Master Peer signed) ******|
-```
+#### Case 1: Certificate Retrieval and Direct Communication
+
+Store PeerA's certificate (Master Peer use decentralized EPQM or other channel to distribute the certificate)
 
 ![bridge set_peer](data/bridge_set_peer_mp.svg)
 
-***
 \pagebreak
 
 ### Secure Messaging Sequence (api:get peer)
 
-#### Case 1: Certificate Retrieval and Direct Communication
-First, PeerB requests PeerA's certificate from the Master Peer because don't have PeerA in cache:
 
-```
-[PeerB]                                     [Master Peer]
-|********* AKE Request + PeerA ID *********************>|
-|<******-- PeerA Certificate (Master Peer signed) ******|
-
-```
+PeerB requests PeerA's certificate from the Master Peer because don't have PeerA in cache:
 
 ![bridge get_peer](data/bridge_get_peer_mp.svg)
-
-***
 
 \pagebreak
 
 Then, direct communication between PeerB and PeerA occurs:
-```
-[PeerB]                                           [PeerA]
-|********* AKE Request + PeerB ID + Api Request ******->| (PeerA get certificate of PeerB (case 1/2) )
-|<-- Encrypted Response with new Secret Key ************|
-```
+
 ![bridge direct case 1](data/bridge_direct_1.svg)
 
 \pagebreak
@@ -464,29 +463,15 @@ Then, direct communication between PeerB and PeerA occurs:
 #### Case 2: Direct Communication
 Direct communication between PeerB and PeerA when certificate is already available (from cache or other secure channel):
 
-```
-[PeerB]                                           [PeerA]
-|********* AKE Request + PeerB ID + Api Request ******->|
-|<-- Encrypted Response with new Secret Key ************|
-```
-
 ![bridge direct case 2](data/bridge_direct_2.svg)
 
-***
 \pagebreak
 
 #### Case Revoke: Revoke Certificate (api: del_peer)
-If at least PeerA's secret_kyber and secret_dilithium keys are compromised, the peer is no longer safe and must revoke the peer certificate so other peers know not to use the certificate, and PeerA becomes untrusted:
+If at least PeerA's secret_kem or secret_sign keys are compromised, the peer is no longer safe and must revoke the peer certificate so other peers know not to use the certificate, and PeerA becomes untrusted:
 
-```
-[PeerA]                                                      [Master Peer]
-|********* AKE Request + PeerA ID + Sign with compromized secret ******->|
-|<-- Encrypted EApiResult Response ************************************--|
-```
 
 ![bridge revoke](data/bridge_del_peer_mp.svg)
-
-***
 
 \pagebreak
 
@@ -600,7 +585,7 @@ Regular Peers implement similar memory optimization strategies:
 To enhance forward secrecy and mitigate passive monitoring, the system implements dynamic session renegotiation:
 
 - **Random Renegotiation Triggers:**
-  - Time-based: Secret session keys renegotiated after configurable intervals (default: 1 hour)
+  - Time-based: Secret session keys renegotiated after configurable intervals 
   - Random-based: Spontaneous renegotiation initiated with 0.1% probability per message exchange
 
 - **Renegotiation Process:**

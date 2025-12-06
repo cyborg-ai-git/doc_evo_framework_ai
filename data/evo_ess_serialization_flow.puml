@@ -4,22 +4,56 @@
 !define PEER_A_COLOR #FFB6C1
 !define PEER_B_COLOR #87CEEB
 !define BRIDGE_COLOR #ff0000
+
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFF
+
+skinparam title {
+    FontColor #FFFFF
+}
+' Sequence styling
+
+
+skinparam legend {
+
+    FontColor #FFFFF
+}
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam class {
+    BackgroundColor #555555
+    BorderColor #2C5F77
+    ArrowColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+
 title ESS Serialization Flow - Bridge Layer Communication
 
 skinparam sequence {
-    ArrowColor #2C5F77
-    ActorBorderColor #2C5F77
-    LifeLineBorderColor #2C5F77
-    ParticipantBackgroundColor #E8F4F8
-    ParticipantBorderColor #2C5F77
+    ArrowColor #FFFFFF
+    ActorBorderColor #2C5FFFF77
+    LifeLineBorderColor #FFFFF
+    ParticipantBackgroundColor #FFFFF
+    ParticipantBorderColor #FFFFFF
 }
 
+
+
+skinparam actorStyle awesome
 actor "PeerA\n(Sender)" as PeerA PEER_A_COLOR
 participant "ETest0" as entity #09b620
 participant "Header" as header #09b620
 participant "Nested\nEntities" as nested #09b620
-participant "MapEntity" as map
-participant "Buffer" as buffer
+participant "MapEntity" as map #333333
+participant "Buffer" as buffer #333333
 queue "Bridge\nChannel" as bridge BRIDGE_COLOR
 actor "PeerB\n(Receiver)" as PeerB PEER_B_COLOR
 

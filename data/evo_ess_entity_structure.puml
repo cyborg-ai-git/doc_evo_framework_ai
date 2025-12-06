@@ -3,10 +3,22 @@
 !define IEntityColor #09b620
 title ETest0 Entity Structure - Complete Layout
 
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
 skinparam class {
-    BackgroundColor #E8F4F8
+    BackgroundColor #555555
     BorderColor #2C5F77
-    ArrowColor #2C5F77
+    ArrowColor #09b620
+    FontColor #FFFFFF
 }
 
 class ETest0 #09b620 {

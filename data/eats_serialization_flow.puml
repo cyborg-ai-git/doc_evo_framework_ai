@@ -1,7 +1,7 @@
 @startuml serialization_flow
 !theme plain
 skinparam backgroundColor #FFFFFF
-
+skinparam actorStyle awesome
 title Serialization Flow (to_ai)
 
 actor "Application" as App
