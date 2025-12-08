@@ -24,7 +24,7 @@
 > 
 > (x86_64) linux ubuntu
 > 
-> rust cargo 1.93.0-nightly (9fa462fe3 2025-11-21)
+> rust cargo 1.94.0-nightly (2c283a9a5 2025-12-04)
 > 
 > **Note:** Measurements below ~1ns are subject to noise (CPU cache, branch prediction, 
 > frequency scaling). Ratios < 1.0x or differences < 5% at sub-nanosecond scale are not 
@@ -58,7 +58,7 @@
 | 21  | downcast_async_error       | 1.8797     | 5.2420x        |
 
 
-> TODO: to migrate all tests in new standard
+> TODO: to migrate all tests in new benches standard ...
 ## evo_core_id
 
 

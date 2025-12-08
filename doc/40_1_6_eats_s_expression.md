@@ -1,5 +1,3 @@
-> Draft 
-> 
 # S-Expression Format Guide
 
 ## Table of Contents

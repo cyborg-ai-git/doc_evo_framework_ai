@@ -20,6 +20,146 @@ The design emphasizes maintainability through modular cryptographic primitives a
 By implementing this system in accordance with NIST guidelines and recommendations, organizations can establish a cryptographic foundation that meets current security standards while remaining resistant to future quantum computing attacks.
 \pagebreak
 
+## Bridge System Architecture
+
+### Core Components
+
+![Bridge Actors](data/bridge_actors.svg)
+
+#### Master Peer
+
+The Master Peer serves as the trust anchor and certificate authority within the system.
+
+**Cryptographic Capabilities:**
+- Kyber-1024 (NIST Level 5) for key encapsulation
+- Dilithium-5 (NIST Level 5) for digital signatures
+
+**Maintains:**
+- Peer certificate registry
+- Fully distributed IPFS (InterPlanetary File System) -> EPQM
+- Public key directory
+- Cryptographic material storage
+
+> Master Peer are multiple to make it decentralized system and Peer* check the nearest to make the fastest connection
+
+#### Peer
+
+Regular Peers are standard network participants with established identities.
+
+**Cryptographic Capabilities:**
+- Kyber-1024 for key exchange
+- Aes256_Gcm for symmetric encryption
+
+**Contains:**
+- Unique cryptographic identity (32-byte hash using BLAKE3)
+- Public/private key pair
+- Certificate chain
+- Embedded MasterPeers public key (Kyber) and signature public key (Dilithium)
+- Expose api
+
+
+### Relay Peer
+Relay peer is important to Nat peer that can not tunnelling connection, the relay peer , check if peer is an enemy banned so block the connection otherwise, send the EApiEvent to the correct peer, only the destination peer can decrypt correctly the data
+Relay peer also not expose your address so the peer can be totally anonymous for safe privacy
+
+> Every Peer can be also a Relay Peer to create  decentralized sun mesh network (...)
+
+
+#### Network Action (EAction)
+
+Network Actions represent standardized communication protocol units.
+
+**Structure:**
+- 32-byte unique identifier
+- Action type code
+- Cryptographic payload
+- Source/destination identifiers
+- Encrypted data payload
+
+## Cryptographic Workflows
+
+### Peer Registration Protocol
+
+#### Phase 1: Identity Establishment
+- Peer generates Kyber-1024 key pair
+  - Uses NIST-standardized key generation procedures
+  - Follows guidance from NIST SP 800-56C Rev. 2 for key derivation
+- Derives 32-byte Peer ID using one of:
+  - BLAKE3 (Public Key)
+- Creates self-signed identity claim
+
+#### Phase 2: Certificate Issuance
+- Peer initiates Key Encapsulation Mechanism (KEM) with Master Peer:
+  - Generates Kyber ciphertext + shared secret
+  - Encrypts identity package using Aes256_Gcm with implementation following RFC 8439
+- Master Peer:
+  - Decapsulates shared secret
+  - Decrypts and validates identity claim
+  - Issues Dilithium-signed certificate containing:
+    - Peer ID
+    - Public key
+    - Master Peer ID
+    - Expiration metadata
+    - Certificate format compliant with X.509v3 extensions
+
+### Peer-to-Peer Communication Protocol
+
+#### Direct Communication Flow
+
+**Certificate Verification**
+- Validate Dilithium signature using Master Peer's public key (embedded in each peer for pinning)
+- Verify certificate chain integrity
+- Check revocation status (implied via registry)
+- Implementation follows NIST SP 800-57 Part 1 Rev. 5 guidelines for key management
+
+**Session Establishment**
+- Initiator performs Kyber KEM with recipient's certified public key
+- Generate 256-bit shared secret
+- Derive session keys using SHA-512 according to NIST FIPS 202
+- Session key derivation follows NIST SP 800-108 Rev. 1 recommendations
+
+**Secure Messaging**
+- Encrypt payloads with Aes256_Gcm
+- A unique, random 96-bit (12-byte) nonce is generated for every packet sent
+  - Nonces are never reused within the same session
+  - Generated using a cryptographically secure random number generator
+  - Each packet contains its own unique nonce to prevent replay attacks
+- Message authentication via Poly1305 tags
+- Session rekeying every 1MB data or 24 hours
+- Follows NIST SP 800-38D recommendations for authenticated encryption
+
+### Certificate Retrieval Protocol
+
+#### Request Phase
+- Requester initiates KEM with Master Peer
+- Encrypts certificate query using established secret
+
+#### Validation Phase
+- Master Peer verifies query authorization
+- Retrieves requested certificate from registry
+- Signs response package with Dilithium
+- Implements NIST SP 800-130 recommendations for key management infrastructure
+
+#### Delivery Phase
+- Encrypts certificate package with session keys
+- Includes integrity proof via SHA-512/256 (NIST FIPS 180-4)
+
+## Security Properties
+
+### Cryptographic Foundations
+
+* **Post-Quantum Security:** All primitives resist quantum computing attacks
+
+  - Implements NIST-selected post-quantum cryptographic algorithms
+  - Kyber: [NIST FIPS 203](https://csrc.nist.gov/pubs/fips/203/ipd)
+  - Dilithium: [NIST FIPS 204](https://csrc.nist.gov/pubs/fips/204/ipd)
+
+- **Mutual Authentication:** Dual verification via certificates and session keys
+- **Forward Secrecy:** Ephemeral session keys derived from KEM exchanges
+- **Cryptographic Agility:** Modular design supports algorithm updates
+
+  - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
+
 ## Technical Overview
 This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.
 
@@ -67,7 +207,92 @@ The cryptography algorithm is dynamic so is possible to migrate to other more se
 
 ![e_peer_public_schema](data/e_peer_public_schema.svg)
 
-The public counterpart containing verifiable cryptographic material and network configuration.
+***
+# Cryptographic Specifications Table
+
+| Component | Algorithm | Standard | Key/Output Size | Security Level | NIST Status |
+|-----------|-----------|----------|-----------------|----------------|-------------|
+| **Key Exchange** | ML-KEM-1024 (Kyber-1024) | FIPS 203 | PK: 1,568 bytes<br>SK: 3,168 bytes<br>CT: 1,568 bytes<br>SS: 32 bytes | 256-bit<br>(NIST Level 5) | ✅ NIST Approved |
+| **Digital Signature** | ML-DSA-87 (Dilithium-5) | FIPS 204 | PK: 2,592 bytes<br>SK: 4,864 bytes<br>Sig: 4,627 bytes | 256-bit<br>(NIST Level 5) | ✅ NIST Approved |
+| **Hash Function** | BLAKE3 | N/A | 256-bit (32 bytes) | 256-bit | ⚠️ **NOT NIST Approved**<br>**NOT FIPS 140 Compliant** |
+| **AEAD Encryption** | AES-256-GCM | FIPS 197 | 256-bit key | 256-bit | ✅ NIST Approved |
+
+---
+
+## ⚠️ BLAKE3 Cryptographic Hash Function Disclaimer
+
+### NIST Approval Status
+
+**BLAKE3 is NOT currently approved by NIST and is NOT FIPS 140 compliant.**
+
+### What This Means
+
+- BLAKE3 is not listed as a secure hashing algorithm in NIST SP 800-140Cr2
+- BLAKE3 cannot be used in systems requiring FIPS 140 compliance
+- Government agencies and regulated industries may be prohibited from using BLAKE3
+- Systems requiring federal certification or government contracts must use NIST-approved alternatives
+
+### NIST-Approved Hash Alternatives
+
+For applications requiring NIST approval, use one of the following:
+
+- **SHA-256** (SHA-2 family) - NIST FIPS 180-4
+- **SHA-512** (SHA-2 family) - NIST FIPS 180-4
+- **SHA3-256** (Keccak family) - NIST FIPS 202
+- **SHA3-512** (Keccak family) - NIST FIPS 202
+
+---
+
+## Default Configuration
+
+```
+enum_peer_crypto: PqKyberDilithium → (Kyber-1024, Dilithium-5)
+hash: BLAKE3-256 (32 bytes) ⚠️
+aead: AES-256-GCM
+```
+
+---
+
+## Detailed Specifications
+
+### FIPS 203: ML-KEM (Kyber 1024)
+
+#### Parameter Sets
+
+- ML-KEM-512 (formerly Kyber-512): 128-bit security
+- ML-KEM-768 (formerly Kyber-768): 192-bit security
+- **ML-KEM-1024 (formerly Kyber-1024): 256-bit security** ✓
+
+#### Key Specifications for ML-KEM-1024
+
+- **Public Key Size:** 1,568 bytes
+- **Secret Key Size:** 3,168 bytes
+- **Ciphertext Size:** 1,568 bytes
+- **Shared Secret:** 32 bytes (256 bits)
+- **Security Level:** NIST Level 5 (equivalent to AES-256)
+
+### FIPS 204: ML-DSA (Dilithium 5)
+
+#### Parameter Sets
+
+- **ML-DSA-87 (formerly Dilithium5): 256-bit security (NIST Level 5)** ✓
+
+#### Key Specifications for ML-DSA-87 (Dilithium5)
+
+- **Public Key Size:** 2,592 bytes
+- **Secret Key Size:** 4,864 bytes
+- **Signature Size:** 4,627 bytes
+- **Security Level:** NIST Level 5 (equivalent to AES-256)
+
+---
+
+## Notes
+
+- All post-quantum cryptographic algorithms (ML-KEM and ML-DSA) are NIST-approved and designed to resist attacks from quantum computers
+- AES-256-GCM provides authenticated encryption with associated data (AEAD) (=> 128 )
+- BLAKE3 offers superior performance compared to SHA-2 and SHA-3 but lacks NIST approval for regulated environments
+
+***
 
 > **Default:**
 > 
@@ -231,145 +456,7 @@ The system maintains a careful balance between the three elements of the CIA tri
 - **Integrity vs Performance Balance:** Comprehensive integrity verification is optimized for minimal latency impact.
 - **Security Level Customization:** The system allows selection of cryptographic parameters based on specific confidentiality, integrity, and availability requirements.
 
-## Bridge System Architecture
 
-### Core Components
-
-![Bridge Actors](data/bridge_actors.svg)
-
-#### Master Peer 
-
-The Master Peer serves as the trust anchor and certificate authority within the system.
-
-**Cryptographic Capabilities:**
-- Kyber-1024 (NIST Level 5) for key encapsulation
-- Dilithium-5 (NIST Level 5) for digital signatures
-
-**Maintains:**
-- Peer certificate registry
-- Fully distributed IPFS (InterPlanetary File System) -> EPQM
-- Public key directory
-- Cryptographic material storage
-
-> Master Peer are multiple to make it decentralized system and Peer* check the nearest to make the fastest connection
-
-#### Peer 
-
-Regular Peers are standard network participants with established identities.
-
-**Cryptographic Capabilities:**
-- Kyber-1024 for key exchange
-- Aes256_Gcm for symmetric encryption
-
-**Contains:**
-- Unique cryptographic identity (32-byte hash using BLAKE3)
-- Public/private key pair
-- Certificate chain
-- Embedded MasterPeers public key (Kyber) and signature public key (Dilithium)
-- Expose api
-
-
-### Relay Peer
-Relay peer is important to Nat peer that can not tunnelling connection, the relay peer , check if peer is an enemy banned so block the connection otherwise, send the EApiEvent to the correct peer, only the destination peer can decrypt correctly the data
-Relay peer also not expose your address so the peer can be totally anonymous for safe privacy
-
-> Every Peer can be also a Relay Peer to create  decentralized sun mesh network (...)
-
-
-#### Network Action (EAction)
-
-Network Actions represent standardized communication protocol units.
-
-**Structure:**
-- 32-byte unique identifier
-- Action type code
-- Cryptographic payload
-- Source/destination identifiers
-- Encrypted data payload
-
-## Cryptographic Workflows
-
-### Peer Registration Protocol
-
-#### Phase 1: Identity Establishment
-- Peer generates Kyber-1024 key pair
-  - Uses NIST-standardized key generation procedures
-  - Follows guidance from NIST SP 800-56C Rev. 2 for key derivation
-- Derives 32-byte Peer ID using one of:
-  - BLAKE3 (Public Key)
-- Creates self-signed identity claim
-
-#### Phase 2: Certificate Issuance
-- Peer initiates Key Encapsulation Mechanism (KEM) with Master Peer:
-  - Generates Kyber ciphertext + shared secret
-  - Encrypts identity package using Aes256_Gcm with implementation following RFC 8439
-- Master Peer:
-  - Decapsulates shared secret
-  - Decrypts and validates identity claim
-  - Issues Dilithium-signed certificate containing:
-    - Peer ID
-    - Public key
-    - Master Peer ID
-    - Expiration metadata
-    - Certificate format compliant with X.509v3 extensions
-
-### Peer-to-Peer Communication Protocol
-
-#### Direct Communication Flow
-
-**Certificate Verification**
-- Validate Dilithium signature using Master Peer's public key (embedded in each peer for pinning)
-- Verify certificate chain integrity
-- Check revocation status (implied via registry)
-- Implementation follows NIST SP 800-57 Part 1 Rev. 5 guidelines for key management
-
-**Session Establishment**
-- Initiator performs Kyber KEM with recipient's certified public key
-- Generate 256-bit shared secret
-- Derive session keys using SHA-512 according to NIST FIPS 202
-- Session key derivation follows NIST SP 800-108 Rev. 1 recommendations
-
-**Secure Messaging**
-- Encrypt payloads with Aes256_Gcm
-- A unique, random 96-bit (12-byte) nonce is generated for every packet sent
-  - Nonces are never reused within the same session
-  - Generated using a cryptographically secure random number generator
-  - Each packet contains its own unique nonce to prevent replay attacks
-- Message authentication via Poly1305 tags
-- Session rekeying every 1MB data or 24 hours
-- Follows NIST SP 800-38D recommendations for authenticated encryption
-
-### Certificate Retrieval Protocol
-
-#### Request Phase
-- Requester initiates KEM with Master Peer 
-- Encrypts certificate query using established secret
-
-#### Validation Phase
-- Master Peer verifies query authorization
-- Retrieves requested certificate from registry
-- Signs response package with Dilithium
-- Implements NIST SP 800-130 recommendations for key management infrastructure
-
-#### Delivery Phase
-- Encrypts certificate package with session keys
-- Includes integrity proof via SHA-512/256 (NIST FIPS 180-4)
-
-## Security Properties
-
-### Cryptographic Foundations
-
-* **Post-Quantum Security:** All primitives resist quantum computing attacks
-
-  - Implements NIST-selected post-quantum cryptographic algorithms
-  - Kyber: [NIST FIPS 203](https://csrc.nist.gov/pubs/fips/203/ipd)
-  - Dilithium: [NIST FIPS 204](https://csrc.nist.gov/pubs/fips/204/ipd)
-  
-- **Mutual Authentication:** Dual verification via certificates and session keys
-- **Forward Secrecy:** Ephemeral session keys derived from KEM exchanges
-- **Cryptographic Agility:** Modular design supports algorithm updates
-
-  - Follows NIST SP 800-131A Rev. 2 guidelines for cryptographic algorithm transitions
 
 
 ### Virtual IPv6 Architecture (VIP6)

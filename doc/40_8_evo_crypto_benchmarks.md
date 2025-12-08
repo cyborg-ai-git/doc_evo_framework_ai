@@ -8,7 +8,7 @@
 > 
 > ⚠️ Warnings suggest benchmark configuration improvements for more accurate results
 
-> TODO: to add diagrams benches
+> TODO: to new benches format
 > 
 > TODO: to add diagrams memory
 
