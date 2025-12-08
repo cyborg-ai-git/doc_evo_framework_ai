@@ -22,16 +22,18 @@ skinparam actor {
 ' Colors definition
 !$PEER_A_COLOR = "#FFB6C1"
 !$PEER_B_COLOR = "#87CEEB"
-!$PEER_C_COLOR = "#DDA0DD"
-!$PEER_D_COLOR = "#98FB98"
-!$PEER_E_COLOR = "#989E98"
+!$PEER_C_COLOR = "#87CEEB"
+!$PEER_D_COLOR = "#87CEEB"
+!$PEER_E_COLOR = "#87CEEB"
 !$PEER_F_COLOR = "#EEEEEE"
 !$RELAY_PEER_COLOR = "#FFFFDD"
 !$PEER_CLIENT_COLOR = "#FFA07A"
+!$MASTER_PEER_COLOR = "#90EE90"
 
 title EPQB Network Topology
 
 ' Actors
+
 actor "PeerA" as PA $PEER_A_COLOR
 actor "PeerB" as PB $PEER_B_COLOR
 actor "PeerC" as PC $PEER_C_COLOR
@@ -43,6 +45,25 @@ actor "PeerClient" as PCL $PEER_CLIENT_COLOR
 actor "RelayPeer1" as RP1 $RELAY_PEER_COLOR
 actor "RelayPeer2" as RP2 $RELAY_PEER_COLOR
 actor "RelayPeer3" as RP3 $RELAY_PEER_COLOR
+
+actor "MasterPeer1" as MP1 $MASTER_PEER_COLOR
+actor "MasterPeer2" as MP2 $MASTER_PEER_COLOR
+
+
+PA -[$PEER_A_COLOR].> MP1
+MP1 -[$PEER_A_COLOR].> PA
+
+PE -[$PEER_E_COLOR].> MP2
+MP2 -[$PEER_E_COLOR].> PE
+
+PC -[$PEER_CLIENT_COLOR].> MP2
+MP2 -[$PEER_CLIENT_COLOR].> PC
+
+PD -[$PEER_A_COLOR].> MP1
+MP1 -[$PEER_A_COLOR].> PD
+
+RP1 -[$RELAY_PEER_COLOR].> MP1
+MP1 -[$RELAY_PEER_COLOR].> RP1
 
 ' PeerA connections to multiple RelayPeers
 PA -[$PEER_A_COLOR]-> RP1
@@ -71,9 +92,10 @@ PCL -[$PEER_CLIENT_COLOR]-> PF
 
 note right of PA
   PeerA connects to multiple Peer
-  by RelayPeers or direct bridge to PeerE
-  To connect to PeerD is selected
-  the fastest RelayPeer3
+  by RelayPeers or direct bridge to **PeerE**
+  To connect to **PeerD** is selected
+  the fastest **RelayPeer3** vs (**RelayPeer2**,  **RelayPeer1**)
+  set, get **MasterPeer1**
 end note
 
 note bottom of RP1
