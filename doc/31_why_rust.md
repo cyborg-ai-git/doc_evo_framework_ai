@@ -1,6 +1,7 @@
 # Why Rust? 🦀
 
 The Evo Framework is fundamentally implemented in Rust, a systems programming language that combines:
+
 - Extreme performance comparable to C
 - Memory safety without garbage collection
 - Zero-cost abstractions
@@ -10,6 +11,7 @@ The Evo Framework is fundamentally implemented in Rust, a systems programming la
 ### Performance Considerations
 
 Unlike traditional frameworks that rely on slow serialization methods like JSON or Protocol Buffers, Evo implements a custom zero-copy serialization mechanism that:
+
 - Eliminates runtime serialization overhead
 - Provides near-native performance
 - Ensures type-safe data transmission
@@ -18,11 +20,13 @@ Unlike traditional frameworks that rely on slow serialization methods like JSON 
 #### Language Performance Critique
 
 The framework acknowledges the performance limitations of certain languages:
+
 - Python: Interpreted, global interpreter lock (GIL) limitations
 - Node.js: Single-threaded event loop, inefficient for complex computations
 - JavaScript: Garbage collection overhead
 
 In contrast, Rust offers:
+
 - Compiled performance matching C
 - Safe concurrency
 - Zero-cost abstractions
@@ -41,11 +45,13 @@ In contrast, Rust offers:
 **For Threading**: Rust and Kotlin (coroutines) excel in modern concurrency. C# has excellent async support. Avoid Python. Node.js for CPU-bound multithreading.
 
 **For Mobile Development**:
+
 - **Android**: Java and Kotlin are native choices. C/C++ via NDK for performance-critical components. Rust via JNI/FFI for high-performance libraries.
 - **iOS**: Swift is the native choice, with excellent performance and platform integration. Rust can be integrated via FFI for shared business logic.
 - **Cross-platform Mobile**: React Native (JavaScript/React), Kotlin Multiplatform Mobile, C# with Xamarin/MAUI, or Rust with platform-specific UI layers.
 
 **Mobile-Specific Considerations**:
+
 - Native development (Swift for iOS, Kotlin/Java for Android) provides best performance and platform integration
 - Rust offers excellent mobile FFI support: can compile to iOS frameworks and Android libraries with C ABI
 - Cross-platform solutions trade some performance for development efficiency
