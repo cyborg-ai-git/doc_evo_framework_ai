@@ -60,7 +60,7 @@ else
     # Fallback - use config file setting or default
     EMOJI_CONFIG=${EMOJI_CONFIG:-"data/working_emoji.tex"}
 fi
-PDF_ENGINE=${PDF_ENGINE:-"xelatex"}
+PDF_ENGINE=${PDF_ENGINE:-"lualatex"}
 
 # Display loaded configuration
 echo "📋 Configuration loaded from $CONFIG_FILE:"
@@ -108,8 +108,13 @@ pandoc \
   --include-in-header="$EMOJI_CONFIG" \
   --pdf-engine-opt=-shell-escape
 
-echo "✅ PDF generated successfully: $PATH_OUTPUT"
-open "$PATH_OUTPUT"
+if [ -f "$PATH_OUTPUT" ]; then
+    echo "✅ PDF generated successfully: $PATH_OUTPUT"
+    open "$PATH_OUTPUT"
+else
+    echo "❌ Error: PDF generation failed!"
+    exit 1
+fi
 #---------------------------------------------------------------------------------------------------
 cd "$CURRENT_DIRECTORY" || exit
 #===================================================================================================

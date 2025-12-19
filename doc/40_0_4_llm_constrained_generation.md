@@ -402,7 +402,7 @@ arguments → (schema for selected tool)
 
 ### What Does NOT Work
 
-**1. $ref references:**
+**1. `$ref` references:**
 ```json
 {
   "$defs": {
