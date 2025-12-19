@@ -4,7 +4,7 @@
 # github: https://github.com/cyborg-ai-git
 #===================================================================================================
 # Document Configuration
-version = "v2025.12.141236"
+version = "v2025.12.190227"
 title = "Evo Framework AI"
 subtitle = "The fastest and secure framework for AI"
 author = "CyborgAI"
@@ -15,8 +15,9 @@ output_dir = "./output"
 template = "data/dark.tex"
 emoji_config = "data/working_emoji.tex"
 #---------------------------------------------------------------------------------------------------
-# PDF Engine Options
-pdf_engine = "xelatex"
+pdf_engine = "lualatex"
+mainfont = "Noto Sans"
+mathfont = "Noto Sans Math"
 enable_toc = true
 number_sections = true
 shell_escape = true
