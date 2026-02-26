@@ -1,0 +1,72 @@
+@startuml agentic_vs_forge
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam object {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #000000
+}
+
+' Colors
+!$FORGE_COLOR = "#90EE90"
+!$VIBE_COLOR = "#FF6347"
+
+title F.O.R.G.E Coding vs Vibe Coding
+
+object "**F.O.R.G.E Coding**\n(Evo Framework AI)" as FORGE $FORGE_COLOR {
+  **F**orced **O**utput **R**einforced
+  **G**enerated **E**vo Framework AI
+  ====
+  Token efficiency: Optimized (-60%)
+  Security: Proactive, auditable
+  Quantum safety: EPQB (NIST)
+  Privacy: Transparent, encrypted
+  Predictability: 100% deterministic
+  Maintenance: Low, sustainable
+  AI compat: Structured specs
+  ----
+  Tests: Always (auto-generated)
+  Benchmarks: Always (auto-generated)
+  Docs: Always (auto-generated)
+  Error handling: Exhaustive match
+  Thread safety: Compile-time enforced
+  Memory safety: Compile-time enforced
+  ====
+  **Generated = Production-Ready**
+}
+
+object "**Vibe Coding**\n(Claude Code, Cursor, Antigravity)" as VIBE $VIBE_COLOR {
+  LLM writes code based on
+  prompt + context + model mood
+  ====
+  Token efficiency: Wasteful (+300%)
+  Security: Implicit, reactive
+  Quantum safety: Vulnerable
+  Privacy: Hard to trace
+  Predictability: Unreliable
+  Maintenance: High tech debt
+  AI compat: Chaotic prompts
+  ----
+  Tests: Maybe (if LLM decides)
+  Benchmarks: Almost never
+  Docs: Inconsistent
+  Error handling: Runtime exceptions
+  Thread safety: Runtime bugs
+  Memory safety: GC-managed
+  ====
+  **Output = Starting Point**
+}
+
+FORGE -[hidden]-> VIBE
+
+@enduml

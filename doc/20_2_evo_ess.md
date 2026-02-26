@@ -550,6 +550,7 @@ MapId
 - Minimal memory footprint
 
 ### Comparison
+\pagebreak
 
 | Aspect       | MapEntity<T>                | MapId                   |
 |--------------|-----------------------------|-------------------------|
@@ -561,8 +562,10 @@ MapId
 ## Performance
 
 ![Performance](data/evo_ess_performance.svg)
+\pagebreak
 
 ### Benchmark Results
+\pagebreak
 
 | Operation | Time | Description |
 |-----------|------|-------------|
@@ -579,16 +582,18 @@ MapId
 | MapEntity<ETest2> | 153ns / 377ns | Serialize / Deserialize |
 
 > TODO: to update benches time
+\pagebreak
 
 ### Format Comparison
 
 | Format             | Size       | Overhead   | Speed     | Use Case       |
 |--------------------|------------|------------|-----------|----------------|
-| **ESS (zerocopy)** | 176 bytes  | 0%         | ⚡ 7.5ns   | Cross-language |
-| **Bincode**        | 176 bytes  | 0%         | ⚡ ~20ns   | Rust-to-Rust   |
-| **Protobuf**       | ~184 bytes | +4%        | ⚡ ~50ns   | Cross-language |
-| **MessagePack**    | ~198 bytes | +12%       | ⚡ ~100ns  | Compact binary |
-| **JSON**           | ~528 bytes | +200%      | 🐌 ~500ns | Human-readable |
+| **ESS (zerocopy)** | 176 bytes  | 0%         | 7.5ns     | Cross-language |
+| **Bincode**        | 176 bytes  | 0%         | ~20ns     | Rust-to-Rust   |
+| **Protobuf**       | ~184 bytes | +4%        | ~50ns     | Cross-language |
+| **MessagePack**    | ~198 bytes | +12%       | ~100ns    | Compact binary |
+| **JSON**           | ~528 bytes | +200%      | ~500ns    | Human-readable |
+\pagebreak
 
 ## Safety Guarantees
 
@@ -614,14 +619,15 @@ ESS uses compile-time verification for safety:
 - ✅ Error handling (proper error types)
 
 ### Safety Comparison
+\pagebreak
 
 | Aspect              | Unsafe Code   | ESS (Safe)   |
 |---------------------|---------------|--------------|
-| Compile-time checks | ❌ No          | ✅ Yes        |
-| Runtime validation  | ❌ No          | ✅ Yes        |
-| UB risk             | ❌ High        | ✅ None       |
-| Performance         | ⚡ Fast        | ⚡ Same       |
-| Maintenance         | ❌ Hard        | ✅ Easy       |
+| Compile-time checks | No            | Yes          |
+| Runtime validation  | No            | Yes          |
+| UB risk             | High          | None         |
+| Performance         | Fast          | Same         |
+| Maintenance         | Hard          | Easy         |
 
 ### Why Safety Matters
 
@@ -659,6 +665,7 @@ Bridge Layer A          Bridge Layer B          Bridge Layer C
 ```
 
 ### Bridge Layer Benefits
+\pagebreak
 
 | Benefit            | Description                               | Impact              |
 |--------------------|-------------------------------------------|---------------------|

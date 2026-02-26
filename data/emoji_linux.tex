@@ -1,154 +1,64 @@
-% Linux emoji configuration (LuaLaTeX)
+% Linux emoji configuration (LuaLaTeX - Babel & Targeted approach)
 \usepackage{fontspec}
-\usepackage{adjustbox}
-\usepackage{xcolor}
-\usepackage{colortbl}
 
-% Define pandocbounded command if not available
-\providecommand{\pandocbounded}[1]{#1}
+% 0. Math Support
+\usepackage{unicode-math}
+\setmathfont{Noto Sans Math}
 
-\renewcommand{\familydefault}{\sfdefault}
+% 1. Force HarfBuzz globally
+\defaultfontfeatures{Renderer=HarfBuzz}
 
+% 2. Japanese Support via Babel (instead of luatexja)
+\usepackage[japanese, english]{babel}
+\babelprovide[import, onchar=ids fonts]{japanese}
+\babelfont[japanese]{rm}{Noto Sans CJK JP}
 
-% Set main fonts with full Unicode support including CJK
-\setmainfont{Noto Sans}[
-  BoldFont=Noto Sans Bold,
-  ItalicFont=Noto Sans Italic,
-  BoldItalicFont=Noto Sans Bold Italic
-]
-
-% Set monospace font
-\setmonofont{DejaVu Sans Mono}[Scale=0.9]
-
-% Set emoji font to Noto Color Emoji with HarfBuzz renderer for color support
+% 3. Emoji Font
 \newfontfamily\emojifont{Noto Color Emoji}[Renderer=HarfBuzz]
 
-% Set Japanese font for CJK characters
-\newfontfamily\japanesefont{Noto Sans CJK JP}[Scale=1.0]
-
-% Command to render emoji (generic wrapper)
+% 4. Targeted mapping for emojis found in doc
+\usepackage{newunicodechar}
 \newcommand{\emoji}[1]{{\emojifont #1}}
 
-% Command to render Japanese text
-\newcommand{\jp}[1]{{\japanesefont #1}}
-
-% Map Unicode characters to emoji font
-\usepackage{newunicodechar}
-
-% Standard Emojis - Using Noto Color Emoji
-% LuaLaTeX with HarfBuzz usually handles these automatically if the font is set as main font or fallback,
-% but explicit mapping ensures they use the correct font family.
-
-% Explicit mappings for emojis used in documentation
-\newunicodechar{📚}{\emoji{📚}}
-\newunicodechar{🧠}{\emoji{🧠}}
-\newunicodechar{🏗}{\emoji{🏗}}
-\newunicodechar{⚙}{\emoji{⚙}}
-\newunicodechar{🦀}{\emoji{🦀}}
-\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{🚀}{\emoji{🚀}}
 \newunicodechar{✅}{\emoji{✅}}
 \newunicodechar{❌}{\emoji{❌}}
-\newunicodechar{⚠}{\emoji{⚠}}
-\newunicodechar{🔧}{\emoji{🔧}}
-\newunicodechar{💻}{\emoji{💻}}
-\newunicodechar{🔒}{\emoji{🔒}}
-\newunicodechar{⚡}{\emoji{⚡}}
-\newunicodechar{🧪}{\emoji{🧪}}
-\newunicodechar{📊}{\emoji{📊}}
-\newunicodechar{🚀}{\emoji{🚀}}
-\newunicodechar{🎉}{\emoji{🎉}}
-\newunicodechar{🔄}{\emoji{🔄}}
-\newunicodechar{🎯}{\emoji{🎯}}
-\newunicodechar{💡}{\emoji{💡}}
-\newunicodechar{🔥}{\emoji{🔥}}
-\newunicodechar{⭐}{\emoji{⭐}}
-\newunicodechar{🌟}{\emoji{🌟}}
-\newunicodechar{💎}{\emoji{💎}}
-\newunicodechar{🛡}{\emoji{🛡}}
-\newunicodechar{🔑}{\emoji{🔑}}
-\newunicodechar{🎨}{\emoji{🎨}}
-\newunicodechar{💋}{\emoji{💋}}
-\newunicodechar{🔷}{\emoji{🔷}}
-\newunicodechar{🔶}{\emoji{🔶}}
-\newunicodechar{🔴}{\emoji{🔴}}
-\newunicodechar{🟢}{\emoji{🟢}}
-\newunicodechar{🏆}{\emoji{🏆}}
-\newunicodechar{🥇}{\emoji{🥇}}
-\newunicodechar{🥈}{\emoji{🥈}}
-\newunicodechar{🥉}{\emoji{🥉}}
-
-% Mathematical symbols - use main font or specific math font if needed,
-% ensuring they don't break if present in emoji font.
-\newunicodechar{≈}{≈}
-\newunicodechar{→}{→}
-\newunicodechar{≤}{≤}
-\newunicodechar{√}{√}
-\newunicodechar{↔}{↔}
-\newunicodechar{⋆}{⋆}
+\newunicodechar{🤖}{\emoji{🤖}}
+\newunicodechar{🦀}{\emoji{🦀}}
 \newunicodechar{★}{\emoji{★}}
-\newunicodechar{◇}{◇}
-\newunicodechar{░}{░}
-
-% Japanese characters - use Japanese font
-\newunicodechar{ス}{\jp{ス}}
-\newunicodechar{す}{\jp{す}}
-\newunicodechar{カ}{\jp{カ}}
-\newunicodechar{つ}{\jp{つ}}
-\newunicodechar{え}{\jp{え}}
-\newunicodechar{レ}{\jp{レ}}
-\newunicodechar{サ}{\jp{サ}}
-\newunicodechar{け}{\jp{け}}
-\newunicodechar{へ}{\jp{へ}}
-\newunicodechar{ワ}{\jp{ワ}}
-\newunicodechar{さ}{\jp{さ}}
-\newunicodechar{ほ}{\jp{ほ}}
-\newunicodechar{き}{\jp{き}}
-\newunicodechar{て}{\jp{て}}
-\newunicodechar{ソ}{\jp{ソ}}
-\newunicodechar{く}{\jp{く}}
-\newunicodechar{い}{\jp{い}}
-\newunicodechar{と}{\jp{と}}
-\newunicodechar{の}{\jp{の}}
-\newunicodechar{メ}{\jp{メ}}
-\newunicodechar{む}{\jp{む}}
-\newunicodechar{ル}{\jp{ル}}
-\newunicodechar{ト}{\jp{ト}}
-\newunicodechar{わ}{\jp{わ}}
-\newunicodechar{ツ}{\jp{ツ}}
-\newunicodechar{セ}{\jp{セ}}
-
-% Other symbols
-\newunicodechar{♫}{\emoji{♫}}
+\newunicodechar{☆}{\emoji{☆}}
 \newunicodechar{☎}{\emoji{☎}}
+\newunicodechar{☴}{\emoji{☴}}
+\newunicodechar{☺}{\emoji{☺}}
+\newunicodechar{♂}{\emoji{♂}}
+\newunicodechar{♡}{\emoji{♡}}
+\newunicodechar{♥}{\emoji{♥}}
+\newunicodechar{♦}{\emoji{♦}}
+\newunicodechar{♪}{\emoji{♪}}
+\newunicodechar{♫}{\emoji{♫}}
+\newunicodechar{⚠}{\emoji{⚠}}
+\newunicodechar{✓}{\emoji{✓}}
+\newunicodechar{✔}{\emoji{✔}}
+\newunicodechar{➡}{\emoji{➡}}
+\newunicodechar{💋}{\emoji{💋}}
+\newunicodechar{🔄}{\emoji{🔄}}
+\newunicodechar{🟢}{\emoji{🟢}}
+\newunicodechar{🦾}{\emoji{🦾}}
+\newunicodechar{🦿}{\emoji{🦿}}
+\newunicodechar{🧪}{\emoji{🧪}}
+\newunicodechar{🧬}{\emoji{🧬}}
 
-% Greek letters
-\newunicodechar{α}{α}
-\newunicodechar{δ}{δ}
-\newunicodechar{φ}{φ}
-\newunicodechar{τ}{τ}
-\newunicodechar{λ}{λ}
-\newunicodechar{π}{π}
-\newunicodechar{Δ}{Δ}
-\newunicodechar{Ε}{Ε}
-\newunicodechar{ε}{ε}
+% Variation Selector-16
+\newunicodechar{️}{} 
 
-% Box-drawing characters
-\newunicodechar{├}{+}
-\newunicodechar{─}{-}
-\newunicodechar{│}{|}
-\newunicodechar{└}{+}
-\newunicodechar{┌}{+}
-\newunicodechar{┐}{+}
-\newunicodechar{┘}{+}
-\newunicodechar{┬}{+}
-\newunicodechar{┴}{+}
-\newunicodechar{┼}{+}
-\newunicodechar{━}{=}
-\newunicodechar{┃}{|}
-\newunicodechar{┏}{+}
-\newunicodechar{┓}{+}
-\newunicodechar{┗}{+}
-\newunicodechar{┛}{+}
-
-% Handle variation selectors
-\newunicodechar{️}{}  % Variation Selector-16
+% 5. Map common math symbols to math mode
+\newunicodechar{→}{$\to$}
+\newunicodechar{←}{$\leftarrow$}
+\newunicodechar{↔}{$\leftrightarrow$}
+\newunicodechar{≤}{$\le$}
+\newunicodechar{≥}{$\ge$}
+\newunicodechar{≠}{$\neq$}
+\newunicodechar{≈}{$\approx$}
+\newunicodechar{×}{$\times$}
+\newunicodechar{÷}{$\div$}
+\newunicodechar{±}{$\pm$}

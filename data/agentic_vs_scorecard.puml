@@ -1,0 +1,133 @@
+@startuml agentic_vs_scorecard
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam object {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #000000
+}
+
+' Colors
+!$EVO_COLOR = "#90EE90"
+!$CC_COLOR = "#87CEEB"
+!$CCT_COLOR = "#DDA0DD"
+!$AG_COLOR = "#DAA520"
+!$CUR_COLOR = "#FFB6C1"
+!$CREW_COLOR = "#FFA07A"
+!$OC_COLOR = "#FF6347"
+
+title FINAL SCORECARD (All using Claude Opus 4.6)
+
+object "**Evo Framework AI**" as EVO $EVO_COLOR {
+  Production: **A**
+  Development: **A**
+  Infrastructure: **A-**
+  ----
+  **OVERALL: A**
+  ----
+  Best at: Prod. autonomous,
+  scalable, any domain agent
+  ----
+  Risk: Beta, CC-ND license,
+  small community
+}
+
+object "**Claude Code**" as CC $CC_COLOR {
+  Production: D+
+  Development: A-
+  Infrastructure: B-
+  ----
+  **OVERALL: B**
+  ----
+  Best at: General purpose
+  dev tool
+  ----
+  Risk: Vendor lock (Anthropic),
+  no local LLM
+}
+
+object "**CC Teams**" as CCT $CCT_COLOR {
+  Production: C-
+  Development: B+
+  Infrastructure: C
+  ----
+  **OVERALL: B-**
+  ----
+  Best at: Team collab
+  experimental
+  ----
+  Risk: Experimental,
+  20-30s spawn
+}
+
+object "**Antigravity**" as AG $AG_COLOR {
+  Production: C
+  Development: A-
+  Infrastructure: C
+  ----
+  **OVERALL: B**
+  ----
+  Best at: Agent-first IDE
+  with artifacts + manager
+  ----
+  Risk: Cloud only (Google)
+}
+
+object "**Cursor**" as CUR $CUR_COLOR {
+  Production: D
+  Development: A-
+  Infrastructure: C+
+  ----
+  **OVERALL: B-**
+  ----
+  Best at: IDE coding UX,
+  Background Agents (2.0)
+  ----
+  Risk: Sub cost, VM-only
+}
+
+object "**CrewAI**" as CREW $CREW_COLOR {
+  Production: C-
+  Development: C
+  Infrastructure: C
+  ----
+  **OVERALL: C**
+  ----
+  Best at: Python multi-agent
+  prototype
+  ----
+  Risk: Python perf
+}
+
+object "**OpenClaw**" as OC $OC_COLOR {
+  Production: D+
+  Development: C+
+  Infrastructure: C-
+  ----
+  **OVERALL: C**
+  ----
+  Best at: Open-src community
+  skills (Node.js)
+  ----
+  Risk: 512 CVEs, single-agent
+}
+
+' Layout
+EVO -[hidden]-> CC
+CC -[hidden]-> CCT
+CCT -[hidden]-> AG
+AG -[hidden]-> CUR
+CUR -[hidden]-> CREW
+CREW -[hidden]-> OC
+
+@enduml

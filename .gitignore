@@ -6,3 +6,5 @@ scripts_release
 *.idea
 *.kiro
 *.vscode
+luatex.*
+doc_draft

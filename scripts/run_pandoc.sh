@@ -36,6 +36,10 @@ OUTPUT_DIR=$(grep '^output_dir' "$CONFIG_FILE" | sed 's/output_dir = "\(.*\)"/\1
 TEMPLATE=$(grep '^template' "$CONFIG_FILE" | sed 's/template = "\(.*\)"/\1/')
 EMOJI_CONFIG=$(grep '^emoji_config' "$CONFIG_FILE" | sed 's/emoji_config = "\(.*\)"/\1/')
 PDF_ENGINE=$(grep '^pdf_engine' "$CONFIG_FILE" | sed 's/pdf_engine = "\(.*\)"/\1/')
+MAINFONT=$(grep '^mainfont' "$CONFIG_FILE" | sed 's/mainfont = "\(.*\)"/\1/')
+MATHFONT=$(grep '^mathfont' "$CONFIG_FILE" | sed 's/mathfont = "\(.*\)"/\1/')
+CJKMAINFONT=$(grep '^CJKmainfont' "$CONFIG_FILE" | sed 's/CJKmainfont = "\(.*\)"/\1/')
+CJKMONOFONT=$(grep '^CJKmonofont' "$CONFIG_FILE" | sed 's/CJKmonofont = "\(.*\)"/\1/')
 
 # Validate required configuration values
 if [ -z "$VERSION" ] || [ -z "$TITLE" ] || [ -z "$AUTHOR" ]; then
@@ -73,6 +77,10 @@ echo "   Logo: $LOGO"
 echo "   Output Dir: $OUTPUT_DIR"
 echo "   Template: $TEMPLATE"
 echo "   PDF Engine: $PDF_ENGINE"
+echo "   Main Font: $MAINFONT"
+echo "   Math Font: $MATHFONT"
+echo "   CJK Main Font: $CJKMAINFONT"
+echo "   CJK Mono Font: $CJKMONOFONT"
 echo ""
 
 #---------------------------------------------------------------------------------------------------
@@ -86,8 +94,8 @@ PATH_OUTPUT="$OUTPUT_DIR/evo_framework_doc_$VERSION.pdf"
 
 #rm -Rf "$OUTPUT_DIR/*.pdf"
 
-# Build PDF from modular markdown sections
-# Each .md file is on a separate line for easy addition/removal
+rm -f "$PATH_OUTPUT"
+
 pandoc \
   $PATH_INPUT/*.md \
   -o "$PATH_OUTPUT" \
@@ -106,15 +114,23 @@ pandoc \
   --number-sections \
   --toc \
   --include-in-header="$EMOJI_CONFIG" \
+  --variable mainfont="$MAINFONT" \
+  --variable mathfont="$MATHFONT" \
+  --variable CJKmainfont="$CJKMAINFONT" \
+  --variable CJKmonofont="$CJKMONOFONT" \
   --pdf-engine-opt=-shell-escape
 
-if [ -f "$PATH_OUTPUT" ]; then
+PANDOC_EXIT_CODE=$?
+
+if [ $PANDOC_EXIT_CODE -eq 0 ] && [ -f "$PATH_OUTPUT" ]; then
     echo "✅ PDF generated successfully: $PATH_OUTPUT"
-    open "$PATH_OUTPUT"
+    # open "$PATH_OUTPUT" # Commented out as we are in an agent environment
 else
-    echo "❌ Error: PDF generation failed!"
+    echo "❌ Error: PDF generation failed with exit code $PANDOC_EXIT_CODE"
     exit 1
 fi
+
+  rm -Rf "../luatex.*"
 #---------------------------------------------------------------------------------------------------
 cd "$CURRENT_DIRECTORY" || exit
 #===================================================================================================

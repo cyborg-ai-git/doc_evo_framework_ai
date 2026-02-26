@@ -1,0 +1,110 @@
+@startuml agentic_vs_cc_teams_flow
+!theme plain
+skinparam actorStyle awesome
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    ParticipantBackgroundColor #000000
+    ParticipantFontColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+    ArrowColor #FFFFFF
+    BoxBorderColor #FFFFFF
+    BoxBackgroundColor #111111
+    BoxFontColor #FFFFFF
+}
+
+' Colors
+!$USER_COLOR = "#FFB6C1"
+!$LEAD_COLOR = "#90EE90"
+!$T1_COLOR = "#87CEEB"
+!$T2_COLOR = "#DDA0DD"
+!$T3_COLOR = "#DAA520"
+
+title Claude Code Agent Teams Flow — "Create Instagram API package"
+
+actor "USER\n(CLI)" as U $USER_COLOR
+participant "TEAM LEAD\n(Node.js)" as TL $LEAD_COLOR
+participant "TEAMMATE 1" as T1 $T1_COLOR
+participant "TEAMMATE 2" as T2 $T2_COLOR
+participant "TEAMMATE 3" as T3 $T3_COLOR
+
+autonumber
+
+== Spawn Teammates (20-30s each) ==
+
+U -[$USER_COLOR]> TL: "create Instagram"
+activate TL $LEAD_COLOR
+
+TL -[$LEAD_COLOR]> T1: spawn teammate 1
+note right: 20-30s startup
+TL -[$LEAD_COLOR]> T2: spawn teammate 2
+note right: 20-30s startup
+TL -[$LEAD_COLOR]> T3: spawn teammate 3
+note right: 20-30s startup
+
+== Task Assignment ==
+
+TL -[$LEAD_COLOR]> T1: task list: "write entities"
+activate T1 $T1_COLOR
+TL -[$LEAD_COLOR]> T2: task list: "write API handlers"
+activate T2 $T2_COLOR
+TL -[$LEAD_COLOR]> T3: task list: "write tests + config"
+activate T3 $T3_COLOR
+
+== Parallel Execution (each with own context) ==
+
+T1 -> T1: Write files\n~40K tokens\n(own context)
+T2 -> T2: Write files\n~40K tokens\n(own context)
+T3 -> T3: Write files\n~40K tokens\n(own context)
+
+== Coordination (natural language mailbox) ==
+
+T1 -[$T1_COLOR]> TL: mailbox: "done"
+deactivate T1
+T2 -[$T2_COLOR]> TL: mailbox: "done"
+deactivate T2
+T3 -[$T3_COLOR]> TL: mailbox: "done"
+deactivate T3
+
+== Merge & Deploy ==
+
+TL -> TL: merge results
+TL -> TL: Bash: cargo build + test
+TL -> TL: Bash: git push
+
+deactivate TL
+
+TL -[$LEAD_COLOR]> U: "Done"
+
+note over U
+  **TOTAL: ~400,000 tokens**
+  **COST: ~$3.60-$7.20**
+  **TIME: 8-15 minutes**
+  **SPAWN: 20-30s/each**
+  3 teammates x own context + lead context
+  Each sends ALL tool defs per call (~3K each)
+  Natural language coordination (no capability manifest)
+  Shared task list + mailbox
+end note
+
+@enduml

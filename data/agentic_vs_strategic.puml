@@ -1,0 +1,87 @@
+@startuml agentic_vs_strategic
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+skinparam activity {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+    DiamondBackgroundColor #000000
+    DiamondBorderColor #FFFFFF
+    DiamondFontColor #FFFFFF
+    ArrowColor #FFFFFF
+}
+
+skinparam activityDiamond {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam partition {
+    BackgroundColor #111111
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Colors
+!$DEV_COLOR = "#87CEEB"
+!$EVO_COLOR = "#90EE90"
+!$LLM_COLOR = "#FFFFDD"
+!$DET_COLOR = "#DDA0DD"
+!$DEPLOY_COLOR = "#FFB6C1"
+
+title The Strategic Conclusion
+
+start
+
+partition "**Development Phase**" {
+    #87CEEB:Use Claude Code / Cursor to\n**DEVELOP and PROTOTYPE**;
+}
+
+partition "**Production Phase**" {
+    #90EE90:Use Evo Framework AI to\n**BUILD the production agent pipeline**;
+
+    #FFFFDD:Evo agent calls **DoCreatePackage**\n(LLM creates schema);
+
+    #DDA0DD:evo_core_dev **GENERATES**\ncomplete Rust workspace\n**(0 tokens)**;
+
+    #FFFFDD:Evo agent calls **DoEvoCoreApi**\n(LLM implements logic only);
+
+    #FFFFDD:Evo agent calls\n**DoCodeQuality + DoCodeSecurity**\n(LLM audits);
+
+    #DDA0DD:**DoRunAppPeer**\n(deterministic build + test);
+
+    #DDA0DD:**DoGithubPush**\n(deterministic deploy);
+}
+
+partition "**Deployed**" {
+    #FFB6C1:New agent is deployed and\nrunning **autonomously**\nMonitored via bridge.\n**Agents creating agents.**;
+}
+
+note right
+  **LLM options:**
+  Claude Pro/Max sub,
+  Anthropic API,
+  Ollama/vLLM ($0)
+
+  **Development cost:**
+  Claude Code tokens (one-time)
+
+  **Production cost:**
+  $0 (local models) or
+  ~4x less (API) — recurring, scale
+end note
+
+stop
+
+@enduml
