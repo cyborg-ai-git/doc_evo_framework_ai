@@ -1,0 +1,101 @@
+@startuml agentic_vs_pipeline
+!theme plain
+skinparam actorStyle awesome
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Activity styling
+skinparam activity {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+    DiamondBackgroundColor #000000
+    DiamondBorderColor #FFFFFF
+    DiamondFontColor #FFFFFF
+}
+
+skinparam partition {
+    BackgroundColor #111111
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Colors
+!$LLM_COLOR = "#87CEEB"
+!$DETERM_COLOR = "#90EE90"
+!$ZERO_COLOR = "#DAA520"
+
+title EVO Framework AI — Full Autonomous Pipeline\n"Create Instagram API package with 5 endpoints"
+
+|#111111| **Supervisor (Rust)** |
+
+start
+
+partition "**Phase 1: Schema Generation (LLM)**" #111133 {
+  #87CEEB:DoCreatePackage — child agent
+  generates 3 TOML schemas
+  (package.toml, entity.toml, api.toml)
+  **~3,150 tokens**;
+}
+
+partition "**Phase 2: Code Generation (Deterministic)**" #113311 {
+  #90EE90:evo_core_dev generates 50-100 files
+  Entity crates, API crates, WASM, FFI,
+  GUI, tests, benchmarks, docs, scripts
+  **0 tokens — sub-second**;
+
+  note right
+    **This is where EVO wins.**
+    50-100 production files at
+    **$0 cost** and sub-second.
+    Claude Code / Cursor / Antigravity
+    would need ~30,000-80,000 tokens
+    for the same output.
+  end note
+}
+
+partition "**Phase 3: Business Logic (LLM)**" #111133 {
+  while (API actions remaining?) is (yes)
+    #87CEEB:DoEvoCoreApi — child agent
+    implements business logic
+    **~3,300 tokens per action**;
+  endwhile (done)
+}
+
+partition "**Phase 4: Quality Assurance (LLM)**" #111133 {
+  #87CEEB:DoCodeQuality — 8-dim audit;
+  #87CEEB:DoCodeSecurity — security scan;
+}
+
+partition "**Phase 5: Testing (Deterministic)**" #113311 {
+  #90EE90:DoRunAppPeer — cargo build + test
+  **0 tokens**;
+}
+
+partition "**Phase 6: Deployment (Deterministic)**" #113311 {
+  #90EE90:DoGithubPush — git commit + push
+  **0 tokens**;
+}
+
+stop
+
+note right
+  **TOTAL: ~19,650 tokens**
+  **COST: ~$0.28**
+  **TIME: ~5 minutes**
+  ----
+  3 LLM phases (blue)
+  3 deterministic phases (green)
+  50+ files generated at $0
+end note
+
+@enduml

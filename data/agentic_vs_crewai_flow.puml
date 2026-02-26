@@ -1,0 +1,90 @@
+@startuml agentic_vs_crewai_flow
+!theme plain
+skinparam actorStyle awesome
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    ParticipantBackgroundColor #000000
+    ParticipantFontColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+    ArrowColor #FFFFFF
+    BoxBorderColor #FFFFFF
+    BoxBackgroundColor #111111
+    BoxFontColor #FFFFFF
+}
+
+' Colors
+!$DEV_COLOR = "#FFB6C1"
+!$ORCH_COLOR = "#90EE90"
+!$A1_COLOR = "#87CEEB"
+!$A2_COLOR = "#DDA0DD"
+
+title CrewAI / Python Framework Flow — "Create Instagram API package"
+
+actor "DEVELOPER" as D $DEV_COLOR
+participant "CREW\nORCHESTRATOR\n(Python)" as O $ORCH_COLOR
+participant "AGENT 1\n(Python)" as A1 $A1_COLOR
+participant "AGENT 2\n(Python)" as A2 $A2_COLOR
+
+autonumber
+
+== Kickoff ==
+
+D -[$DEV_COLOR]> O: crew.kickoff()
+activate O $ORCH_COLOR
+
+== Sequential Agent Execution ==
+
+O -[$ORCH_COLOR]> A1: assign task (string)
+activate A1 $A1_COLOR
+
+A1 -> A1: LLM call\n+ ALL tools\ncontext grows\n~50K tokens
+
+A1 -[$A1_COLOR]> A2: return string
+deactivate A1
+activate A2 $A2_COLOR
+
+A2 -> A2: LLM call\n+ ALL tools\n+ previous output\ncontext grows\n~60K tokens
+
+A2 -[$A2_COLOR]> O: collect results
+deactivate A2
+
+O -[$ORCH_COLOR]> D: result string
+deactivate O
+
+note over D
+  **TOTAL: ~150,000 tokens**
+  **COST: ~$1.50**
+  **TIME: 15-25 minutes**
+  (Python overhead)
+  Python GIL limits parallelism
+  No compile-time type safety
+  No code generation
+  No bridge infrastructure
+  String-based roles
+  No binary entities
+  No WASM deployment
+  JSON serialization
+end note
+
+@enduml

@@ -1,0 +1,122 @@
+@startuml agentic_vs_token_comparison
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam card {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+skinparam object {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #000000
+}
+
+' Colors
+!$EVO_COLOR = "#90EE90"
+!$CC_COLOR = "#87CEEB"
+!$CCT_COLOR = "#DDA0DD"
+!$AG_COLOR = "#DAA520"
+!$CUR_COLOR = "#FFB6C1"
+!$CREW_COLOR = "#FFA07A"
+!$OC_COLOR = "#FF6347"
+
+title Side-by-Side Token Flow Comparison\nTask: "Create Instagram API package with 5 endpoints" — Claude Opus 4.6
+
+object "**EVO Framework AI**" as EVO $EVO_COLOR {
+  Tool defs/call: 1 (~200 tok)
+  Context growth: 0 (clean child)
+  Code generation: 50-100 files
+  LLM calls: ~8
+  **Total tokens: ~20K**
+  **Total cost: ~$0.28**
+  Files produced: 50-100
+  **Ratio vs EVO: 1x**
+}
+
+object "**Claude Code**" as CC $CC_COLOR {
+  Tool defs/call: ALL (~3,000 tok)
+  Context growth: linear (+5K/call)
+  Code generation: 0 files
+  LLM calls: ~20-30
+  **Total tokens: ~120K**
+  **Total cost: ~$1.20**
+  Files produced: 15-20
+  **Ratio vs EVO: 6x**
+}
+
+object "**CC Teams**" as CCT $CCT_COLOR {
+  Tool defs/call: ALL (~3,000 tok)
+  Context growth: linear (per agent)
+  Code generation: 0 files
+  LLM calls: ~60-90
+  **Total tokens: ~400K**
+  **Total cost: ~$3.60-$7.20**
+  Files produced: 15-20
+  **Ratio vs EVO: 20x**
+}
+
+object "**Antigravity**" as AG $AG_COLOR {
+  Tool defs/call: ALL (~3,000 tok)
+  Context growth: linear (+5K/call)
+  Code generation: 0 files
+  LLM calls: ~20-30
+  **Total tokens: ~115K**
+  **Total cost: ~$1.10-$1.40**
+  Files produced: 15-20
+  **Ratio vs EVO: 5.7x**
+}
+
+object "**Cursor**" as CUR $CUR_COLOR {
+  Tool defs/call: ALL (~3,000 tok)
+  Context growth: linear
+  Code generation: 0 files
+  LLM calls: ~25-35
+  **Total tokens: ~125K**
+  **Total cost: ~$1.20-$1.50**
+  Files produced: 15-20
+  **Ratio vs EVO: 6.2x**
+}
+
+object "**CrewAI**" as CREW $CREW_COLOR {
+  Tool defs/call: ALL (~2,000 tok)
+  Context growth: linear
+  Code generation: 0 files
+  LLM calls: ~20-30
+  **Total tokens: ~150K**
+  **Total cost: ~$1.50**
+  Files produced: 10-15
+  **Ratio vs EVO: 7.5x**
+}
+
+object "**OpenClaw**" as OC $OC_COLOR {
+  Tool defs/call: ALL (~2,500 tok)
+  Context growth: linear
+  Code generation: 0 files
+  LLM calls: ~20-30
+  **Total tokens: ~150K**
+  **Total cost: ~$1.50**
+  Files produced: 10-15
+  **Ratio vs EVO: 7.5x**
+}
+
+' Layout
+EVO -[hidden]-> CC
+CC -[hidden]-> CCT
+CCT -[hidden]-> AG
+AG -[hidden]-> CUR
+CUR -[hidden]-> CREW
+CREW -[hidden]-> OC
+
+@enduml

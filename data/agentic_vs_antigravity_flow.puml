@@ -1,0 +1,101 @@
+@startuml agentic_vs_antigravity_flow
+!theme plain
+skinparam actorStyle awesome
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    ParticipantBackgroundColor #000000
+    ParticipantFontColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+    ArrowColor #FFFFFF
+    BoxBorderColor #FFFFFF
+    BoxBackgroundColor #111111
+    BoxFontColor #FFFFFF
+}
+
+' Colors
+!$USER_COLOR = "#FFB6C1"
+!$MANAGER_COLOR = "#90EE90"
+!$A1_COLOR = "#87CEEB"
+!$A2_COLOR = "#DDA0DD"
+
+title Google Antigravity Flow — "Create Instagram API package"
+
+actor "USER\n(IDE)" as U $USER_COLOR
+participant "MANAGER\nVIEW" as M $MANAGER_COLOR
+participant "AGENT 1\n(workspace)" as A1 $A1_COLOR
+participant "AGENT 2\n(workspace)" as A2 $A2_COLOR
+
+autonumber
+
+== Spawn Agents ==
+
+U -[$USER_COLOR]> M: "create Instagram"
+activate M $MANAGER_COLOR
+
+M -[$MANAGER_COLOR]> A1: spawn agent 1
+note right: cloud startup
+activate A1 $A1_COLOR
+M -[$MANAGER_COLOR]> A2: spawn agent 2
+activate A2 $A2_COLOR
+
+== Parallel Work (each with growing context) ==
+
+A1 -> A1: Write entities\n+ ALL tools per call\ncontext grows\n~60K tokens
+A2 -> A2: Write handlers\n+ ALL tools per call\ncontext grows\n~60K tokens
+
+== Artifact Production ==
+
+A1 -[$A1_COLOR]> M: produce Artifact\n(screenshot, plan)
+M -[$MANAGER_COLOR]> U: Artifact 1
+A2 -[$A2_COLOR]> M: produce Artifact
+M -[$MANAGER_COLOR]> U: Artifact 2
+deactivate A2
+
+== Feedback Loop ==
+
+U -[$USER_COLOR]> M: feedback on Artifact
+M -[$MANAGER_COLOR]> A1: resume agent 1
+
+A1 -> A1: more Write calls
+A1 -> A1: Bash: build + test
+A1 -> A1: Bash: git push
+deactivate A1
+
+M -[$MANAGER_COLOR]> U: final Artifact
+
+deactivate M
+
+note over U
+  **TOTAL: ~115,000 tokens**
+  **COST: ~$1.10-$1.40**
+  **TIME: 10-20 minutes**
+  No typed entities
+  No capability manifest
+  No deterministic code gen
+  Agents are independent
+  Artifacts are visual, not machine-readable
+  Knowledge base saves context for future
+end note
+
+@enduml

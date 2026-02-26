@@ -1,0 +1,75 @@
+@startuml agentic_vs_evo_openclaw
+!theme plain
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+skinparam object {
+    BackgroundColor #000000
+    BorderColor #FFFFFF
+    FontColor #FFFFFF
+}
+
+' Colors
+!$EVO_COLOR = "#90EE90"
+!$OC_COLOR = "#FF6347"
+
+title Evo Framework AI vs OpenClaw — Summary
+
+object "**Evo Framework AI**" as EVO $EVO_COLOR {
+  **Security: A**
+  0 CVEs, Rust memory safety,
+  post-quantum crypto
+  ----
+  **Scalability: A**
+  WASM, native, edge,
+  distributed bridge,
+  0 token codegen
+  ----
+  **Cost: A**
+  $0.28/package,
+  no subscription,
+  4-7x less tokens
+  ----
+  **Performance: A**
+  Rust compiled,
+  zero-copy binary,
+  nanosecond dispatch
+  ====
+  **OVERALL: A**
+}
+
+object "**OpenClaw**" as OC $OC_COLOR {
+  **Security: F**
+  512 CVEs,
+  386 malicious skills,
+  CVE-2026-25253 CVSS 8.8
+  ----
+  **Scalability: C**
+  Kubernetes scaling,
+  Node.js single-agent,
+  no code generation
+  ----
+  **Cost: C+**
+  ~$1.50/package,
+  optional $39/mo cloud,
+  hidden audit costs
+  ----
+  **Performance: C-**
+  Node.js V8 JIT,
+  JSON serialization,
+  single-threaded event loop
+  ====
+  **OVERALL: C-**
+}
+
+EVO -[hidden]-> OC
+
+@enduml

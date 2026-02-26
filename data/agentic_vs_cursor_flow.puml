@@ -1,0 +1,105 @@
+@startuml agentic_vs_cursor_flow
+!theme plain
+skinparam actorStyle awesome
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    ParticipantBackgroundColor #000000
+    ParticipantFontColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+    ArrowColor #FFFFFF
+    BoxBorderColor #FFFFFF
+    BoxBackgroundColor #111111
+    BoxFontColor #FFFFFF
+}
+
+' Colors
+!$USER_COLOR = "#FFB6C1"
+!$AGENT_COLOR = "#87CEEB"
+!$LLM_COLOR = "#DAA520"
+
+title Cursor Flow — "Create Instagram API package with 5 endpoints"
+
+actor "USER\n(IDE)" as U $USER_COLOR
+participant "SINGLE AGENT\n(Electron)" as A $AGENT_COLOR
+participant "LLM\n(Opus 4.6)" as L $LLM_COLOR
+
+autonumber
+
+== Planning ==
+
+U -[$USER_COLOR]> A: "create Instagram"
+activate A $AGENT_COLOR
+
+A -[$AGENT_COLOR]> L: system prompt + ALL tools
+activate L $LLM_COLOR
+L --> A: plan as diff
+deactivate L
+
+A -[$AGENT_COLOR]> U: show diff
+U -[$USER_COLOR]> A: accept
+
+== Entity Generation (human approves each diff) ==
+
+A -[$AGENT_COLOR]> L: Write entity_1.rs
+note right: context: ~10K
+L --> A
+A -[$AGENT_COLOR]> U: show diff
+U -[$USER_COLOR]> A: accept
+
+A -[$AGENT_COLOR]> L: Write entity_2.rs
+note right: context: ~15K
+L --> A
+A -[$AGENT_COLOR]> U: show diff
+U -[$USER_COLOR]> A: accept
+
+A -[$AGENT_COLOR]> L: ... repeat for every file ...
+
+== API & Test Generation (context keeps growing) ==
+
+A -[$AGENT_COLOR]> L: Write api_handler_1.rs
+note right: context: ~40K
+A -[$AGENT_COLOR]> L: Write test_1.rs
+note right: context: ~50K
+A -[$AGENT_COLOR]> L: Write Cargo.toml
+note right: context: ~60K
+
+deactivate A
+
+A -[$AGENT_COLOR]> U: all diffs shown
+
+note over U
+  **TOTAL: ~125,000 tokens**
+  **COST: ~$1.20-$1.50**
+  **+ $20-$40/mo subscription**
+  **TIME: 15-30 minutes**
+  (includes human review time)
+  Cursor 2.0: up to 8 parallel agents
+  Background Agents in VMs
+  Human approves every diff
+  ALL tools sent per call
+  Context grows linearly
+  No schema-to-code generation
+end note
+
+@enduml

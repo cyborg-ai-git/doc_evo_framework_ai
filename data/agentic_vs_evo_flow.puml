@@ -1,0 +1,144 @@
+@startuml agentic_vs_evo_flow
+!theme plain
+skinparam actorStyle awesome
+
+' Global dark theme settings
+skinparam backgroundColor #000000
+skinparam defaultFontColor #FFFFFF
+
+' Note specific settings
+skinparam note {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    FontColor #000000
+}
+
+' Sequence styling
+skinparam sequence {
+    LifeLineBorderColor #FFFFFF
+    LifeLineBackgroundColor #000000
+    ParticipantBorderColor #FFFFFF
+    ParticipantBackgroundColor #000000
+    ParticipantFontColor #FFFFFF
+    GroupBackgroundColor #000000
+    GroupBodyBackgroundColor #000000
+    GroupBorderColor #FFFFFF
+    GroupFontColor #FFFFFF
+    DividerBackgroundColor #000000
+    DividerBorderColor #FFFFFF
+    DividerFontColor #FFFFFF
+    ArrowColor #FFFFFF
+    BoxBorderColor #FFFFFF
+    BoxBackgroundColor #111111
+    BoxFontColor #FFFFFF
+}
+
+' Colors
+!$CLIENT_COLOR = "#FFB6C1"
+!$SUPERVISOR_COLOR = "#90EE90"
+!$CHILD_COLOR = "#87CEEB"
+!$DETERM_COLOR = "#DAA520"
+
+title Evo Framework AI Flow — "Create Instagram API package with 5 endpoints"
+
+actor "CLIENT" as C $CLIENT_COLOR
+participant "SUPERVISOR" as S $SUPERVISOR_COLOR
+participant "CHILD\nAGENTS" as CH $CHILD_COLOR
+participant "DETERMINISTIC\n(evo_core_dev)" as D $DETERM_COLOR
+
+autonumber
+
+== Agent Creation ==
+
+C -[$CLIENT_COLOR]> S: do_create_agent
+S -[$SUPERVISOR_COLOR]> C: f_progress(AgentCreated)
+
+== Phase 1: Schema Generation (LLM) ==
+
+C -[$CLIENT_COLOR]> S: EventAiDevInput\n::DoCreatePackage
+activate S $SUPERVISOR_COLOR
+
+S -> S: save supervisor state
+S -> S: pattern match variant
+S -[$SUPERVISOR_COLOR]> CH: create child (clean context)\nbrain + mission + 1 tool
+S -[$SUPERVISOR_COLOR]> C: f_progress(AddChild)
+activate CH $CHILD_COLOR
+
+CH -[$CHILD_COLOR]> D: LLM: generate 3 TOML\n~3,150 tokens
+CH -[$CHILD_COLOR]> S: f_progress(ApiProgress)
+D --> CH: 3 TOML files
+deactivate CH
+
+S -[$SUPERVISOR_COLOR]> C: f_progress(ApiComplete)
+S -> S: restore supervisor state
+S -> S: remove child
+
+== Phase 2: Code Generation (0 tokens) ==
+
+note over D
+  **evo_core_dev generates**
+  50-100 files
+  0 tokens
+  <1 second
+end note
+
+== Phase 3: Business Logic (LLM) ==
+
+loop 5 API actions
+    S -> S: save state
+    S -[$SUPERVISOR_COLOR]> CH: create child\nbrain + mission + 1 tool
+    activate CH $CHILD_COLOR
+    S -[$SUPERVISOR_COLOR]> C: f_progress(AddChild)
+    CH -[$CHILD_COLOR]> D: LLM: impl logic\n~3,300 tokens
+    CH -[$CHILD_COLOR]> S: f_progress(ApiProgress)
+    S -[$SUPERVISOR_COLOR]> C: f_progress(ApiComplete)
+    deactivate CH
+    S -> S: restore + remove child
+end
+
+== Phase 4: Quality Assurance (LLM) ==
+
+S -[$SUPERVISOR_COLOR]> CH: DoCodeQuality
+activate CH $CHILD_COLOR
+S -[$SUPERVISOR_COLOR]> C: f_progress(AddChild)
+CH -> CH: LLM: 8-dim audit
+S -[$SUPERVISOR_COLOR]> C: f_progress(ApiComplete)
+deactivate CH
+
+S -[$SUPERVISOR_COLOR]> CH: DoCodeSecurity
+activate CH $CHILD_COLOR
+S -[$SUPERVISOR_COLOR]> C: f_progress(AddChild)
+CH -> CH: LLM: security scan
+S -[$SUPERVISOR_COLOR]> C: f_progress(ApiComplete)
+deactivate CH
+
+== Phase 5: Testing (Deterministic) ==
+
+S -[$SUPERVISOR_COLOR]> D: DoRunAppPeer
+activate D $DETERM_COLOR
+D -> D: cargo build\ncargo test\n0 tokens
+S -[$SUPERVISOR_COLOR]> C: f_progress(ApiComplete)
+deactivate D
+
+== Phase 6: Deployment (Deterministic) ==
+
+S -[$SUPERVISOR_COLOR]> D: DoGithubPush
+activate D $DETERM_COLOR
+D -> D: git add\ngit commit\ngit push\n0 tokens
+S -[$SUPERVISOR_COLOR]> C: f_progress(ApiComplete)
+deactivate D
+
+deactivate S
+
+S -[$SUPERVISOR_COLOR]> C: f_progress(Complete)
+
+note over C
+  **TOTAL: ~19,650 tokens**
+  **COST: ~$0.28**
+  **TIME: minutes**
+  Each child: 1 tool definition
+  No context accumulation
+  50+ files generated at 0 tokens
+end note
+
+@enduml

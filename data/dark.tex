@@ -186,6 +186,9 @@ $if(CJKmainfont)$
 \ifLuaTeX
 \usepackage[$for(luatexjafontspecoptions)$$luatexjafontspecoptions$$sep$,$endfor$]{luatexja-fontspec}
 \setmainjfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+$if(CJKmonofont)$
+\setmonojfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmonofont$}
+$endif$
 \fi
 $endif$
 \fi
