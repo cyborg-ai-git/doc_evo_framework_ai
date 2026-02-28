@@ -221,5 +221,3 @@ Got:      (1001 ("hashtags" "content" "public"))
 - Token counting tools for your specific model
 
 ---
-
-*Document Version 1.0 - Last Updated: December 2024*
