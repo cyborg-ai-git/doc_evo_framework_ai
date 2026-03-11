@@ -46,6 +46,22 @@ The core data structures that represent your application's domain objects.
 
 **Purpose:** Define the structure and relationships of your data.
 
+
+### Entity Pattern (Zero-Copy, Code-Generated)
+
+Every entity follows a strict two-part structure:
+
+```
+E*Header 
+├── id: TypeID (32 bytes SHA-256)
+├── time: u64 (utc nanosecond precision)
+├── Version prefix: 8 bytes (compile-time EVO_VERSION)
+└── properties  ...
+
+E* (variable body)
+├── _header: E*Header (private)
+└── properties ...
+
 #### 2. Serialization Layer
 Handles conversion between in-memory structures and byte arrays.
 
