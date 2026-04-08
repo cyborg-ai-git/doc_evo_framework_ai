@@ -1,5 +1,5 @@
 ## Cross-Language Compatibility
-![languages](data/evo_languages.svg)
+![languages](data//evo_languages.svg)
 
 The **Evo Framework AI** is designed for seamless integration across multiple platforms and languages through:
 

@@ -1,6 +1,6 @@
 # Architectural Layers
 
-![architectural layers](data/evo_framework.svg)
+![architectural layers](data//evo_framework.svg)
 
 ## Evo Framework AI — Design Pattern Reference
 

@@ -2,7 +2,7 @@
 
 ## Core Philosophy and Technical Foundation
 
-![evo framework ai](data/logo_evo.svg){width=100% height=100%}
+![evo framework ai](data//logo_evo.svg){width=100% height=100%}
 
 ### Origins and Inspiration
 

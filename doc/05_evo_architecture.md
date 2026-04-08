@@ -1,6 +1,6 @@
 # Architecture
 
-![evo framework ai](data/evo_framework_text.svg)
+![evo framework ai](data//evo_framework_text.svg)
 
 The **Evo Framework AI** is based on different programming paradigms:
 - modular programming,

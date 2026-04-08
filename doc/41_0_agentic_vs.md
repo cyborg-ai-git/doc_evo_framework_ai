@@ -120,7 +120,7 @@ Each tool creates a **child agent** with clean LLM context. The supervisor dispa
 
 This is the key differentiator. The EVO dev agent orchestrates a pipeline where the LLM handles creative work and deterministic code generation handles everything else:
 
-![EVO Framework AI Full Autonomous Pipeline](data/agentic_vs_pipeline.svg)
+![EVO Framework AI Full Autonomous Pipeline](data//agentic_vs_pipeline.svg)
 
 ### Phase 1: Schema Generation (LLM)
 The supervisor calls **DoCreatePackage** — a child agent with the BRAIN prompt generates three TOML schema files (package.toml, entity.toml, api.toml) following strict EVO naming conventions. This is the ONLY creative step that requires LLM inference.
@@ -201,10 +201,6 @@ Task: **"Create an Instagram API package with 5 endpoints"** — all using Claud
 ### Cursor Flow
 
 ![Cursor Flow](data/agentic_vs_cursor_flow.svg)
-
-### CrewAI / Python Framework Flow
-
-![CrewAI Python Framework Flow](data/agentic_vs_crewai_flow.svg)
 
 ### Side-by-Side Token Flow Comparison
 
@@ -678,7 +674,7 @@ Note on "Prototyping speed": In EVO, there is no prototype phase. evo_core_dev g
 
 ## 🏆 Final Grades
 
-![Final Scorecard](data/agentic_vs_scorecard.svg)
+![Final Scorecard](data//agentic_vs_scorecard.svg)
 
 ---
 
@@ -714,7 +710,7 @@ This is the philosophical difference that underpins everything else in this comp
 
 ### F.O.R.G.E Coding vs Vibe Coding
 
-![F.O.R.G.E Coding vs Vibe Coding](data/agentic_vs_forge.svg)
+![F.O.R.G.E Coding vs Vibe Coding](data//agentic_vs_forge.svg)
 
 **F.O.R.G.E** stands for: **F**orced **O**utput **R**einforced **G**enerated **E**vo Framework AI.
 
@@ -920,7 +916,7 @@ This is the difference between "AI-assisted development" and "AI-automated engin
 
 ### 🔑 Summary: Evo Framework AI vs OpenClaw
 
-![Evo Framework AI vs OpenClaw Summary](data/agentic_vs_evo_openclaw.svg)
+![Evo Framework AI vs OpenClaw Summary](data//agentic_vs_evo_openclaw.svg)
 
 > **OpenClaw's ~140K GitHub stars reflect community size, not production readiness.** The 512 known vulnerabilities — including a CVSS 8.8 session hijacking exploit and 386 malicious skills discovered on ClawHub — make it a significant security liability for production deployment. Evo Framework AI has zero known CVEs, Rust compile-time memory safety, and post-quantum cryptography. For production autonomous agents, security is not optional — it is the prerequisite.
 
@@ -928,7 +924,7 @@ This is the difference between "AI-assisted development" and "AI-automated engin
 
 ## 🎯 The Strategic Conclusion
 
-![The Strategic Conclusion](data/agentic_vs_strategic.svg)
+![The Strategic Conclusion](data//agentic_vs_strategic.svg)
 
 The tools are complementary. The mistake is using a development tool (Claude Code, Antigravity, Cursor) for production workloads, or a production framework (Evo Framework AI) for ad-hoc exploration. Each dominates its domain. The winning strategy uses both.
 

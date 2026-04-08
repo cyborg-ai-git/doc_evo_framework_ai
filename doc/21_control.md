@@ -1,4 +1,4 @@
-![evo control](data/evo_layer_control.svg)
+![evo_layer_control.svg](data//evo_layer_control.svg)
 \pagebreak
 
 # \textcolor{blue}{Evo Control Layer (IControl)}

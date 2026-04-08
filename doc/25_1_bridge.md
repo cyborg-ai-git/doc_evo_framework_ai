@@ -1,4 +1,4 @@
-![evo bridge](data/evo_layer_bridge.svg)
+![evo bridge](data//evo_layer_bridge.svg)
 \pagebreak
 
 # \textcolor{red}{Evo Bridge Layer (IBridge)}
@@ -24,7 +24,7 @@ By implementing this system in accordance with NIST guidelines and recommendatio
 
 ### Core Components
 
-![Bridge Actors](data/bridge_actors.svg)
+![Bridge Actors](data//bridge_actors.svg)
 
 #### Master Peer
 
@@ -163,7 +163,7 @@ Network Actions represent standardized communication protocol units.
 ## Technical Overview
 This document describes a post-quantum cryptographic system designed for secure peer-to-peer communication in distributed networks. The architecture employs a hierarchical trust model with specialized cryptographic roles and modern NIST-standardized algorithms.
 
-![bridge_epqb](data/bridge_epqb.svg)
+![bridge_epqb](data//bridge_epqb.svg)
 
 \pagebreak
 ## Bridge Entities
@@ -173,17 +173,17 @@ The **Evo Bridge EPQB** architecture is built upon four fundamental cryptographi
 
 ### Enum Entity Types
 
-![enum_peer_crypto_schema](data/enum_peer_crypto_schema.svg)
+![enum_peer_crypto_schema](data//enum_peer_crypto_schema.svg)
 
 
-![enum_peer_visibility_schema](data/enum_peer_visibility_schema.svg)
+![enum_peer_visibility_schema](data//enum_peer_visibility_schema.svg)
 
 
 ### Core Entity Types
 
 #### EPeerSecret - Private Cryptographic Identity
 
-![e_peer_secret_schema](data/e_peer_secret_schema.svg)
+![e_peer_secret_schema](data//e_peer_secret_schema.svg)
 
 The foundational private entity containing all secret cryptographic material for a peer. 
 The cryptography algorithm is dynamic so is possible to migrate to other more secure PQ algorithm if is founded security issue
@@ -205,7 +205,7 @@ The cryptography algorithm is dynamic so is possible to migrate to other more se
 
 #### EPeerPublic - Public Cryptographic Identity
 
-![e_peer_public_schema](data/e_peer_public_schema.svg)
+![e_peer_public_schema](data//e_peer_public_schema.svg)
 
 ***
 # Cryptographic Specifications Table
@@ -319,7 +319,7 @@ aead: AES-256-GCM
 
 #### EPeerCertificate - Authenticated Identity Credential
 
-![e_peer_certificate_schema](data/e_peer_certificate_schema.svg)
+![e_peer_certificate_schema](data//e_peer_certificate_schema.svg)
 
 A digitally signed certificate that establishes trust and authenticity for peer identities.
 
@@ -340,7 +340,7 @@ A digitally signed certificate that establishes trust and authenticity for peer 
 
 #### EApiBridge - Secure Communication Container
 
-![e_api_bridge_schema](data/e_api_bridge_schema.svg)
+![e_api_bridge_schema](data//e_api_bridge_schema.svg)
 
 The standardized message format for all peer-to-peer communications.
 
@@ -474,7 +474,7 @@ The peer **ID** functions as a secure, decentralized addressing system that prov
 - **Location-Independent**: Peers can migrate between networks, cloud providers, or devices without changing identity
 - **Multi-Protocol Support**: Single identity works across multiple transport mechanisms
 
-![bridge_vip6_portability](data/bridge_vip6_portability.svg)
+![bridge_vip6_portability](data//bridge_vip6_portability.svg)
 
 **Key Concepts:**
 
@@ -528,7 +528,7 @@ The **Evo Bridge Layer** work as a virtual vpn , all data are crypted end-to-end
 
 Store PeerA's certificate (Master Peer use decentralized EPQM or other channel to distribute the certificate)
 
-![bridge set_peer](data/bridge_set_peer_mp.svg)
+![bridge set_peer](data//bridge_set_peer_mp.svg)
 
 \pagebreak
 
@@ -537,20 +537,20 @@ Store PeerA's certificate (Master Peer use decentralized EPQM or other channel t
 
 PeerB requests PeerA's certificate from the Master Peer because don't have PeerA in cache:
 
-![bridge get_peer](data/bridge_get_peer_mp.svg)
+![bridge get_peer](data//bridge_get_peer_mp.svg)
 
 \pagebreak
 
 Then, direct communication between PeerB and PeerA occurs:
 
-![bridge direct case 1](data/bridge_direct_1.svg)
+![bridge direct case 1](data//bridge_direct_1.svg)
 
 \pagebreak
 
 #### Case 2: Direct Communication
 Direct communication between PeerB and PeerA when certificate is already available (from cache or other secure channel):
 
-![bridge direct case 2](data/bridge_direct_2.svg)
+![bridge direct case 2](data//bridge_direct_2.svg)
 
 \pagebreak
 
@@ -558,7 +558,7 @@ Direct communication between PeerB and PeerA when certificate is already availab
 If at least PeerA's secret_kem or secret_sign keys are compromised, the peer is no longer safe and must revoke the peer certificate so other peers know not to use the certificate, and PeerA becomes untrusted:
 
 
-![bridge revoke](data/bridge_del_peer_mp.svg)
+![bridge revoke](data//bridge_del_peer_mp.svg)
 
 \pagebreak
 

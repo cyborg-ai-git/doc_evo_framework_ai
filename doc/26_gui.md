@@ -1,4 +1,4 @@
-![evo gui](data/evo_layer_gui.svg)
+![evo gui](data//evo_layer_gui.svg)
 \pagebreak
 
 # \textcolor{magenta}{Evo Gui Layer (IGui)}

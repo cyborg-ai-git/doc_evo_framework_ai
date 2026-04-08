@@ -30,7 +30,7 @@ Traditional serialization approaches face trade-offs:
 
 ## Architecture
 
-![ESS Architecture](data/evo_ess_overview.svg)
+![ESS Architecture](data//evo_ess_overview.svg)
 
 ### System Layers
 
@@ -61,7 +61,7 @@ E*Header
 E* (variable body)
 ├── _header: E*Header (private)
 └── properties ...
-
+```
 #### 2. Serialization Layer
 Handles conversion between in-memory structures and byte arrays.
 
@@ -99,22 +99,22 @@ Integration with communication mechanisms.
 
 ### evo_entity_test for all ESS attributes type 
 
-![evo_entity_test.svg](data/evo_entity_test.svg)
+![evo_entity_test.svg](data//evo_entity_test.svg)
 \pagebreak
 
-![e_test0_schema](data/e_test0_schema.svg)
+![e_test0_schema](data//e_test0_schema.svg)
 \pagebreak
 
-![e_test1_schema](data/e_test1_schema.svg)
-![e_test2_schema](data/e_test2_schema.svg)
-![e_test3_schema](data/e_test3_schema.svg)
+![e_test1_schema](data//e_test1_schema.svg)
+![e_test2_schema](data//e_test2_schema.svg)
+![e_test3_schema](data//e_test3_schema.svg)
 
 > TODO: to add enum schemas
 \pagebreak
 
 ## Entity Structure class diagram (rust)
 
-![Entity Structure](data/evo_ess_entity_structure.svg)
+![Entity Structure](data//evo_ess_entity_structure.svg)
 
 ### Two-Part Architecture
 
@@ -308,7 +308,7 @@ time_sync: ULONG       // When entity was last synchronized
 
 ## Serialization Process
 
-![Serialization Flow](data/evo_ess_serialization_flow.svg)
+![Serialization Flow](data//evo_ess_serialization_flow.svg)
 
 ### High-Level Flow
 
@@ -577,7 +577,7 @@ MapId
 
 ## Performance
 
-![Performance](data/evo_ess_performance.svg)
+![Performance](data//evo_ess_performance.svg)
 \pagebreak
 
 ### Benchmark Results

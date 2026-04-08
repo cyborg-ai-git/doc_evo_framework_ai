@@ -1,4 +1,4 @@
-![evo memory](data/evo_layer_memory.svg)
+![evo memory](data//evo_layer_memory.svg)
 \pagebreak
 
 # \textcolor{yellow}{Evo Memory Layer (IMemory)}
